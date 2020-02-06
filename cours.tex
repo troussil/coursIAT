@@ -1,0 +1,131 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+%figures
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+\DeclareGraphicsExtensions{.eps,.pdf,.jpg}
+\usepackage{tikz}
+
+%math
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+%algo
+\usepackage[vlined, linesnumbered, french]{algorithm2e}
+
+% ----------------------------------------------------------------------
+%macros
+
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\newcommand{\ve}[1]{\ensuremath{\vec{e}_{#1}}}
+
+% ----------------------------------------------------------------------
+\title[]
+ {Optimisation TODO}
+
+\author[T. Roussillon]
+ {Tristan Roussillon}
+
+\date{2020}
+
+\institute{INSA Lyon, TC}
+
+
+%% %rappel du sommaire 
+%% \AtBeginSection[]
+%% {
+%%   \begin{frame}<beamer>
+%%     \frametitle{Outline}
+%%     \tableofcontents[currentsection]
+%%   \end{frame}
+%% }
+
+\begin{document}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ----------------------------------------------------------------------
+\section{\'Enoncé du problème}
+% ----------------------------------------------------------------------
+
+\begin{frame}
+  \frametitle{
+    \only<1,2>{Problème d'optimisation}
+    \only<3>{Optimisation continue sans contrainte}
+    \only<4>{Optimisation continue avec contraintes}
+    \only<5>{Optimisation continue convexe}
+    \only<6>{Programmation linéaire}
+    \only<7>{Programmation linéaire en nombre entiers}
+  }
+
+  \[
+  \text{(P)} \left\{
+  \begin{array}{c}
+    \text{Min} \ f(x) \ \text{tel que :} \\
+    g_i(x) \leq 0, \ i = 1, \dots, m \\
+    x \in S \subset \R^n
+  \end{array}
+  \right.
+  \]
+
+  \only<1>{
+    \begin{itemize}
+    \item fonction objectif: $f$
+    \item contraintes: $g_i(x) \leq 0, \ i = 1, \dots, m$ et $x \in S$
+    \item inconnues: $x(x_1, \dots, x_n) \in \R^n$
+    \item une solution: $\{x\}$ satisfaisant les contraintes
+    \item solution optimale: une solution minimisant $f$
+    \end{itemize}
+    %distinction des contraintes en deux:
+    %- generalisation a plusieurs classes de pb
+    %- traites differement dans les algos
+  }
+  \only<2->{
+    \begin{itemize}
+    \item Max $f'$ $\Leftrightarrow$ Min $-f'$
+    \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \geq 0$ et $g'(x) \geq 0$
+    \item \only<2,3>{sans contrainte ($m = 0$)} \only<2>{ou} \only<2,4->{avec contrainte ($m > 0$)}
+    \item diversité de fonctions\only<3->{:} \only<3->{$f$}\only<4->{ et $g_i$} \only<3,4>{continues non linéaires}\only<5>{convexes}\only<6->{linéaires}
+    \item diversité de $S$\only<3->{:} \only<3-5>{$S \subset \R^n$}\only<3,4>{ continu compact}\only<5>{ convexe}\only<6>{cône de $\R^n$}\only<7>{$S \subset \Z^n$}
+    \end{itemize}
+  }
+  %optimisation continue sans/avec contrainte 3/4
+  %optimisation convexe 5
+  %programmation linéaire 6
+  %programmation linéaire en nombre entiers 7
+
+  %TODO inégalités strictes ?
+\end{frame}
+
+\begin{frame}
+  \frametitle{Différentes classes de problèmes et d'algorithmes}
+
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\section{Convexité}
+% ----------------------------------------------------------------------
+
+
+% ----------------------------------------------------------------------
+\section{Optimisation continue}
+% ----------------------------------------------------------------------
+
+% ----------------------------------------------------------------------
+\section{Optimisation combinatoire}
+% ----------------------------------------------------------------------
+
+
+\end{document}
+
