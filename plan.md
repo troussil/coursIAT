@@ -1,6 +1,6 @@
-#Cours: optimisation (exacte)
+# Cours: optimisation (exacte)
 
-##Introduction
+## Introduction
 
 ### énoncé du problème
 
@@ -87,19 +87,15 @@ Différentes variantes :
  - heuristiques (...), méta-heuristiques (tabou, recuit-simulé, alg génétique, colonie de fourmis, ...) -> cf. cours Olivier
  - optimisation stochastique (méthode de Monte-Carlo)
 
-##Références
+## Références
 
 [1] Programmation mathématique, Théorie et algorithmes, Michel Minoux, Lavoisier, 2eme édition, 2008, 711 pp. 
 
-#3 TDs
+# Trois TDs
 
-3 approches: 
-- optimisation continue: simplexe et/ou Franck et Wolf
-- optimisation combinatoire: 
-   - branch and bound
-   - programmation par contrainte
+- desc. grad. 
+- Franck et Wolf, simplexe,  
+- ranch and bound, prog par contrainte
 
-organisation, 2 alternatives: 
-- 1 TD modélisation sur papier, 2 TDs machines où "on trouve des solutions optimales"
-- 3 TDs, chacun consacré à une approche. Dans chacun, modélisation puis expérimentation sur machine. 
+Dans chacun, modélisation puis expérimentation sur machine. 
 
