@@ -1,4 +1,20 @@
 \documentclass{beamer}
+\mode<presentation>
+\setbeamertemplate{navigation symbols}{}
+
+% ----------------------------------------------------------------------
+%footer
+\setbeamertemplate{footline}
+{
+  \leavevmode
+    \hfill
+    \usebeamerfont{footer}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    \insertframenumber{} / \inserttotalframenumber
+    ~~~~~
+}
+
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
@@ -28,7 +44,7 @@
 
 % ----------------------------------------------------------------------
 \title[]
- {Optimisation TODO}
+ {Optimisation}
 
 \author[T. Roussillon]
  {Tristan Roussillon}
@@ -54,24 +70,38 @@
   \titlepage
 \end{frame}
 
-%IA <- optim
-%1) car l'IA c'est aussi résoudre des problemes difficiles, hors d'atteinte des algo classiques,
-%ce que fait l'optim pour les problemes de d'optimisation. 
-% arbre de recherche,
-% approches heuristiques (ex. A étoile), 
-% approches meta-heuristiques (cf. O.S.)
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Introduction}
 
-%2) l'optim est une étape de l'apprentissage automatique
+  \begin{block}{L'optimisation est partout}
+  \begin{itemize}
+  \item à la question ``y a-t-il une solution ?'' (problème de décision)
+  \item suit naturellement ``quelle est la meilleure solution ?'' (problème d'optimisation)
+  \item l'optimisation peut être sous-jacente : par ex. en apprentissage supervisé, on cherche
+    une fonction de prédiction qui minimise une fonction de coût.
+    %exemple du salaire d'une personne qui arrive
+    %moyenne minimise les écarts quadratiques
+    %mediane minimise les écarts absolus
+    %mode, cad le plus probable. 
+  \item certains problèmes sont difficiles et requièrent des méthodes inhabituelles pour découvrir
+    des solutions, mêmes approchées : c'est de l'IA.
+  \end{itemize}
+  \end{block}
+  
+\end{frame}
 
-%exemples
+% ----------------------------------------------------------------------
+%TODO exemples
 % - cf. fiches + ressources tc
+
 
 % ----------------------------------------------------------------------
 \section{\'Enoncé du problème}
 % ----------------------------------------------------------------------
 
 \begin{frame}
-  \frametitle{\only<1,2>{Problème d'optimisation}\only<3>{Optimisation continue sans contrainte}\only<4>{Optimisation continue avec contraintes}\only<5>{Optimisation continue convexe}\only<6>{Programmation linéaire}\only<7>{Programmation linéaire en nombre entiers}}
+  \frametitle{Problème d'optimisation}
 
   \[
   \text{(P)} \left\{
@@ -84,78 +114,51 @@
   \]
 
   \only<1>{
+    \begin{block}{Vocabulaire}
     \begin{itemize}
     \item fonction objectif : $f$
     \item contraintes : $g_i(x) \leq 0, \ i = 1, \dots, m$ et $x \in S$
-    \item inconnues : $x(x_1, \dots, x_n) \in \R^n$
-    \item une solution : $\{x\}$ satisfaisant les contraintes
+    \item inconnues : composantes du vecteur $x^T := (x_1, \dots, x_n) \in \R^n$
+    \item une solution : $x$ satisfaisant les contraintes
     \item solution optimale/optimum global : une solution minimisant $f$
     \end{itemize}
     %distinction des contraintes en deux:
     %- generalisation a plusieurs classes de pb
     %- traites differement dans les algos
+    \end{block}
   }
-  \only<2->{
+  \only<2>{
+    \begin{block}{Remarques}
     \begin{itemize}
+    \item dimension du problème $n \geq 1$
     \item max $f'$ $\Leftrightarrow$ min $-f'$
-    \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \geq 0$ et $g'(x) \geq 0$
-    \item \only<2,3>{sans contrainte ($m = 0$)} \only<2>{ou} \only<2,4->{avec contrainte ($m > 0$)}
-    \item diversité de fonctions\only<3->{:} \only<3->{$f$}\only<4->{ et $g_i$} \only<3,4>{continues non linéaires}\only<5>{convexes}\only<6->{linéaires}
-    \item diversité de $S$\only<3->{:} \only<3-5>{$S \subset \R^n$}\only<3,4>{ continu compact}\only<5>{ convexe}\only<6>{cône de $\R^n$}\only<7>{$S \subset \Z^n$}
+    \item sans contrainte ($m = 0$) ou avec ($m > 0$)
+    \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \geq 0$ et $g'(x) \leq 0$
+    \item généralement pas d'inégalités strictes
     \end{itemize}
+    \end{block}
+    %existence de solution (th. de Weierstrass)
+    %si f est une fonction reelle continue sur K \subset R^n ferme et borne, alors il existe
+    %une solution optimale x \in K qui min f(x)
+    %inégalités strictes => ensemble de solutions non ferme et borne, donc possiblement pas de solutions. 
   }
-  %TODO inégalités strictes ?
-  %TODO colorer en rouge ce qui apparait
-  
-  %TODO dimension,
-  %existence de solution (th. de Weierstrass)
+  \only<3->{
+    \begin{block}{Résoudre (P) peut être difficile...}
+    \begin{itemize}
+    \item $n$ peut être grand
+    \item l'ensemble des solutions peut être vide, très grand ou infini
+    \item $f$ et les $g_i$ peuvent être quelconques %ni differentiable, ni convexe, ni lineaire)
+    \item $f$ peut être quasiment plat près du min (instabilité numérique) 
+    \item $f$ peut ne pas être analytiquement connu 
+    \end{itemize}
+    \end{block}
+  }
 \end{frame}
 
 \begin{frame}
-  \frametitle{Différentes classes de problèmes et d'algorithmes}
-
-  
-\end{frame}
-
-% ----------------------------------------------------------------------
-\section{Convexité}
-% ----------------------------------------------------------------------
-
-\begin{frame}
-  \frametitle{Convexité d'un ensemble}
+  \frametitle{Optimum local vs optimum global}
 
   \begin{block}{Définition}
-    $S \subset \R^n$ est convexe ssi  
-    pour tout $x,y \in S$ et $\lambda \in [0,1]$,
-    $\lambda x - (1 - \lambda) y \in S$. 
-  \end{block}
-
-  \begin{exampleblock}{Exemple dans $\R^2$}
-    TODO 2 sets
-  \end{exampleblock}
-  
-\end{frame}
-
-\begin{frame}
-  \frametitle{Convexité d'une fonction}
-
-  \begin{block}{Définition}
-     Soit $S \subset \R^n$ convexe.
-     Une fonction $f : S \rightarrow \R$ est convexe ssi  
-    pour tout $x,y \in S$ et $\lambda \in [0,1]$,
-    $f(\lambda x - (1 - \lambda) y) \leq \lambda f(x) + (1 - \lambda) f(y)$. 
-  \end{block}
-
-  \begin{exampleblock}{Exemple dans $\R^1$}
-    TODO 2 fonc
-  \end{exampleblock}
-  
-\end{frame}
-
-\begin{frame}
-  \frametitle{Programmation convexe}
-
-  \begin{block}{Définition d'optimum local}
     La solution $x^0$ est un optimum local du problème (P) s'il existe un voisinage
     $V(x^0)$ autour de $x^0$ tel que $x^0$ soit optimum global du problème
   \[
@@ -168,37 +171,252 @@
   \right.
   \]
   \end{block}
+
+  \begin{exampleblock}{Exemple dans $\R^1$}
+    \centering
+    \includegraphics[width=0.7\textwidth]{opt-loc}
+  \end{exampleblock}
   
+\end{frame}
+
+
+%% % ----------------------------------------------------------------------
+
+%% \begin{frame}
+%%   \frametitle{\only<1,2>{Problème d'optimisation}\only<3>{Optimisation continue sans contrainte}\only<4>{Optimisation continue avec contraintes}\only<5>{Optimisation continue convexe}\only<6>{Programmation linéaire}\only<7>{Programmation linéaire en nombre entiers}}
+
+%%   \[
+%%   \text{(P)} \left\{
+%%   \begin{array}{c}
+%%     \text{min} \ f(x) \ \text{tel que :} \\
+%%     g_i(x) \leq 0, \ i = 1, \dots, m \\
+%%     x \in S \subset \R^n
+%%   \end{array}
+%%   \right.
+%%   \]
+
+%%   \only<1>{
+%%     \begin{itemize}
+%%     \item fonction objectif : $f$
+%%     \item contraintes : $g_i(x) \leq 0, \ i = 1, \dots, m$ et $x \in S$
+%%     \item inconnues : $x(x_1, \dots, x_n) \in \R^n$
+%%     \item une solution : $\{x\}$ satisfaisant les contraintes
+%%     \item solution optimale/optimum global : une solution minimisant $f$
+%%     \end{itemize}
+%%     %distinction des contraintes en deux:
+%%     %- generalisation a plusieurs classes de pb
+%%     %- traites differement dans les algos
+%%   }
+%%   \only<2->{
+%%     \begin{itemize}
+%%     \item max $f'$ $\Leftrightarrow$ min $-f'$
+%%     \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \geq 0$ et $g'(x) \geq 0$
+%%     \item \only<2,3>{sans contrainte ($m = 0$)} \only<2>{ou} \only<2,4->{avec contrainte ($m > 0$)}
+%%     \item diversité de fonctions\only<3->{:} \only<3->{$f$}\only<4->{ et $g_i$} \only<3,4>{continues non linéaires}\only<5>{convexes}\only<6->{linéaires}
+%%     \item diversité de $S$\only<3->{:} \only<3-5>{$S \subset \R^n$}\only<3,4>{ continu compact}\only<5>{ convexe}\only<6>{cône de $\R^n$}\only<7>{$S \subset \Z^n$}
+%%     \end{itemize}
+%%   }
+%%   %TODO inégalités strictes ?
+%%   %TODO colorer en rouge ce qui apparait
+  
+%%   %TODO dimension,
+%%   %existence de solution (th. de Weierstrass)
+%% \end{frame}
+
+%% \begin{frame}
+%%   \frametitle{Différentes classes de problèmes et d'algorithmes}
+
+  
+%% \end{frame}
+
+% ----------------------------------------------------------------------
+\section{Convexité et différentiabilité}
+% ----------------------------------------------------------------------
+%permet de dire si on peut chercher un min ou un max
+%permet de dire si tout optimum local est un optimum global ou non
+
+% ----------------------------------------------------------------------
+\begin{frame}<beamer>
+  \frametitle{Outline}
+  \tableofcontents[currentsection]
+\end{frame}
+
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Convexité d'un ensemble}
+
+  \begin{block}{Définition}
+    $S \subset \R^n$ est convexe ssi  
+    pour tout $x,y \in S$ et $\lambda \in [0,1]$,
+    $\lambda x - (1 - \lambda) y \in S$. 
+  \end{block}
+
+  \begin{exampleblock}{Exemple pour $S \subset \R^2$}
+    \centering
+    \includegraphics[width=0.25\textwidth,page=1]{ens-conv} \hspace{0.05\textwidth}
+    \includegraphics[width=0.25\textwidth,page=2]{ens-conv}
+  \end{exampleblock}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Convexité d'une fonction}
+
+  \begin{block}{Définition}
+     Soit $S \subset \R^n$ convexe.
+     Une fonction $f : S \rightarrow \R$ est convexe ssi  
+    pour tout $x,y \in S$ et $\lambda \in [0,1]$,
+    $f(\lambda x - (1 - \lambda) y) \leq \lambda f(x) + (1 - \lambda) f(y)$. 
+  \end{block}
+
+  \begin{exampleblock}{Exemple pour $f:\R \rightarrow \R$}
+    \centering
+    \includegraphics[width=0.45\textwidth,page=1]{fonc-conv} \hspace{0.05\textwidth}
+    \includegraphics[width=0.45\textwidth,page=2]{fonc-conv}
+  \end{exampleblock}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Programmation convexe}
+
   \begin{block}{Théorème}
     Soit $f$ convexe et définie sur $S \subset \R^n$ convexe.
     Tout optimum local est un optimum global.  
   \end{block}
 
-  \begin{exampleblock}{Exemple dans $\R^1$}
-    TODO example
+  \begin{exampleblock}{Exemple numérique pour $f:\R \rightarrow \R$}
+    \only<1>{
+      $f(x) = x^2 - 6x + 4$\\
+      $f'(x) = 2x - 6$\\
+      $f''(x) = 2$ \\ 
+      ~\\
+      $\forall x, \ f''(x) > 0 \Rightarrow f$ convexe $\Rightarrow$ $\exists$ un minimum global $x^\star$ tel que:
+      $f'(x^\star) = 0 \Leftrightarrow x^\star = 3$.
+    }
+    \only<2>{
+      $f(x) = 2x^3 - x^2 + 2x + 5$\\
+      $f'(x) = 6x^2 - 2x + 2$\\
+      $f''(x) = 12x - 2$ \\ 
+      ~\\
+      On ne peut rien dire de la convexité pour tout $x$.\\
+      Mais on peut procéder par intervalle. 
+    }
   \end{exampleblock}
   
 \end{frame}
 
+% ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Exemple numérique dans $\R^1$}
+  \frametitle{Différentiabilité en dimension 1}
+
+  \begin{itemize}
+    \item la dérivée seconde est un indicateur de convexité
+    \item la dérivée première s'annule en un optimum
+    \item la dérivée première donne même la direction vers laquelle chercher l'optimum
+  \end{itemize}
+
+  \begin{exampleblock}{Exemple numérique pour $f:\R \rightarrow \R$}
+    \centering
+    \includegraphics[width=0.6\textwidth]{fonc-plot}    
+  \end{exampleblock}
+
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Différentiabilité en dimension $> 1$}
+
+  \[
+  \begin{array}{l}
+    f: \R^n \rightarrow \R \\
+    x^T = (x_1,x_2,\dots,x_n) \rightarrow f(x)
+  \end{array}
+  \]
+  
+  \begin{block}{Gradient (vecteur), extension de la dérivée première}
+    ${\nabla f}^T := (\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \dots, \frac{\partial f}{\partial x_n})$
+  \end{block}
+
+    \begin{block}{Hessien (matrice), extension de la dérivée seconde}
+      $\nabla^2 f :=
+      \begin{bmatrix}{\frac {\partial ^{2}f}{\partial x_{1}^{2}}}&{\frac {\partial ^{2}f}{\partial x_{1}\partial x_{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{1}\partial x_{n}}}\\{\frac {\partial ^{2}f}{\partial x_{2}\partial x_{1}}}&{\frac {\partial ^{2}f}{\partial x_{2}^{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{2}\partial x_{n}}}\\\vdots &\vdots &\ddots &\vdots \\{\frac {\partial ^{2}f}{\partial x_{n}\partial x_{1}}}&{\frac {\partial ^{2}f}{\partial x_{n}\partial x_{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{n}^{2}}}\end{bmatrix}$
+  \end{block}
 
 \end{frame}
 
-\begin{frame}
-  \frametitle{Différentiabilité}
 
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Différentiabilité et convexité}
+
+  \begin{block}{Théorème}
+    Si $f$ est continûment différentiable (deux fois), les conditions 1, 2 (et 3) sont équivalentes:
+    \begin{enumerate}
+    \item $f$ est convexe,
+    \item $\forall x, y, \ f(y) > f(x) + {\nabla f} ^T(x) \cdot (y - x)$,
+    \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice semi-définie positive, c-à-d. ses valeures propres sont positives.
+    \end{enumerate}
+  \end{block}
+
+  \begin{block}{Note:}
+    Les valeurs propres d'une matrice carré sont les composantes du vecteur
+    $\lambda^T := (\lambda_1, \lambda_2,\dots, \lambda_n)$, solution de
+    l'équation $\det{(\nabla^2f(x) - \lambda I)}$.  
+  \end{block}
+%image pour 2
+  
 \end{frame}
 
+% ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Exemple numérique dans $\R^2$}
+  \frametitle{Exemple numérique pour $f:\R^2 \rightarrow \R$}
 
+  \begin{itemize}
+  \item $f(x_1,x_2) = x_1^2 + x_2^2 - 4x_1 + 8x_2 - 5$
+  \item $\frac{\partial f}{\partial x_1} = 2x_1 - 4, \frac{\partial f}{\partial x_2} = 2x_2 + 8$
+  \item $\frac{\partial^2 f}{\partial x_1^2} = 2, \frac{\partial^2 f}{\partial x_1x_2} = 0, \frac{\partial^2 f}{\partial x_2x_1} = 0, \frac{\partial^2 f}{\partial x_2^2} = 2$
+  \end{itemize}
+
+  
+  $\forall (x_1,x_2), \ \nabla^2f(x_1,x_2) =
+  \left(\begin{array}{cc}
+    2 & 0 \\
+    0 & 2 \\
+  \end{array}
+  \right)
+  $ $\Rightarrow$ $f$ est convexe $\Rightarrow$ \\
+  $\exists$ un minimum global $x^\star$ tel que ${\nabla f}^T(x^\star) = 0$, c-à-d.
+  \[
+  \left\{
+  \begin{array}{ll}
+    2x^\star_1 - 4 & = 0\\
+    2x^\star_2 + 8 & = 0
+  \end{array}
+  \right.
+  \Leftrightarrow x^\star = (2,-4).
+  \]
+  
 \end{frame}
 
 
 % ----------------------------------------------------------------------
 \section{Optimisation continue}
 % ----------------------------------------------------------------------
+
+%TODO
+%conditions d'optimalité sans contraintes
+% et méthodes de desc. de grad. 
+%conditions d'optimalité avec contraintes inegalites: 
+% - conditions de Kuhn et Tucker, etc. (p. 204 et après [1])
+%conditions d'optimalité avec contraintes egalites: 
+% - multiplicateur de Lagrange, etc. (p. 209 et après [1])
+% - dualité de Lagrange
+
 
 % ----------------------------------------------------------------------
 \section{Optimisation combinatoire}
