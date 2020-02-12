@@ -140,6 +140,8 @@
     %existence de solution (th. de Weierstrass)
     %si f est une fonction reelle continue sur K \subset R^n ferme et borne, alors il existe
     %une solution optimale x \in K qui min f(x)
+    %existence aussi si f est une fonction reelle continue et possède la propriété de croissance à l'infini:
+    %f(x) -> +inf qs x -> +inf
     %inégalités strictes => ensemble de solutions non ferme et borne, donc possiblement pas de solutions. 
   }
   \only<3->{
@@ -147,8 +149,9 @@
     \begin{itemize}
     \item $n$ peut être grand
     \item l'ensemble des solutions peut être vide, très grand ou infini
-    \item $f$ et les $g_i$ peuvent être quelconques %ni differentiable, ni convexe, ni lineaire)
-    \item $f$ peut être quasiment plat près du min (instabilité numérique) 
+    \item $f$ et les $g_i$ peuvent être quelconques %ni differentiable, ni convexe, ni lineaire
+    \item $f$ peut être (quasiment) plat autour du min
+      %si plat, plusieurs solutions optimales, si quasiment, instabilités numériques 
     \item $f$ peut ne pas être analytiquement connu 
     \end{itemize}
     \end{block}
@@ -279,51 +282,74 @@
   
 \end{frame}
 
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Programmation convexe}
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Programmation convexe}
 
-  \begin{block}{Théorème}
-    Soit $f$ convexe et définie sur $S \subset \R^n$ convexe.
-    Tout optimum local est un optimum global.  
-  \end{block}
+%%   \begin{block}{Théorème}
+%%     Soit $f$ convexe et définie sur $S \subset \R^n$ convexe.
+%%     Tout optimum local est un optimum global.  
+%%   \end{block}
 
-  \begin{exampleblock}{Exemple numérique pour $f:\R \rightarrow \R$}
-    \only<1>{
-      $f(x) = x^2 - 6x + 4$\\
-      $f'(x) = 2x - 6$\\
-      $f''(x) = 2$ \\ 
-      ~\\
-      $\forall x, \ f''(x) > 0 \Rightarrow f$ convexe $\Rightarrow$ $\exists$ un minimum global $x^\star$ tel que:
-      $f'(x^\star) = 0 \Leftrightarrow x^\star = 3$.
-    }
-    \only<2>{
-      $f(x) = 2x^3 - x^2 + 2x + 5$\\
-      $f'(x) = 6x^2 - 2x + 2$\\
-      $f''(x) = 12x - 2$ \\ 
-      ~\\
-      On ne peut rien dire de la convexité pour tout $x$.\\
-      Mais on peut procéder par intervalle. 
-    }
-  \end{exampleblock}
+%%   \begin{exampleblock}{Exemple numérique pour $f:\R \rightarrow \R$}
+%%     \only<1>{
+%%       $f(x) = x^2 - 6x + 4$\\
+%%       $f'(x) = 2x - 6$\\
+%%       $f''(x) = 2$ \\ 
+%%       ~\\
+%%       $\forall x, \ f''(x) > 0 \Rightarrow f$ convexe $\Rightarrow$ $\exists$ un minimum global $x^\star$ tel que:
+%%       $f'(x^\star) = 0 \Leftrightarrow x^\star = 3$.
+%%     }
+%%     \only<2>{
+%%       $f(x) = 2x^3 - x^2 + 2x + 5$\\
+%%       $f'(x) = 6x^2 - 2x + 2$\\
+%%       $f''(x) = 12x - 2$ \\ 
+%%       ~\\
+%%       On ne peut rien dire de la convexité pour tout $x$.\\
+%%       Mais on peut procéder par intervalle. 
+%%     }
+%%   \end{exampleblock}
   
-\end{frame}
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Différentiabilité en dimension 1}
+
+%%   \begin{itemize}
+%%     \item la dérivée seconde est un indicateur de convexité
+%%     \item la dérivée première s'annule en un optimum
+%%     \item la dérivée première donne même la direction vers laquelle chercher l'optimum
+%%   \end{itemize}
+
+%%   \begin{exampleblock}{Exemple numérique pour $f:\R \rightarrow \R$}
+%%     \centering
+%%     \includegraphics[width=0.6\textwidth]{fonc-plot}    
+%%   \end{exampleblock}
+  
+%% \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
   \frametitle{Différentiabilité en dimension 1}
 
-  \begin{itemize}
-    \item la dérivée seconde est un indicateur de convexité
-    \item la dérivée première s'annule en un optimum
-    \item la dérivée première donne même la direction vers laquelle chercher l'optimum
-  \end{itemize}
+  \[
+  \begin{array}{l}
+    f: \R \rightarrow \R \\
+    x \rightarrow f(x)
+  \end{array}
+  \]
+  
+  \begin{block}{Dérivée première}
+    $f'(x) := \frac{\partial f}{\partial x} = \lim_{h \rightarrow 0} \frac{f(x+h) - f(x)}{h}$.\\
+    Géométriquement, c'est la pente de la tangente au graphe de $f$ 
+  \end{block}
 
-  \begin{exampleblock}{Exemple numérique pour $f:\R \rightarrow \R$}
-    \centering
-    \includegraphics[width=0.6\textwidth]{fonc-plot}    
-  \end{exampleblock}
+  \begin{block}{Dérivée seconde = dérivée de la dérivée première}
+    $f''(x) := \frac{\partial f'}{\partial x} = \frac{\partial ^{2}f}{\partial x^{2}}$.
+  \end{block}
 
+  %TODO image
   
 \end{frame}
 
@@ -359,16 +385,70 @@
     \begin{enumerate}
     \item $f$ est convexe,
     \item $\forall x, y, \ f(y) > f(x) + {\nabla f} ^T(x) \cdot (y - x)$,
-    \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice semi-définie positive, c-à-d. ses valeures propres sont positives.
+    \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice semi-définie positive,
+      c-à-d. ses valeures propres sont positives (ou nulles).
     \end{enumerate}
   \end{block}
 
   \begin{block}{Note:}
-    Les valeurs propres d'une matrice carré sont les composantes du vecteur
+    Les valeurs propres d'une matrice carrée sont les composantes du vecteur
     $\lambda^T := (\lambda_1, \lambda_2,\dots, \lambda_n)$, solution de
     l'équation $\det{(\nabla^2f(x) - \lambda I)}$.  
   \end{block}
-%image pour 2
+
+%image pour 2 ?
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Conditions d'optimalité}
+
+  \begin{block}{Conditions d'optimalité locale}
+    Soit $f$ continue et deux fois continûment différentiable en tout $x \in \R^n$.
+    $x^\star$ est un optimum local ssi
+    \begin{itemize}
+    \item ${\nabla f}^T(x^\star) = 0$ (stationnarité) et
+    \item $\nabla^2f(x^\star)$ est une matrice \emph{définie positive},
+      c-à-d. ses valeures propres sont \emph{strictement positives}.
+    \end{itemize}
+  \end{block}
+
+  \only<1>{
+  \begin{block}{Théorème (avec différentiabilité)}
+    Soit $f$ convexe et continûment différentiable en tout $x \in \R^n$.
+    $x^\star$ est un optimum global ssi ${\nabla f}^T(x^\star) = 0$.
+  \end{block}
+  }
+  \only<2>{
+  \begin{block}{Théorème (sans différentiabilité)}
+    Soit $f$ convexe et définie sur $S \subset \R^n$ convexe.
+    Tout optimum local est un optimum global.  
+  \end{block}
+  }
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Exemple numérique pour $f:\R \rightarrow \R$}
+
+    \only<1>{
+      $f(x) = x^2 - 6x + 4$\\
+      $f'(x) = 2x - 6$\\
+      $f''(x) = 2$ \\ 
+      ~\\
+      $\forall x, \ f''(x) > 0 \Rightarrow f$ convexe $\Rightarrow$ $\exists$ un minimum global $x^\star$ tel que:
+      $f'(x^\star) = 0 \Leftrightarrow x^\star = 3$.
+    }
+    \only<2>{
+      $f(x) = 2x^3 - x^2 + 2x + 5$\\
+      $f'(x) = 6x^2 - 2x + 2$\\
+      $f''(x) = 12x - 2$ \\ 
+      ~\\
+      On ne peut rien dire de la convexité pour tout $x$.\\
+      Mais on peut procéder par intervalle. 
+    }
   
 \end{frame}
 
@@ -405,9 +485,48 @@
 
 
 % ----------------------------------------------------------------------
-\section{Optimisation continue}
+\section{Méthodes numériques d'pptimisation sans contrainte}
 % ----------------------------------------------------------------------
 
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Enoncé du problème}
+
+  \[
+  (\text{P}^\circ) \left\{
+  \begin{array}{c}
+    \text{min} \ f(x) \ \text{tel que :} \\
+    x \in \R^n
+  \end{array}
+  \right.
+  \]
+
+  \begin{itemize}
+  \item problème fréquent,
+  \item même avec contraintes, on peut parfois se ramener à $\text{P}^\circ$,
+  \item existence d'une solution optimale si $f$ est continue et :
+    \begin{itemize}
+    \item soit est définie dans $K \subset \R^n$, fermé et borné,
+    \item soit $f(x) \rightarrow \infty$ quand $\|x\| \rightarrow \infty$, 
+    \end{itemize}
+  \item pas d'unicité, nombreux optima locaux si $f$ quelconque.
+  \end{itemize}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Schéma itératif général}
+
+  \begin{itemize}
+  \item Soit $f : \R^n \rightarrow \R$ (+ hypothèses)
+  \item On part d'une solution initiale $x^{(0)}$
+  \item A chaque étape, on obtient une nouvelle solution
+    \[ x^{(k+1)} := x^{(k)} - \lambda^{(k)} {\nabla f}(x^{(k)}), \ \lambda^{(k)} > 0. \]
+  \item On s'arrête quand le gradient s'annule (ou presque)
+  \end{itemize}
+
+\end{frame}
 %TODO
 %conditions d'optimalité sans contraintes
 % et méthodes de desc. de grad. 
@@ -416,6 +535,8 @@
 %conditions d'optimalité avec contraintes egalites: 
 % - multiplicateur de Lagrange, etc. (p. 209 et après [1])
 % - dualité de Lagrange
+
+
 
 
 % ----------------------------------------------------------------------
