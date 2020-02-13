@@ -76,16 +76,16 @@
 
   \begin{block}{L'optimisation est partout}
   \begin{itemize}
-  \item à la question ``y a-t-il une solution ?'' (problème de décision)
-  \item suit naturellement ``quelle est la meilleure solution ?'' (problème d'optimisation)
-  \item l'optimisation peut être sous-jacente : par ex. en apprentissage supervisé, on cherche
+  \item à la question ``y a-t-il une solution ?'' (pb. de décision)
+  \item suit ``quelle est la meilleure solution ?'' (pb. d'optimisation)
+  \item l'optimisation peut être sous-jacente : par ex., en apprentissage supervisé, on cherche
     une fonction de prédiction qui minimise une fonction de coût.
     %exemple du salaire d'une personne qui arrive
     %moyenne minimise les écarts quadratiques
     %mediane minimise les écarts absolus
     %mode, cad le plus probable. 
   \item certains problèmes sont difficiles et requièrent des méthodes inhabituelles pour découvrir
-    des solutions, mêmes approchées : c'est de l'IA.
+    des solutions, mêmes approchées : c'est une partie de ce qu'on appelle l'IA.
   \end{itemize}
   \end{block}
   
@@ -108,7 +108,7 @@
   \begin{array}{c}
     \text{min} \ f(x) \ \text{tel que :} \\
     g_i(x) \leq 0, \ i = 1, \dots, m \\
-    x \in S \subset \R^n
+    x \in S \subseteq \R^n
   \end{array}
   \right.
   \]
@@ -331,48 +331,46 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Différentiabilité en dimension 1}
+  \frametitle{Différentiabilité pour $f: \R \rightarrow \R$}
 
-  \[
-  \begin{array}{l}
-    f: \R \rightarrow \R \\
-    x \rightarrow f(x)
-  \end{array}
-  \]
-  
   \begin{block}{Dérivée première}
     $f'(x) := \frac{\partial f}{\partial x} = \lim_{h \rightarrow 0} \frac{f(x+h) - f(x)}{h}$.\\
     Géométriquement, c'est la pente de la tangente au graphe de $f$ 
   \end{block}
 
+  {
+    \begin{center}
+      \includegraphics<+>[width=0.5\textwidth,page=1]{derivee}    
+      \includegraphics<+>[width=0.5\textwidth,page=2]{derivee}
+    \end{center}
+  }
+  
   \begin{block}{Dérivée seconde = dérivée de la dérivée première}
     $f''(x) := \frac{\partial f'}{\partial x} = \frac{\partial ^{2}f}{\partial x^{2}}$.
   \end{block}
-
-  %TODO image
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Différentiabilité en dimension $> 1$}
-
-  \[
-  \begin{array}{l}
-    f: \R^n \rightarrow \R \\
-    x^T = (x_1,x_2,\dots,x_n) \rightarrow f(x)
-  \end{array}
-  \]
+  \frametitle{Différentiabilité pour $f: \R^n \rightarrow \R$}
   
   \begin{block}{Gradient (vecteur), extension de la dérivée première}
-    ${\nabla f}^T := (\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \dots, \frac{\partial f}{\partial x_n})$
+    ${\nabla f}^T := (\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \dots, \frac{\partial f}{\partial x_n})$ \\
+    Géométriquement, il est perpendiculaire à la courbe de niveau projetée. 
   \end{block}
 
+  \only<1>{
+    \begin{center}
+      \includegraphics<+>[width=0.9\textwidth]{gradient}    
+    \end{center}
+  }
+  \only<2>{
     \begin{block}{Hessien (matrice), extension de la dérivée seconde}
       $\nabla^2 f :=
       \begin{bmatrix}{\frac {\partial ^{2}f}{\partial x_{1}^{2}}}&{\frac {\partial ^{2}f}{\partial x_{1}\partial x_{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{1}\partial x_{n}}}\\{\frac {\partial ^{2}f}{\partial x_{2}\partial x_{1}}}&{\frac {\partial ^{2}f}{\partial x_{2}^{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{2}\partial x_{n}}}\\\vdots &\vdots &\ddots &\vdots \\{\frac {\partial ^{2}f}{\partial x_{n}\partial x_{1}}}&{\frac {\partial ^{2}f}{\partial x_{n}\partial x_{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{n}^{2}}}\end{bmatrix}$
-  \end{block}
-
+    \end{block}
+  }
 \end{frame}
 
 
@@ -385,8 +383,8 @@
     \begin{enumerate}
     \item $f$ est convexe,
     \item $\forall x, y, \ f(y) > f(x) + {\nabla f} ^T(x) \cdot (y - x)$,
-    \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice semi-définie positive,
-      c-à-d. ses valeures propres sont positives (ou nulles).
+    \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice \emph{semi-définie positive},
+      c-à-d. ses valeures propres sont \emph{positives ou nulles}.
     \end{enumerate}
   \end{block}
 
@@ -396,13 +394,11 @@
     l'équation $\det{(\nabla^2f(x) - \lambda I)}$.  
   \end{block}
 
-%image pour 2 ?
-  
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Conditions d'optimalité}
+  \frametitle{Conditions d'optimalité générales}
 
   \begin{block}{Conditions d'optimalité locale}
     Soit $f$ continue et deux fois continûment différentiable en tout $x \in \R^n$.
@@ -411,17 +407,19 @@
     \item ${\nabla f}^T(x^\star) = 0$ (stationnarité) et
     \item $\nabla^2f(x^\star)$ est une matrice \emph{définie positive},
       c-à-d. ses valeures propres sont \emph{strictement positives}.
+      %le strictement permet d'éviter les points d'inflexion ou
+      %on a un point stationnaire et ou le hessien est seulement semi-definie positive
     \end{itemize}
   \end{block}
 
   \only<1>{
-  \begin{block}{Théorème (avec différentiabilité)}
+  \begin{block}{Théorème d'optimalité globale (avec différentiabilité)}
     Soit $f$ convexe et continûment différentiable en tout $x \in \R^n$.
     $x^\star$ est un optimum global ssi ${\nabla f}^T(x^\star) = 0$.
   \end{block}
   }
   \only<2>{
-  \begin{block}{Théorème (sans différentiabilité)}
+  \begin{block}{Théorème d'optimalité globale (sans différentiabilité)}
     Soit $f$ convexe et définie sur $S \subset \R^n$ convexe.
     Tout optimum local est un optimum global.  
   \end{block}
@@ -485,20 +483,22 @@
 
 
 % ----------------------------------------------------------------------
-\section{Méthodes numériques d'pptimisation sans contrainte}
+\section{Méthodes numériques d'optimisation sans contrainte}
 % ----------------------------------------------------------------------
+
+% ----------------------------------------------------------------------
+\begin{frame}<beamer>
+  \frametitle{Outline}
+  \tableofcontents[currentsection]
+\end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
   \frametitle{Enoncé du problème}
 
   \[
-  (\text{P}^\circ) \left\{
-  \begin{array}{c}
-    \text{min} \ f(x) \ \text{tel que :} \\
-    x \in \R^n
-  \end{array}
-  \right.
+  (\text{P}^\circ) \quad
+    \text{min} \ f(x), \ x \in \R^n
   \]
 
   \begin{itemize}
@@ -506,10 +506,10 @@
   \item même avec contraintes, on peut parfois se ramener à $\text{P}^\circ$,
   \item existence d'une solution optimale si $f$ est continue et :
     \begin{itemize}
-    \item soit est définie dans $K \subset \R^n$, fermé et borné,
+    \item soit est définie dans $S \subset \R^n$, fermé et borné,
     \item soit $f(x) \rightarrow \infty$ quand $\|x\| \rightarrow \infty$, 
     \end{itemize}
-  \item pas d'unicité, nombreux optima locaux si $f$ quelconque.
+  \item mais non unicité et nombreux optima locaux pour $f$ quelconque.
   \end{itemize}
   
 \end{frame}
@@ -522,11 +522,56 @@
   \item Soit $f : \R^n \rightarrow \R$ (+ hypothèses)
   \item On part d'une solution initiale $x^{(0)}$
   \item A chaque étape, on obtient une nouvelle solution
-    \[ x^{(k+1)} := x^{(k)} - \lambda^{(k)} {\nabla f}(x^{(k)}), \ \lambda^{(k)} > 0. \]
+    \[ x^{(k+1)} := x^{(k)} - \textcolor{blue}{\lambda^{(k)}} \alert{{\nabla f}(x^{(k)})}, \ \lambda^{(k)} > 0. \]
+    (c-à-d. qu'on se déplace dans la direction du \alert{gradient},
+    d'un pas d'une certaine \textcolor{blue}{longueur})
   \item On s'arrête quand le gradient s'annule (ou presque)
   \end{itemize}
 
+  ~
+
+  Questions : 
+  terminaison ?
+  solution initiale ?
+  longueur du pas ?
 \end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Longueur du pas}
+
+  \begin{block}{De nombreuses méthodes pour déterminer $\lambda^{(k)}$}
+  \begin{itemize}
+  \item fixé par l'utilisateur (mais normalisé par la norme du gradient)
+  \item $1 / k \|{\nabla f}(x^{(k)})\|$ (le pas diminue au fur et à mesure des itérations)
+  \item \emph{Newton}: $\Big( {\nabla^2 f}(x^{(k)}) \Big)^{-1}$
+    \begin{itemize}
+    \item $x^{(k+1)}$ est l'optimal d'une approximation quadratique en $x^{(k)}$
+    \item nécessite le hessien
+    \item ne converge pas toujours
+    \end{itemize}
+  \item \emph{Steepest descent}: tel que $f(x^{(k)} - \lambda^{(k)} {\nabla f}(x^{(k)}))
+    = \min_{\lambda \geq 0} f(x^{(k)} - \lambda {\nabla f}(x^{(k)})$
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+%exemples Newton convergence ratée, exemple zigzag
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Ce à quoi vous avez échappé}
+
+  \begin{itemize}
+  \item Newton modifié et quasi-Newton
+  \item méthode du gradient conjugué, méthode de Fletcher et Reeves
+  \item méthode de Davidon-Fletcher-Powell (DFP)
+  \item méthode de Broyden-Fletcher-Goldfarb-Shanno (BFGS)
+  \item algorithme de Powell (sans dérivée)
+  \end{itemize}
+  
+\end{frame}
+
 %TODO
 %conditions d'optimalité sans contraintes
 % et méthodes de desc. de grad. 
