@@ -538,6 +538,26 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
+  \frametitle{La terminaison dépend de $f$ et de la solution initiale}
+
+  \begin{itemize}
+    \item $f(x) = 2x\exp{-x^2}$
+  \end{itemize}
+  
+  \begin{center}
+      \includegraphics[width=0.6\textwidth]{desc-grad-non-conv}    
+  \end{center}
+  
+  \begin{itemize}
+  \item En partant de $x^{(0)} = 0$, on peut atteindre $-\frac{\sqrt{2}}{2}$, le minimum.
+  \item En partant de $x^{(0)} = 1$, on a $x^{(k)} \rightarrow \infty$ quand $k \rightarrow \infty$. 
+  \end{itemize}
+  
+\end{frame}
+
+
+% ----------------------------------------------------------------------
+\begin{frame}
   \frametitle{Longueur du pas}
 
   \begin{block}{De nombreuses méthodes pour déterminer $\lambda^{(k)}$}
@@ -547,16 +567,95 @@
   \item \emph{Newton}: $\Big( {\nabla^2 f}(x^{(k)}) \Big)^{-1}$
     \begin{itemize}
     \item $x^{(k+1)}$ est l'optimal d'une approximation quadratique en $x^{(k)}$
-    \item nécessite le hessien
-    \item ne converge pas toujours
+    \item nécessite le hessien (et le gradient)
     \end{itemize}
   \item \emph{Steepest descent}: tel que $f(x^{(k)} - \lambda^{(k)} {\nabla f}(x^{(k)}))
-    = \min_{\lambda \geq 0} f(x^{(k)} - \lambda {\nabla f}(x^{(k)})$
+    = \min_{\lambda \geq 0} f(x^{(k)} - \lambda {\nabla f}(x^{(k)}))$
   \end{itemize}
   \end{block}
 \end{frame}
 
-%exemples Newton convergence ratée, exemple zigzag
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Méthode de Newton: convergence en un pas}
+
+  \begin{itemize}
+  \item $f(x_1,x_2) = a_1x_1^2 + b_1x_1 + c_1 + a_2x_2^2 + b_2 + c_2$
+  \item $\frac{\partial f}{\partial x_1} = 2a_1x_1 + b_1, \frac{\partial f}{\partial x_2} = 2a_2x_2 + b_2$
+    , donc $\forall (x_1,x_2), \ {\nabla f}(x_1,x_2)^T = (2a_1x_1 + b_1,2a_2x_2 + b_2)$
+  \item $\frac{\partial^2 f}{\partial x_1^2} = 2a_1, \frac{\partial^2 f}{\partial x_1x_2} = 0,
+    \frac{\partial^2 f}{\partial x_2x_1} = 0, \frac{\partial^2 f}{\partial x_2^2} = 2a_2$, donc
+  $ \forall (x_1,x_2), \ \nabla^2f(x_1,x_2) =
+  \left(\begin{array}{cc}
+    2a_1 & 0 \\
+    0 & 2a_2 \\
+  \end{array}
+  \right)
+  %% , \ \Big( \nabla^2f(x_1,x_2) \Big)^1 =
+  %% \left(\begin{array}{cc}
+  %%   \frac{1}{2} & 0 \\
+  %%   0 & \frac{1}{4} \\
+  %% \end{array}
+  %% \right)
+  $
+  %
+  \end{itemize}
+
+  \begin{itemize}
+  \item $\left( \begin{array}{c} x_1^{(1)} \\ x_2^{(1)} \end{array} \right ) =
+    \left( \begin{array}{c} x_1^{(0)} \\ x_2^{(0)} \end{array} \right ) -
+  \left(\begin{array}{cc} \frac{1}{2a_1} & 0 \\ 0 & \frac{1}{2a_2} \\ \end{array} \right) \cdot
+  \left( \begin{array}{c} 2a_1x_1^{(0)} + b_1 \\ 2a_2x_2^{(0)} + b_2 \end{array} \right ) =
+  \left( \begin{array}{c} -\frac{b_1}{2a_1} \\ -\frac{b_2}{2a_2} \end{array} \right ) $, or
+  ${\nabla f}(-\frac{b_1}{2a_1}, -\frac{b_2}{2a_2})$ est nul : on a le minimum
+  \item \alert{convergence en une itération car $f$ est quadratique et convexe}
+  \end{itemize}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Méthode de Newton: non convergence}
+
+  \begin{itemize}
+  \item $f(x) = \left \{
+    \begin{array}{ll}
+      -4x^3 + 3x^4 & \text{si} \ x\geq 0 \\
+      4x^3 + 3x^4 & \text{si} \ x < 0 \\
+    \end{array} \right.$
+  \end{itemize}
+  
+  \begin{center}
+      \includegraphics[width=0.6\textwidth]{newton-non-conv}    
+  \end{center}
+  
+  \begin{itemize}
+  \item En partant de $x^{(0)} = 0.4$, on converge vers 0, le minimum.
+  \item En partant de $x^{(0)} = 0.6$, on a $x^{(1)}$ = -0.6, $x^{(2)}$ = 0.6\dots 
+  \end{itemize}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{\emph{Steepest Descent}: convergence lente}
+
+  \begin{itemize}
+  \item $f(x_1,x_2) = 2x_1x_2 + 2x_2 - x_1^2 - 2x_2^2$
+  \item$(x_1^{(0)}, x_2^{(0)}) = (0, 0.5)$ 
+  \end{itemize}
+
+  \begin{center}
+      \includegraphics[width=0.6\textwidth]{steepest-desc}    
+  \end{center}
+  
+  \begin{itemize}
+  \item Deux directions successives sont toujours orthogonales
+  \item Ce qui est lent pour des fonctions à \emph{vallée étroite}. 
+  \end{itemize}
+    
+  
+\end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
@@ -567,14 +666,41 @@
   \item méthode du gradient conjugué, méthode de Fletcher et Reeves
   \item méthode de Davidon-Fletcher-Powell (DFP)
   \item méthode de Broyden-Fletcher-Goldfarb-Shanno (BFGS)
-  \item algorithme de Powell (sans dérivée)
+  \item algorithme de Powell (sans dérivée !)
   \end{itemize}
   
 \end{frame}
 
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Ce à quoi vous n'échapperez pas (TD)}
+
+  \[
+  (\text{P}^\circ) \quad
+    \text{min} \ f(x) := \sum_{i = \{1,\dots,l\}} q_i(x), \ x \in \R^n
+  \]
+
+  \[ x^{(k+1)} := x^{(k)} - \lambda^{(k)} {\nabla f}(x^{(k)}), \ \lambda^{(k)} > 0. \]
+  
+  \begin{itemize}
+  \item méthode du gradient stochastique : on évalue le gradient
+    \begin{itemize}
+    \item sur 1 fonction $q_i(x), \ i \in \{1,\dots,l\}$ au hasard
+    \item ou sur plusieurs (\emph{mini-batch}), mais pas sur tout $f$
+    \end{itemize}
+  \item variantes :
+    \begin{itemize}
+    \item méthode du moment 
+    \item RMSprop
+    \item Adam
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+%%40 min
+
 %TODO
-%conditions d'optimalité sans contraintes
-% et méthodes de desc. de grad. 
 %conditions d'optimalité avec contraintes inegalites: 
 % - conditions de Kuhn et Tucker, etc. (p. 204 et après [1])
 %conditions d'optimalité avec contraintes egalites: 
