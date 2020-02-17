@@ -107,7 +107,7 @@
   \text{(P)} \left\{
   \begin{array}{c}
     \text{min} \ f(x) \ \text{tel que :} \\
-    g_i(x) \leq 0, \ i = 1, \dots, m \\
+    g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
     x \in S \subseteq \R^n
   \end{array}
   \right.
@@ -117,9 +117,9 @@
     \begin{block}{Vocabulaire}
     \begin{itemize}
     \item fonction objectif : $f$
-    \item contraintes : $g_i(x) \leq 0, \ i = 1, \dots, m$ et $x \in S$
+    \item contraintes : $(g_i)_{i \in I}$ et $x \in S$
     \item inconnues : composantes du vecteur $x^T := (x_1, \dots, x_n) \in \R^n$
-    \item une solution : $x$ satisfaisant les contraintes
+    \item une solution (candidate) : $x$ satisfaisant les contraintes
     \item solution optimale/optimum global : une solution minimisant $f$
     \end{itemize}
     %distinction des contraintes en deux:
@@ -581,22 +581,17 @@
 
   \begin{itemize}
   \item $f(x_1,x_2) = a_1x_1^2 + b_1x_1 + c_1 + a_2x_2^2 + b_2 + c_2$
-  \item $\frac{\partial f}{\partial x_1} = 2a_1x_1 + b_1, \frac{\partial f}{\partial x_2} = 2a_2x_2 + b_2$
-    , donc $\forall (x_1,x_2), \ {\nabla f}(x_1,x_2)^T = (2a_1x_1 + b_1,2a_2x_2 + b_2)$
-  \item $\frac{\partial^2 f}{\partial x_1^2} = 2a_1, \frac{\partial^2 f}{\partial x_1x_2} = 0,
-    \frac{\partial^2 f}{\partial x_2x_1} = 0, \frac{\partial^2 f}{\partial x_2^2} = 2a_2$, donc
+  \item %$\frac{\partial f}{\partial x_1} = 2a_1x_1 + b_1, \frac{\partial f}{\partial x_2} = 2a_2x_2 + b_2$
+    %, donc
+    $\forall (x_1,x_2), \ {\nabla f}(x_1,x_2)^T = (2a_1x_1 + b_1,2a_2x_2 + b_2)$
+  \item %$\frac{\partial^2 f}{\partial x_1^2} = 2a_1, \frac{\partial^2 f}{\partial x_1x_2} = 0,
+    %\frac{\partial^2 f}{\partial x_2x_1} = 0, \frac{\partial^2 f}{\partial x_2^2} = 2a_2$, donc
   $ \forall (x_1,x_2), \ \nabla^2f(x_1,x_2) =
   \left(\begin{array}{cc}
     2a_1 & 0 \\
     0 & 2a_2 \\
   \end{array}
   \right)
-  %% , \ \Big( \nabla^2f(x_1,x_2) \Big)^1 =
-  %% \left(\begin{array}{cc}
-  %%   \frac{1}{2} & 0 \\
-  %%   0 & \frac{1}{4} \\
-  %% \end{array}
-  %% \right)
   $
   %
   \end{itemize}
@@ -714,22 +709,189 @@
 \begin{frame}
   \frametitle{\'Enoncé du problème}
 
+  \[
+  (\text{P}^\bullet) \left\{
+  \begin{array}{c}
+    \text{min} \ f(x) \ \text{tel que :} \\
+    g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
+    x \in \R^n
+  \end{array}
+  \right.
+  \]
+
+  \begin{block}{Hypothèses}
+    \begin{itemize}
+    \item (H1) $f$ et $(g_i)_{i \in I}$ continues, différentiables
+    \item (H2) $X = \{ x \in \R^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$,
+      l'ensemble des solutions de $(\text{P}^\bullet)$ est non vide, mais peut avoir un
+      intérieur vide, c-à-d. il n'existe pas de $x_0$ vérfiant $g_i(x_0) < 0, \ \forall i \in I$
+    \item (QC) \alert{hypothèse de qualification des contraintes}
+    \end{itemize}
+  \end{block}
+  
 \end{frame}
 
 %TODO
 %conditions d'optimalité avec contraintes inegalites: 
 % - conditions de Kuhn et Tucker, etc. (p. 204 et après [1])
+
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Hypothèse de qualification des contraintes}
+  \frametitle{Saturation et cône tangent en un point $x_0 \in X$}
 
+  \begin{itemize}
+    \item Une contrainte $g_i$ est \emph{saturée} ssi $g_i(x_0) = 0$
+    \item L'ensemble des contraintes saturées en $x_0$ est
+      $\{g_i\}_{i \in I_0}, \ I_0 := \{i \ | \ g_i(x_0) = 0 \}$
+    \item Le cône tangent en $x_0$ est donné par le gradient des contraintes saturées en $x_0$ :
+      $G_0 := \{ y \in \R^n \ | \ {\nabla g_i}^T \cdot y \leq 0, \ \forall i \in I_0 \}$ 
+  \end{itemize}
+
+  \begin{center}
+      \includegraphics[width=0.45\textwidth,page=1]{cone-tangent} \hspace{0.01\textwidth}   
+      \includegraphics[width=0.45\textwidth,page=2]{cone-tangent}    
+  \end{center}
+  
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Conditions de Khun et Tucker}
+  \frametitle{Hypothèse de qualification des contraintes (QC)}
 
+$X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi 
+  on peut se déplacer de $x_0$ vers tout point de $G_0$ suffisamment proche en restant dans $X$.
+
+  \only<1>{
+  \begin{exampleblock}{Cas où (QC) est vérifiée en $x_0$ : }
+  \begin{center}
+      \includegraphics[width=0.5\textwidth,page=1]{cone-tangent}    
+  \end{center}
+  \end{exampleblock}
+  }
+  \only<2>{
+  \begin{exampleblock}{Cas où (QC) n'est pas vérifiée en $x_0$ : }
+  \begin{center}
+      \includegraphics[width=0.5\textwidth,page=2]{cone-tangent}    
+  \end{center}
+  \end{exampleblock}
+  }
+  \only<3>{
+    \begin{block}{Théorème local}
+      $(QC)$ est vérifiée \alert{en un point $x^0 \in X$}
+      \begin{itemize}
+      \item si les gradients $\{ {\nabla g_i}(x^0) \}_{i \in I_0}$ des contraintes saturées en $x_0$
+        sont linéairement indépendants
+      \end{itemize}
+    \end{block}
+    
+    \begin{block}{Théorème global}
+      $(QC)$ est vérifiée \alert{pour tout $x \in X$}
+      \begin{itemize}
+      \item si toutes les fonctions $g_i$ sont linéaires
+      \item ou si toutes les fonctions $g_i$ sont convexes, différentiables, et l'intérieur de $X$ n'est pas vide
+      \end{itemize}
+    \end{block}
+  }
+  
 \end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Conditions d'optimalité de Khun et Tucker}
+
+  \only<1>{
+  \begin{center}
+      \includegraphics[width=0.5\textwidth,page=3]{cone-tangent}    
+  \end{center}
+  }
+
+  \only<2>{
+    \begin{block}{Conditions nécessaires}
+      En supposant (H), (H2), (QC), si $x_0$ est un minimum local de $(\text{P}^\bullet)$,
+      alors il existe $\{\lambda_i \geq 0\}_{i \in I}$ tels que:
+      \[
+      (\text{KT})
+      \left\{
+      \begin{array}{ll}
+        -{\nabla f}(x_0) = \sum_{i \in I} \lambda_i {\nabla g_i}(x_0)
+        & \text{(combinaison linéaire)} \\
+        \lambda_i g_i(x_0) = 0, \ \forall i \in I
+        & (\Leftrightarrow \lambda_i = 0, \ \forall i \in I \setminus I_0) \\
+      \end{array}
+      \right.
+      \]
+    \end{block}
+
+    \begin{block}{Conditions suffisantes}
+      Dans le cas où, en plus, $f$ et $\{g_i\}_{i\in I}$ sont \emph{convexes},
+      si les conditions (KT) sont vérifées, alors $x_0$ est un minimum
+      (global) de $(\text{P}^\bullet)$.  
+    \end{block}
+  }
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Exemple}
+
+  \[
+  \begin{array}{l}
+    \text{min} \ (x_1 - 3)^2 + (x_2 - 4)^2 \ \text{tel que :} \\
+    \left\{
+    \begin{array}{l}
+      x_1 + x_2 - 5 \leq 0 \\
+      x_1 - x_2 - 2.5 \leq 0 \\
+      -x_1 \leq 0 \\
+      -x_2 \leq 0
+    \end{array}
+    \right.\\
+  \end{array}
+  \]
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Méthodes d'optimisation}
+
+  \begin{itemize}
+  \item Résolution des équations (KT) par des méthodes d'optimisation sans contrainte %ex. resoudre ax = b revient a minimiser (ax - b)^2  
+  \item Méthodes des pénalités : on élimine les contraintes en ajoutant à la fonction objectif des pénalités qui assurent
+    qu'un point $\bar{x} \notin X$ ne soit pas minimum   
+  \item Méthodes exploitant la \emph{dualité lagrangienne}
+    %algorithmes d'Uzawa, Arrow-Hurwicz, Dantzig, méthode des multiplicateurs 
+  \item Méthodes itératives : de la solution courante, on cherche un déplacement de descente vers un point de $X$
+    %méthodes des directions réalisables, du gradient projeté, du gradient réduit (généralisé)...
+  \item Méthodes de linéarisation : à chaque étape, on cherche le minimum d'une approximation linéaire de $f$ pour trouver le
+    déplacement (ex. méthode de Franck et Wolf)
+    %plans sécants de Kelley, génération de colonne de Dantzig...
+  \end{itemize}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Cas particulier des fonctions linéaires (TD 2/3)}
+
+  On appelle \emph{programme linéaire}, le problème d'optimisation
+  suivant : 
+  \[
+  \text{(PL)} \left\{
+  \begin{array}{c}
+    \text{min} \ f(x) \ \text{tel que :} \\
+    g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
+    x \in \R^n \\
+    f, \{g_i\}_{i \in I} \ \text{sont linéaires} \\
+  \end{array}
+  \right.
+  \]
+
+  (PL) est résolu en pratique par la méthode du \emph{simplexe}
+  dû essentiellement à Dantzig (1959). Le traitement correct
+  des configurations dégénérées est dû à Bland (1977).
+\end{frame}
+
 
 %exemple transformation en non contraint si non contrainte de signe cf. p. 222 ou début chapitre dualité
 %prog lineaire
