@@ -483,7 +483,7 @@
 
 
 % ----------------------------------------------------------------------
-\section{Méthodes numériques d'optimisation sans contrainte}
+\section{Optimisation sans contrainte}
 % ----------------------------------------------------------------------
 
 % ----------------------------------------------------------------------
@@ -654,7 +654,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Ce à quoi vous avez échappé}
+  \frametitle{Autres méthodes}
 
   \begin{itemize}
   \item Newton modifié et quasi-Newton
@@ -668,7 +668,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Ce à quoi vous n'échapperez pas (TD 1/3)}
+  \frametitle{Cas d'une somme de fonctions (cf. TD)}
 
   \[
   (\text{P}^\circ) \quad
@@ -730,10 +730,6 @@
   \end{block}
   
 \end{frame}
-
-%TODO
-%conditions d'optimalité avec contraintes inegalites: 
-% - conditions de Kuhn et Tucker, etc. (p. 204 et après [1])
 
 % ----------------------------------------------------------------------
 \begin{frame}
@@ -797,7 +793,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Conditions d'optimalité de Khun et Tucker}
+  \frametitle{Conditions d'optimalité de Kuhn et Tucker}
 
   \only<1>{
   \begin{center}
@@ -824,7 +820,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
     \begin{block}{Conditions suffisantes}
       Dans le cas où, en plus, $f$ et $\{g_i\}_{i\in I}$ sont \emph{convexes},
-      si les conditions (KT) sont vérifées, alors $x_0$ est un minimum
+      si les conditions (KT) sont vérifées pour $x_0$, alors $x_0$ est un minimum
       (global) de $(\text{P}^\bullet)$.  
     \end{block}
   }
@@ -833,22 +829,72 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Exemple}
+  \frametitle{Exemple numérique}
 
-  \[
-  \begin{array}{l}
-    \text{min} \ (x_1 - 3)^2 + (x_2 - 4)^2 \ \text{tel que :} \\
-    \left\{
+  \begin{center}  
+  \begin{tabular}{l}
+    min \textcolor{red}{$f(x) := (x_1 - 3)^2 + (x_2 - 4)^2$} tel que : \\
+    \textcolor{blue}{$\left\{
     \begin{array}{l}
-      x_1 + x_2 - 5 \leq 0 \\
-      x_1 - x_2 - 2.5 \leq 0 \\
-      -x_1 \leq 0 \\
-      -x_2 \leq 0
+      g_1(x) := x_1 + x_2 - 5 \leq 0 \\
+      g_2(x) := x_1 - x_2 - 2.5 \leq 0 \\
+      g_3(x) := -x_1 \leq 0 \\
+      g_4(x) := -x_2 \leq 0
     \end{array}
-    \right.\\
-  \end{array}
-  \]
+    \right.$}
+  \end{tabular}
+  \end{center}
   
+  \begin{center}  
+    \includegraphics[width=0.45\textwidth,page=1]{kuhn-tucker}
+  \end{center}
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Résolution par les équations (KT)}
+
+  \only<1>{  
+  \begin{itemize}
+    \item Comme pour tout $x$, $\nabla^2f(x)$ est définie-positive, $f$ est convexe
+    \item Les contraintes $\{g_i\}_{i \in I}$ sont linéaires donc convexes
+    \item $x^\star$ et $\lambda_1,\lambda_2,\lambda_3, \lambda_4$ qui vérifient (KT)
+      sont tels que $x^\star$ est le minimum global
+    \end{itemize}
+  }
+  \only<2>{
+  On joue aux devinette et suppose que seule $g_1$ est saturée :
+  \begin{itemize}
+  \item $\Rightarrow$ $g_1(x^\star) = x_1^\star + x_2^\star - 5 = 0$
+  \item $\Rightarrow$ $\lambda_2 = \lambda_3 = \lambda_4 = 0$
+  \item et il reste : $-{\nabla f}(x^\star) = \lambda_1 {\nabla g_1}(x^\star)$
+  \end{itemize}
+
+  Le système à résoudre est donc: 
+  \[
+  \left\{
+  \begin{array}{l}
+    x_1^\star + x_2^\star - 5 = 0 \\
+  - \left( \begin{array}{c} 2x_1^\star - 6 \\ 2x_2^\star - 8 \end{array} \right) =
+  \lambda_1 \left( \begin{array}{c} 1 \\ 1 \end{array} \right) \\
+  \end{array}
+  \right.
+  \Leftrightarrow
+  \left\{
+  \begin{array}{l}
+    x_1^\star = 2 \\
+    x_2^\star = 3 \\
+    \lambda_1 = 2 \\
+  \end{array}
+  \right.
+  \]
+  }
+
+  \only<3>{
+  \begin{center}  
+    \includegraphics[width=0.45\textwidth,page=2]{kuhn-tucker}
+  \end{center}
+  }
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -856,23 +902,24 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \frametitle{Méthodes d'optimisation}
 
   \begin{itemize}
-  \item Résolution des équations (KT) par des méthodes d'optimisation sans contrainte %ex. resoudre ax = b revient a minimiser (ax - b)^2  
+  \item Résolution des équations (KT) par des méthodes d'optimisation sans contrainte
+    %ex. resoudre ax = b revient a minimiser (ax - b)^2  
   \item Méthodes des pénalités : on élimine les contraintes en ajoutant à la fonction objectif des pénalités qui assurent
     qu'un point $\bar{x} \notin X$ ne soit pas minimum   
-  \item Méthodes exploitant la \emph{dualité lagrangienne}
+  \item Méthodes exploitant la théorie de la \emph{dualité} de Lagrange
     %algorithmes d'Uzawa, Arrow-Hurwicz, Dantzig, méthode des multiplicateurs 
   \item Méthodes itératives : de la solution courante, on cherche un déplacement de descente vers un point de $X$
     %méthodes des directions réalisables, du gradient projeté, du gradient réduit (généralisé)...
   \item Méthodes de linéarisation : à chaque étape, on cherche le minimum d'une approximation linéaire de $f$ pour trouver le
-    déplacement (ex. méthode de Franck et Wolf)
-    %plans sécants de Kelley, génération de colonne de Dantzig...
+    déplacement 
+    %méthode de Franck et Wolf, plans sécants de Kelley, génération de colonne de Dantzig...
   \end{itemize}
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Cas particulier des fonctions linéaires (TD 2/3)}
+  \frametitle{Cas particulier de fonctions linéaires (cf. TD)}
 
   On appelle \emph{programme linéaire}, le problème d'optimisation
   suivant : 
@@ -888,27 +935,17 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \]
 
   (PL) est résolu en pratique par la méthode du \emph{simplexe}
-  dû essentiellement à Dantzig (1959). Le traitement correct
-  des configurations dégénérées est dû à Bland (1977).
+  %% dû essentiellement à Dantzig (1959). Le traitement correct
+  %% des configurations dégénérées est dû à Bland (1977).
+
 \end{frame}
-
-
-%exemple transformation en non contraint si non contrainte de signe cf. p. 222 ou début chapitre dualité
-%prog lineaire
-%methode de franck et wolf
-
-%a citer
-%conditions d'optimalité avec contraintes egalites: 
-% - multiplicateur de Lagrange, etc. (p. 209 et après [1])
-% - dualité de Lagrange
-
-
 
 
 % ----------------------------------------------------------------------
 \section{Optimisation combinatoire}
 % ----------------------------------------------------------------------
 
+%TODO
 
 \end{document}
 
