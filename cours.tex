@@ -53,16 +53,6 @@
 
 \institute{INSA Lyon, TC}
 
-
-%% %rappel du sommaire 
-%% \AtBeginSection[]
-%% {
-%%   \begin{frame}<beamer>
-%%     \frametitle{Outline}
-%%     \tableofcontents[currentsection]
-%%   \end{frame}
-%% }
-
 \begin{document}
 
 % ----------------------------------------------------------------------
@@ -95,6 +85,16 @@
 %TODO exemples
 % - cf. fiches + ressources tc
 
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Référence}
+
+\begin{thebibliography}{alpha}
+\bibitem{MM}
+Michel Minoux, \emph{Programmation mathématique, Théorie et algorithmes}, Lavoisier, 2eme édition, 2008, 711 pp.
+\end{thebibliography}
+
+\end{frame}
 
 % ----------------------------------------------------------------------
 \section{\'Enoncé du problème}
@@ -181,56 +181,6 @@
   \end{exampleblock}
   
 \end{frame}
-
-
-%% % ----------------------------------------------------------------------
-
-%% \begin{frame}
-%%   \frametitle{\only<1,2>{Problème d'optimisation}\only<3>{Optimisation continue sans contrainte}\only<4>{Optimisation continue avec contraintes}\only<5>{Optimisation continue convexe}\only<6>{Programmation linéaire}\only<7>{Programmation linéaire en nombre entiers}}
-
-%%   \[
-%%   \text{(P)} \left\{
-%%   \begin{array}{c}
-%%     \text{min} \ f(x) \ \text{tel que :} \\
-%%     g_i(x) \leq 0, \ i = 1, \dots, m \\
-%%     x \in S \subset \R^n
-%%   \end{array}
-%%   \right.
-%%   \]
-
-%%   \only<1>{
-%%     \begin{itemize}
-%%     \item fonction objectif : $f$
-%%     \item contraintes : $g_i(x) \leq 0, \ i = 1, \dots, m$ et $x \in S$
-%%     \item inconnues : $x(x_1, \dots, x_n) \in \R^n$
-%%     \item une solution : $\{x\}$ satisfaisant les contraintes
-%%     \item solution optimale/optimum global : une solution minimisant $f$
-%%     \end{itemize}
-%%     %distinction des contraintes en deux:
-%%     %- generalisation a plusieurs classes de pb
-%%     %- traites differement dans les algos
-%%   }
-%%   \only<2->{
-%%     \begin{itemize}
-%%     \item max $f'$ $\Leftrightarrow$ min $-f'$
-%%     \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \geq 0$ et $g'(x) \geq 0$
-%%     \item \only<2,3>{sans contrainte ($m = 0$)} \only<2>{ou} \only<2,4->{avec contrainte ($m > 0$)}
-%%     \item diversité de fonctions\only<3->{:} \only<3->{$f$}\only<4->{ et $g_i$} \only<3,4>{continues non linéaires}\only<5>{convexes}\only<6->{linéaires}
-%%     \item diversité de $S$\only<3->{:} \only<3-5>{$S \subset \R^n$}\only<3,4>{ continu compact}\only<5>{ convexe}\only<6>{cône de $\R^n$}\only<7>{$S \subset \Z^n$}
-%%     \end{itemize}
-%%   }
-%%   %TODO inégalités strictes ?
-%%   %TODO colorer en rouge ce qui apparait
-  
-%%   %TODO dimension,
-%%   %existence de solution (th. de Weierstrass)
-%% \end{frame}
-
-%% \begin{frame}
-%%   \frametitle{Différentes classes de problèmes et d'algorithmes}
-
-  
-%% \end{frame}
 
 % ----------------------------------------------------------------------
 \section{Convexité et différentiabilité}
@@ -572,15 +522,6 @@
   
 \end{frame}
 
-%TODO
-%conditions d'optimalité sans contraintes
-% et méthodes de desc. de grad. 
-%conditions d'optimalité avec contraintes inegalites: 
-% - conditions de Kuhn et Tucker, etc. (p. 204 et après [1])
-%conditions d'optimalité avec contraintes egalites: 
-% - multiplicateur de Lagrange, etc. (p. 209 et après [1])
-% - dualité de Lagrange
-
 
 
 
@@ -588,6 +529,15 @@
 \section{Optimisation combinatoire}
 % ----------------------------------------------------------------------
 
+% ----------------------------------------------------------------------
+\section{Conclusion}
+% ----------------------------------------------------------------------
+
+%% \begin{frame}
+%%   \frametitle{Différentes classes de problèmes et d'algorithmes}
+
+  
+%% \end{frame}
 
 \end{document}
 
