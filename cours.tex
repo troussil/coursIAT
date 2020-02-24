@@ -1108,7 +1108,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Résolution par séparation-évaluation}
+  \frametitle{Déroulement de la méthode}
 
   \only<1>{
     \[
@@ -1132,7 +1132,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   }
   \only<2>{
     \begin{center}
-    Affectation : ouvrier 1 / tâche 1
+    ouvrier 1 $\leftarrow$ tâche 1
     \end{center}
     \[
     \left(
@@ -1144,10 +1144,67 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
     \end{array}
     \right)
     \]
-
-    \[ e(S_{(1)}) = 8 + (6 + 1 + 6) = 21 \]
   }
+  \only<3,6>{
+    \begin{center}
+    \alert<6>{ouvrier 1 $\leftarrow$ tâche 2}
+    \end{center}
+    \[
+    \left(
+    \begin{array}{cccc}
+      \mbox{\sout{8}}& \mbox{\sout{3}} & \mbox{\sout{1}}  & \mbox{\sout{5}} \\
+      11             & \mbox{\sout{7}} & \alert{1}        & \alert{6} \\
+      \alert{7}      & \mbox{\sout{8}} & 6                & 8 \\
+      11             & \mbox{\sout{6}} & 4                & 9 
+    \end{array}
+    \right)
+    \]
+  }
+  \only<4>{
+    \begin{center}
+    ouvrier 1 $\leftarrow$ tâche 3
+    \end{center}
+    \[
+    \left(
+    \begin{array}{cccc}
+      \mbox{\sout{8}}& \mbox{\sout{3}} & \mbox{\sout{1}}  & \mbox{\sout{5}} \\
+      11             & 7               & \mbox{\sout{1}}  & \alert{6} \\
+      \alert{7}      & 8               & \mbox{\sout{6}}  & 8 \\
+      11             & \alert{6}       & \mbox{\sout{4}}  & 9 
+    \end{array}
+    \right)
+    \]
+  }
+  \only<5>{
+    \begin{center}
+    ouvrier 1 $\leftarrow$ tâche 4
+    \end{center}
+    \[
+    \left(
+    \begin{array}{cccc}
+      \mbox{\sout{8}}& \mbox{\sout{3}} & \mbox{\sout{1}}  & \mbox{\sout{5}} \\
+      11             & 7               & \alert{1}        & \mbox{\sout{6}} \\
+      \alert{7}      & 8               & 6                & \mbox{\sout{8}} \\
+      11             & \alert{6}       & 4                & \mbox{\sout{9}} 
+    \end{array}
+    \right)
+    \]
+  }
+  \begin{itemize}
+    \item<2-> $e(S_{(1)}) = 8 + (6 + 1 + 6) = 21$
+    \item<3-> \alert<6>{$e(S_{(2)}) = 3 + (7 + 1 + 6) = 17$}
+    \item<4-> $e(S_{(3)}) = 1 + (7 + 6 + 6) = 20$
+    \item<5-> $e(S_{(4)}) = 5 + (7 + 6 + 1) = 19$
+  \end{itemize}
     
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Trace sous forme arborescente}
+
+  \includegraphics[width=1\textwidth]{ex-bb}
+  
 \end{frame}
 
 % ----------------------------------------------------------------------
