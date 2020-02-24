@@ -66,8 +66,8 @@
 
   \begin{block}{L'optimisation est partout}
   \begin{itemize}
-  \item à la question ``y a-t-il une solution ?'' (pb. de décision)
-  \item suit ``quelle est la meilleure solution ?'' (pb. d'optimisation)
+  \item à la question ``y a-t-il une solution ?'' (existence)
+  \item suit ``quelle est la meilleure solution ?'' (optimisation)
   \item l'optimisation peut être sous-jacente : par ex., en apprentissage supervisé, on cherche
     une fonction de prédiction qui minimise une fonction de coût.
     %exemple du salaire d'une personne qui arrive
@@ -82,18 +82,28 @@
 \end{frame}
 
 % ----------------------------------------------------------------------
-%TODO exemples
-% - cf. fiches + ressources tc
-
-% ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Référence}
+  \frametitle{Optimisation en télécommunications}
 
-\begin{thebibliography}{alpha}
-\bibitem{MM}
-Michel Minoux, \emph{Programmation mathématique, Théorie et algorithmes}, Lavoisier, 2eme édition, 2008, 711 pp.
-\end{thebibliography}
-
+  \begin{itemize}
+  \item Allocation de fréquences / channel assignment
+    %Global System for Mobile Communications (GSM) (historiquement « Groupe spécial mobile »1)
+    %est une norme numérique de seconde génération pour la téléphonie mobile
+  \item Allocation de canaux / time slot assignment
+    %% Le time division multiple access (TDMA) ou accès multiple à répartition dans le temps en français, est une technique de contrôle d'accès au support permettant de transmettre plusieurs flux de trafic sur un seul canal ou une seule bande de fréquence. Il utilise une division temporelle de la bande passante, dont le principe est de répartir le temps disponible entre les différents utilisateurs. Par ce moyen, une fréquence (porteuse) ou une longueur d'onde peut être allouée, à tour de rôle (quasi simultanément), à plusieurs abonnés. 
+  \item Routage et allocation de longueurs d'onde / routing and wavelength assignment
+    %multiplexage en longueur d'onde, souvent appelé WDM (Wavelength Division Multiplexing en anglais)
+  \item Routage IP
+  \item Optimisation dans les réseaux radio maillés :
+    \begin{itemize}
+    \item placement min. de points d'accès / min. gateway placement
+    \item placement équitable de points d'accès / fair gateway placement
+    \item routage équitable / fair joint routing and scheduling
+    \item routage en temps minimum / minimum time routing
+    \end{itemize}
+    %p. 36/37 thèse Optimisation de la capacité des réseaux maillés, C. Molle  
+  \end{itemize}
+  
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -885,12 +895,16 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \]
 
   (PL) est résolu en pratique par la méthode du \emph{simplexe}
-  %% dû essentiellement à Dantzig (1959). Le traitement correct
+  %% dû essentiellement à Dantzig (1947). Le traitement correct
   %% des configurations dégénérées est dû à Bland (1977).
+  %% cf. https://en.wikipedia.org/wiki/Revised_simplex_method et
+  %% https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html
+  %% https://en.wikipedia.org/wiki/Transportation_theory_(mathematics)
+  %% pour le TD
   ou celle \emph{des points intérieurs}.
-  
 \end{frame}
 
+%%1 h
 
 % ----------------------------------------------------------------------
 \section{Optimisation combinatoire}
@@ -927,13 +941,25 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \end{block}
 \end{frame}
 
-    %% Les composantes de $x$, c-à-d. $x_1, \dots, x_n$, peut être supposées dans $\{0,1\}$,
-    %% car on peu toujous passer de variables entières à des variables binaires en nombre suffisant) 
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{De nombreux problèmes se ramènent à (PNE)}
 
+  \begin{itemize}
+    \item problème d'affectation (assignment problem)
+    \item problème des surveillants de musée (art gallery problem)
+    \item problème de coloration (graph coloring)
+    \item problème du sac à dos (knapsack problem)
+    \item problème du voyageur de commerce (travelling salesman problem)
+    \item problème de séquençage de tâches (job sequencing)
+    \item \dots
+  \end{itemize}
+  
+\end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Un problème différent}
+  \frametitle{Un problème différent de sa relaxation continue}
 
 \alert{L'optimum entier est aussi éloigné qu'on veut de l'optimum continu}
 
@@ -953,14 +979,14 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Explosion combinatoire}
+  \frametitle{\'Explosion combinatoire}
 
   \begin{itemize}
-    \item En rajoutant des variables, il est possible de se restreindre à des variables entières positives %2 variables >= 0, pour une variable libre
-    \item En maximisant la somme des coordonnées (sous les mêmes contraintes), il est possible de borner supérieurement les variables,
-      car l'ensemble des solutions est suppposé borné%on cherche à maximiser la sum des coord
-    \item Il y a donc un nombre \emph{fini} de combinaisons de variables à énumérer, mais ce nombre est en pratique tellement grand, qu'il n'est pas envisageable de faire une \emph{énumération exhaustive}
-      %c-à-d. que même pour de relativement petits problèmes, le temps que mettrait un ordinateur pour énumérer toutes les possibilités est de l'ordre de milliers d'années
+  \item L'ensemble des solutions $X$ est suppposé fini
+  %\item Il est possible de déterminer, pour chaque variable, l'ensemble des valeurs qu'elle peut prendre, de façon à ce que leur produit cartésien contienne $X$
+  \item Mais il n'est pas envisageable en pratique de faire une énumération exhaustive ! \\
+    ex. $50$ variables binaires $\rightarrow 2^{50} \approx 10^{15}$ vecteurs possibles  
+  \item Problème NP-difficile
   \end{itemize}
 
 \end{frame}
@@ -970,14 +996,21 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \frametitle{Représentation arborescente et principe de séparation}
   
   \begin{itemize}
-    \item $S$ est l'ensemble des combinaisons des variables et la racine d'un arbre. 
+    \item $S \supseteq X$ est un ensemble de vecteurs $x^T = (x_1,\dots,x_n)$% et la racine d'un arbre. 
     \item On partitionne $S$ en sous-ensembles
-      $\{ S_{v_i} \}_{i \in \{0,\dots,m\}}$ selon les valeurs prises par $x_1$.
-      Ces sous-ensembles sont les fils de $S$ par relation d'inclusion.
-    \item Chacun d'eux peut être partionné de la même façon selon $x_2$ et ainsi de suite.
+      $\{ S_{(v_i)} \}_{i \in \{0,\dots,m\}}$ selon les valeurs prises par $x_1$
+      %Ces sous-ensembles sont les fils de $S$ par relation d'inclusion.
+    \item Pareil selon $x_2$ et ainsi de suite.
+      %Chacun d'eux peut être partionné de la même façon selon $x_2$ et ainsi de suite.
   \end{itemize}
 
-%TODO image
+  {
+    \centering
+    \includegraphics<+>[width=0.9\textwidth,page=1]{arbre}
+    \includegraphics<+>[width=0.9\textwidth,page=2]{arbre}
+    \includegraphics<+>[width=0.9\textwidth,page=3]{arbre}
+    \includegraphics<+>[width=0.9\textwidth,page=4]{arbre}
+  }
   
 \end{frame}
 
@@ -986,15 +1019,13 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \frametitle{Principe d'évaluation}
 
   \begin{itemize}
-  \item fonction d'évaluation $e : \mathcal{P}(S) \rightarrow \R$ telle que
-    \[ \forall T \in \mathcal{P}(S), \ e(T) \leq \min_{x \in T} f(x) \]
+  \item fonction d'évaluation $e$ : pour tout ensemble $T$ descendant de $S$,
+    $e(T) \leq \min_{x \in T} f(x)$
   \item si on connait une solution $\bar{x} \in S$ et qu'au noeud $T$ on a
     \[f(\bar{x}) < e(T) \leq \min_{x \in T} f(x) \]
   \item alors $T$ ne contient aucune solution optimale et ses descendants
     ne seront pas énumérés
   \end{itemize}
-
-  %TODO image ?
   
 \end{frame}
 
@@ -1002,30 +1033,96 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 \begin{frame}
   \frametitle{Séparation-évaluation}
 
-  La méthode séparation-évaluation (\emph{Branch and Bound})
-  consiste en une minimisation le long d'une arborescence
-  et permet de résoudre de nombreux problèmes.
+  On résoud (exactement) de nombreux problèmes en combinant ces deux principes
+  (\emph{Branch and Bound}).
 
-  Il y a de nombreuses variantes selon :
+  Il y a d'innombrables variantes selon :
   \begin{itemize}
   \item la fonction d'évaluation
-  \item le choix du noeud à explorer en priorité
+  \item le choix du noeud à explorer (et donc de la valeur à fixer)
   \item le choix de la variable à partir de laquelle on partitionne le noeud choisi
   \end{itemize}
+
+  Note : on combine souvent ce principe avec la méthode des \emph{coupes intégrales}
+  (\emph{Branch and Cut}). 
   
 \end{frame}
 
-%TODO autres méthodes
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Exemple d'un problème d'affectation}
+
+  \only<1>{
+  \begin{itemize}
+  \item 4 ouvriers $\{1,2,3,4\}$ et 4 tâches $\{1,2,3,4\}$
+  \item 1 matrice de coût
+    $C := \left(
+    \begin{array}{cccc}
+      8 & 3 & 1 & 5 \\
+      11 & 7 & 1 & 6 \\
+      7 & 8 & 6 & 8 \\
+      11 & 6 & 4 & 9 
+    \end{array}
+    \right)$ \\
+    par ex. affecter l'ouvrier 4 à la tâche 3 coûte $c_{4,3} = 4$ 
+  \item Trouver l'affectation de coût minimal
+  \end{itemize}
+  }
+
+  \only<2>{
+    \begin{itemize}
+    \item On peut noter les inconnues et contraintes $x^T = (x_1,x_2,x_3,x_4)$,
+      telles que $\forall i \in \{ 1,2,3,4\}, \ x_i \in \{ 1,2,3,4\}$ \\
+      (la valeur de la variable $x_i$ est la tâche affectée à l'ouvrier $i$).
+      
+    \item Pour exprimer la fonction objectif, on peut écrire $x_i := \sum_{j=1}^4 j d_{i,j}$.
+      
+    \item Le problème s'exprime donc ainsi
+      \[
+      \left\{
+      \begin{array}{c}
+        \text{min} \ \sum_{i,j} c_{i,j}d_{i,j} \ \text{tel que :} \\
+        \forall i \in \{ 1,2,3,4\}, \ x_i \in \{ 1,2,3,4\} \ \text{et} \ x_i = \sum_{j=1}^4 j d_{i,j} 
+      \end{array}
+      \right.
+      \]
+    \end{itemize}
+  }
+ 
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Résolution par séparation-évaluation}
+
+  \begin{itemize}
+    \item ensemble des affectations possibles : $S$ ($|S| = 4! = 24$) 
+    \item choix de l'ouvrier selon lequel on sépare : arbitraire %(variable) 
+    \item fonction d'évaluation $e$ : on somme les coûts minimaux des tâches non affectées, aux coûts des tâches déjà affectées
+    \item choix de la tâche à affecter en priorité : celle qui minimise $e$ %(valeur)
+  \end{itemize}
+\end{frame}
 
 % ----------------------------------------------------------------------
 \section{Conclusion}
 % ----------------------------------------------------------------------
 
-%% \begin{frame}
-%%   \frametitle{Différentes classes de problèmes et d'algorithmes}
+\begin{frame}
+  \frametitle{Différentes classes de problèmes et d'algorithmes}
 
   
-%% \end{frame}
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Référence}
+
+\begin{thebibliography}{alpha}
+\bibitem{MM}
+Michel Minoux, \emph{Programmation mathématique, Théorie et algorithmes}, Lavoisier, 2eme édition, 2008, 711 pp.
+\end{thebibliography}
+
+\end{frame}
 
 \end{document}
 
