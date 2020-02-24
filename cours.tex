@@ -19,6 +19,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 
+\usepackage{ulem}
+\usepackage{soul}
+
 %figures
 \usepackage{graphicx}
 \graphicspath{{fig/}}
@@ -1020,7 +1023,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
   \begin{itemize}
   \item fonction d'évaluation $e$ : pour tout ensemble $T$ descendant de $S$,
-    $e(T) \leq \min_{x \in T} f(x)$
+    on choisit $e$ telle que $e(T) \leq \min_{x \in T} f(x)$
   \item si on connait une solution $\bar{x} \in S$ et qu'au noeud $T$ on a
     \[f(\bar{x}) < e(T) \leq \min_{x \in T} f(x) \]
   \item alors $T$ ne contient aucune solution optimale et ses descendants
@@ -1097,10 +1100,54 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
   \begin{itemize}
     \item ensemble des affectations possibles : $S$ ($|S| = 4! = 24$) 
-    \item choix de l'ouvrier selon lequel on sépare : arbitraire %(variable) 
     \item fonction d'évaluation $e$ : on somme les coûts minimaux des tâches non affectées, aux coûts des tâches déjà affectées
+    \item choix de l'ouvrier selon lequel on sépare : arbitraire %(variable) 
     \item choix de la tâche à affecter en priorité : celle qui minimise $e$ %(valeur)
   \end{itemize}
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Résolution par séparation-évaluation}
+
+  \only<1>{
+    \[
+    \left(
+    \begin{array}{cccc}
+      8         & \alert{3} & \alert{1} & \alert{5} \\
+      11        & 7         & 1         & 6 \\
+      \alert{7} & 8         & 6         & 8 \\
+      11        & 6         & 4         & 9 
+    \end{array}
+    \right)
+    \]
+
+    \[ e(S) = (7 + 3 + 1 + 5) = 16 \]
+
+    \begin{itemize}
+    \item $\Rightarrow 16$ minorant du coût minimum
+    \item choix de l'ouvrier : $1$ 
+    \item choix de la tâche à affecter\dots
+    \end{itemize}
+  }
+  \only<2>{
+    \begin{center}
+    Affectation : ouvrier 1 / tâche 1
+    \end{center}
+    \[
+    \left(
+    \begin{array}{cccc}
+      \mbox{\sout{8}}         & \mbox{\sout{3}}  & \mbox{\sout{1}}  & \mbox{\sout{5}} \\
+      \mbox{\sout{11}}        & 7         & \alert{1} & \alert{6} \\
+      \mbox{\sout{7}}         & 8         & 6         & 8 \\
+      \mbox{\sout{11}}        & \alert{6} & 4         & 9 
+    \end{array}
+    \right)
+    \]
+
+    \[ e(S_{(1)}) = 8 + (6 + 1 + 6) = 21 \]
+  }
+    
 \end{frame}
 
 % ----------------------------------------------------------------------
