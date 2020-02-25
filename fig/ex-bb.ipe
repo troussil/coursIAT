@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70206" creator="Ipe 7.2.7">
-<info created="D:20200224174609" modified="D:20200224180444"/>
+<info created="D:20200224174609" modified="D:20200225095921"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -220,13 +220,13 @@ h
 <dashstyle name="dash dotted" value="[4 2 1 2] 0"/>
 <dashstyle name="dash dot dotted" value="[4 2 1 2 1 2] 0"/>
 <textsize name="large" value="\large"/>
+<textsize name="small" value="\small"/>
+<textsize name="tiny" value="\tiny"/>
 <textsize name="Large" value="\Large"/>
 <textsize name="LARGE" value="\LARGE"/>
 <textsize name="huge" value="\huge"/>
 <textsize name="Huge" value="\Huge"/>
-<textsize name="small" value="\small"/>
 <textsize name="footnote" value="\footnotesize"/>
-<textsize name="tiny" value="\tiny"/>
 <textstyle name="center" begin="\begin{center}" end="\end{center}"/>
 <textstyle name="itemize" begin="\begin{itemize}" end="\end{itemize}"/>
 <textstyle name="item" begin="\begin{itemize}\item{}" end="\end{itemize}"/>
@@ -254,38 +254,116 @@ h
 <page>
 <layer name="alpha"/>
 <layer name="beta"/>
-<view layers="alpha beta" active="alpha"/>
-<text layer="alpha" matrix="1 0 0 1 -32 32" transformations="translations" pos="192 768" stroke="black" type="label" width="19.071" height="7.473" depth="2.49" valign="baseline" style="math">e(S)</text>
-<text matrix="1 0 0 1 -192 -16" transformations="translations" pos="192 768" stroke="black" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(1)})</text>
-<text matrix="1 0 0 1 -96 -16" transformations="translations" pos="192 768" stroke="black" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2)})</text>
-<text matrix="1 0 0 1 0 -16" transformations="translations" pos="192 768" stroke="black" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(3)})</text>
-<text matrix="1 0 0 1 96 -16" transformations="translations" pos="192 768" stroke="black" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4)})</text>
-<text matrix="1 0 0 1 -192 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,1)})</text>
-<text matrix="1 0 0 1 -128 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,3)})</text>
-<text matrix="1 0 0 1 -64 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,4)})</text>
-<text matrix="1 0 0 1 -160 -112" transformations="translations" pos="192 768" stroke="black" type="label" width="41.867" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,3,1)})</text>
-<text matrix="1 0 0 1 -96 -112" transformations="translations" pos="192 768" stroke="black" type="label" width="41.867" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,3,4)})</text>
-<text layer="beta" matrix="1 0 0 1 0 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,1)})</text>
-<text matrix="1 0 0 1 64 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,2)})</text>
-<text matrix="1 0 0 1 128 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,3)})</text>
-<text matrix="1 0 0 1 80 -112" transformations="translations" pos="192 768" stroke="black" type="label" width="41.867" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,3,1)})</text>
-<text matrix="1 0 0 1 144 -112" transformations="translations" pos="192 768" stroke="black" type="label" width="41.867" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,3,2)})</text>
-<text matrix="1 0 0 1 80 -160" transformations="translations" pos="192 768" stroke="black" type="label" width="48.205" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,3,1,2)})</text>
-<text layer="alpha" matrix="1 0 0 1 -48 0" transformations="translations" pos="208 784" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">16</text>
-<text matrix="1 0 0 1 9.01778 0.392077" transformations="translations" pos="0 736" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">21</text>
-<text matrix="1 0 0 1 -41.4099 0.392077" transformations="translations" pos="144 736" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">17</text>
-<text matrix="1 0 0 1 -53.4139 0" transformations="translations" pos="256 736" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">20</text>
-<text matrix="1 0 0 1 -85.4139 0" transformations="translations" pos="384 736" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
-<text matrix="1 0 0 1 16 0" transformations="translations" pos="0 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">26</text>
-<text matrix="1 0 0 1 -16 0" transformations="translations" pos="96 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
-<text matrix="1 0 0 1 -48 0" transformations="translations" pos="192 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">20</text>
-<text matrix="1 0 0 1 -80 0" transformations="translations" pos="288 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">26</text>
-<text matrix="1 0 0 1 -112 0" transformations="translations" pos="384 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">23</text>
-<text matrix="1 0 0 1 -144 0" transformations="translations" pos="480 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
-<text matrix="1 0 0 1 -16 0" transformations="translations" pos="64 640" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">20</text>
-<text matrix="1 0 0 1 -48 0" transformations="translations" pos="160 640" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">20</text>
-<text matrix="1 0 0 1 16 0" transformations="translations" pos="272 640" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
-<text matrix="1 0 0 1 16 0" transformations="translations" pos="336 640" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">25</text>
-<text matrix="1 0 0 1 16 0" transformations="translations" pos="272 592" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
+<layer name="gamma"/>
+<view layers="alpha gamma" active="gamma"/>
+<view layers="alpha beta" active="beta"/>
+<text layer="alpha" matrix="1 0 0 1 0 32" transformations="translations" pos="192 768" stroke="red" type="label" width="19.071" height="7.473" depth="2.49" valign="baseline" style="math">e(S)</text>
+<text matrix="1 0 0 1 -160 -16" transformations="translations" pos="192 768" stroke="black" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(1)})</text>
+<text matrix="1 0 0 1 32 -16" transformations="translations" pos="192 768" stroke="black" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(3)})</text>
+<text matrix="1 0 0 1 -160 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,1)})</text>
+<text matrix="1 0 0 1 -32 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,4)})</text>
+<text matrix="1 0 0 1 -128 -112" transformations="translations" pos="192 768" stroke="black" type="label" width="41.867" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,3,1)})</text>
+<text matrix="1 0 0 1 -64 -112" transformations="translations" pos="192 768" stroke="black" type="label" width="41.867" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,3,4)})</text>
+<text layer="beta" matrix="1 0 0 1 32 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,1)})</text>
+<text matrix="1 0 0 1 96 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,2)})</text>
+<text matrix="1 0 0 1 160 -64" transformations="translations" pos="192 768" stroke="red" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,3)})</text>
+<text matrix="1 0 0 1 112 -112" transformations="translations" pos="192 768" stroke="red" type="label" width="41.867" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,3,1)})</text>
+<text matrix="1 0 0 1 176 -112" transformations="translations" pos="192 768" stroke="black" type="label" width="41.867" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,3,2)})</text>
+<text matrix="1 0 0 1 112 -160" transformations="translations" pos="192 768" stroke="red" type="label" width="48.205" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4,3,1,2)})</text>
+<text layer="alpha" matrix="1 0 0 1 -16 0" transformations="translations" pos="208 784" stroke="red" type="label" width="9.963" height="6.42" depth="0" valign="baseline">16</text>
+<text matrix="1 0 0 1 41.0178 0.392077" transformations="translations" pos="0 736" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">21</text>
+<text matrix="1 0 0 1 -21.4139 0" transformations="translations" pos="256 736" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">20</text>
+<text matrix="1 0 0 1 48 0" transformations="translations" pos="0 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">26</text>
+<text matrix="1 0 0 1 -16 0" transformations="translations" pos="192 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">20</text>
+<text matrix="1 0 0 1 16 0" transformations="translations" pos="64 640" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">20</text>
+<text matrix="1 0 0 1 -16 0" transformations="translations" pos="160 640" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">20</text>
+<path stroke="black" arrow="normal/normal">
+200 780 m
+64 760 l
+</path>
+<path stroke="black" arrow="normal/normal">
+200 780 m
+156 760 l
+</path>
+<path stroke="black" arrow="normal/normal">
+200 780 m
+224 760 l
+</path>
+<path stroke="black" arrow="normal/normal">
+200 780 m
+320 760 l
+</path>
+<path stroke="black" arrow="normal/normal">
+140 732 m
+68 712 l
+</path>
+<path stroke="black" arrow="normal/normal">
+140 732 m
+120 712 l
+</path>
+<path stroke="black" arrow="normal/normal">
+140 732 m
+164 712 l
+</path>
+<path stroke="black" arrow="normal/normal">
+116 684 m
+88 664 l
+</path>
+<path stroke="black" arrow="normal/normal">
+116 684 m
+140 664 l
+</path>
+<text layer="beta" matrix="1 0 0 1 -48 0" transformations="translations" pos="288 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">26</text>
+<text matrix="1 0 0 1 -80 0" transformations="translations" pos="384 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">23</text>
+<text matrix="1 0 0 1 -112 0" transformations="translations" pos="480 688" stroke="red" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
+<text matrix="1 0 0 1 48 0" transformations="translations" pos="272 640" stroke="red" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
+<text matrix="1 0 0 1 48 0" transformations="translations" pos="336 640" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">25</text>
+<text matrix="1 0 0 1 48 0" transformations="translations" pos="272 592" stroke="red" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
+<path stroke="black" arrow="normal/normal">
+336 732 m
+260 712 l
+</path>
+<path stroke="black" arrow="normal/normal">
+336 732 m
+312 712 l
+</path>
+<path stroke="black" arrow="normal/normal">
+336 732 m
+356 712 l
+</path>
+<path stroke="black" arrow="normal/normal">
+372 684 m
+332 664 l
+</path>
+<path stroke="black" arrow="normal/normal">
+372 684 m
+384 664 l
+</path>
+<path stroke="black" arrow="normal/normal">
+328 636 m
+328 616 l
+</path>
+<group>
+<text matrix="1 0 0 1 -64 -16" transformations="translations" pos="192 768" stroke="black" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2)})</text>
+<text matrix="1 0 0 1 -9.4099 0.392077" transformations="translations" pos="144 736" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">17</text>
+</group>
+<group>
+<text matrix="1 0 0 1 -96 -64" transformations="translations" pos="192 768" stroke="black" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,3)})</text>
+<text matrix="1 0 0 1 16 0" transformations="translations" pos="96 688" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
+</group>
+<group layer="gamma">
+<text matrix="1 0 0 1 -64 -16" transformations="translations" pos="192 768" stroke="red" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2)})</text>
+<text matrix="1 0 0 1 -9.4099 0.392077" transformations="translations" pos="144 736" stroke="red" type="label" width="9.963" height="6.42" depth="0" valign="baseline">17</text>
+</group>
+<group>
+<text matrix="1 0 0 1 -96 -64" transformations="translations" pos="192 768" stroke="red" type="label" width="35.53" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(2,3)})</text>
+<text matrix="1 0 0 1 16 0" transformations="translations" pos="96 688" stroke="red" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
+</group>
+<group>
+<text matrix="1 0 0 1 128 -16" transformations="translations" pos="192 768" stroke="black" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4)})</text>
+<text matrix="1 0 0 1 -53.4139 0" transformations="translations" pos="384 736" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
+</group>
+<text layer="beta" matrix="1 0 0 1 128 -16" transformations="translations" pos="192 768" stroke="red" type="label" width="29.193" height="7.474" depth="3.54" valign="baseline" style="math">e(S_{(4)})</text>
+<text matrix="1 0 0 1 -53.4139 0" transformations="translations" pos="384 736" stroke="red" type="label" width="9.963" height="6.42" depth="0" valign="baseline">19</text>
 </page>
 </ipe>

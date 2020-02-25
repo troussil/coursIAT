@@ -19,9 +19,6 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 
-\usepackage{ulem}
-\usepackage{soul}
-
 %figures
 \usepackage{graphicx}
 \graphicspath{{fig/}}
@@ -31,9 +28,7 @@
 %math
 \usepackage{amssymb}
 \usepackage{amsmath}
-
-%algo
-\usepackage[vlined, linesnumbered, french]{algorithm2e}
+\usepackage{cancel}
 
 % ----------------------------------------------------------------------
 %macros
@@ -47,7 +42,7 @@
 
 % ----------------------------------------------------------------------
 \title[]
- {Optimisation}
+ {4TC-IAT, Optimisation}
 
 \author[T. Roussillon]
  {Tristan Roussillon}
@@ -67,7 +62,7 @@
 \begin{frame}
   \frametitle{Introduction}
 
-  \begin{block}{L'optimisation est partout}
+  \begin{block}{Les problèmes d'optimisation sont fréquents}
   \begin{itemize}
   \item à la question ``y a-t-il une solution ?'' (existence)
   \item suit ``quelle est la meilleure solution ?'' (optimisation)
@@ -129,9 +124,9 @@
   \only<1>{
     \begin{block}{Vocabulaire}
     \begin{itemize}
-    \item fonction objectif : $f$
-    \item contraintes : $(g_i)_{i \in I}$ et $x \in S$
+    \item fonction objectif : $f : \R^n \rightarrow \R$
     \item inconnues : composantes du vecteur $x^T := (x_1, \dots, x_n) \in \R^n$
+    \item contraintes : $(g_i)_{i \in I}$ et $x \in S$
     \item une solution (candidate) : $x$ satisfaisant les contraintes
     \item solution optimale/optimum global : une solution minimisant $f$
     \end{itemize}
@@ -143,10 +138,10 @@
   \only<2>{
     \begin{block}{Remarques}
     \begin{itemize}
-    \item dimension du problème $n \geq 1$
+    \item nombre d'inconnues $n \geq 1$ 
     \item max $f'$ $\Leftrightarrow$ min $-f'$
-    \item sans contrainte ($m = 0$) ou avec ($m > 0$)
-    \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \geq 0$ et $g'(x) \leq 0$
+    \item sans contrainte ($I = \emptyset$) ou avec ($I \neq \emptyset$)
+    \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \leq 0$ et $-g'(x) \leq 0$
     \item généralement pas d'inégalités strictes
     \end{itemize}
     \end{block}
@@ -188,7 +183,7 @@
   \]
   \end{block}
 
-  \begin{exampleblock}{Exemple dans $\R^1$}
+  \begin{exampleblock}{Exemple dans $\R$}
     \centering
     \includegraphics[width=0.7\textwidth]{opt-loc}
   \end{exampleblock}
@@ -245,53 +240,6 @@
   
 \end{frame}
 
-%% % ----------------------------------------------------------------------
-%% \begin{frame}
-%%   \frametitle{Programmation convexe}
-
-%%   \begin{block}{Théorème}
-%%     Soit $f$ convexe et définie sur $S \subset \R^n$ convexe.
-%%     Tout optimum local est un optimum global.  
-%%   \end{block}
-
-%%   \begin{exampleblock}{Exemple numérique pour $f:\R \rightarrow \R$}
-%%     \only<1>{
-%%       $f(x) = x^2 - 6x + 4$\\
-%%       $f'(x) = 2x - 6$\\
-%%       $f''(x) = 2$ \\ 
-%%       ~\\
-%%       $\forall x, \ f''(x) > 0 \Rightarrow f$ convexe $\Rightarrow$ $\exists$ un minimum global $x^\star$ tel que:
-%%       $f'(x^\star) = 0 \Leftrightarrow x^\star = 3$.
-%%     }
-%%     \only<2>{
-%%       $f(x) = 2x^3 - x^2 + 2x + 5$\\
-%%       $f'(x) = 6x^2 - 2x + 2$\\
-%%       $f''(x) = 12x - 2$ \\ 
-%%       ~\\
-%%       On ne peut rien dire de la convexité pour tout $x$.\\
-%%       Mais on peut procéder par intervalle. 
-%%     }
-%%   \end{exampleblock}
-  
-%% \end{frame}
-
-%% % ----------------------------------------------------------------------
-%% \begin{frame}
-%%   \frametitle{Différentiabilité en dimension 1}
-
-%%   \begin{itemize}
-%%     \item la dérivée seconde est un indicateur de convexité
-%%     \item la dérivée première s'annule en un optimum
-%%     \item la dérivée première donne même la direction vers laquelle chercher l'optimum
-%%   \end{itemize}
-
-%%   \begin{exampleblock}{Exemple numérique pour $f:\R \rightarrow \R$}
-%%     \centering
-%%     \includegraphics[width=0.6\textwidth]{fonc-plot}    
-%%   \end{exampleblock}
-  
-%% \end{frame}
-
 % ----------------------------------------------------------------------
 \begin{frame}
   \frametitle{Différentiabilité pour $f: \R \rightarrow \R$}
@@ -347,7 +295,7 @@
     \item $f$ est convexe,
     \item $\forall x, y, \ f(y) > f(x) + {\nabla f} ^T(x) \cdot (y - x)$,
     \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice \emph{semi-définie positive},
-      c-à-d. ses valeures propres sont \emph{positives ou nulles}.
+      c-à-d. ses valeurs propres sont \emph{positives ou nulles}.
     \end{enumerate}
   \end{block}
 
@@ -369,7 +317,7 @@
     \begin{itemize}
     \item ${\nabla f}^T(x^\star) = 0$ (stationnarité) et
     \item $\nabla^2f(x^\star)$ est une matrice \emph{définie positive},
-      c-à-d. ses valeures propres sont \emph{strictement positives}.
+      c-à-d. ses valeurs propres sont \emph{strictement positives}.
       %le strictement permet d'éviter les points d'inflexion ou
       %on a un point stationnaire et ou le hessien est seulement semi-definie positive
     \end{itemize}
@@ -486,7 +434,7 @@
   \item On part d'une solution initiale $x^{(0)}$
   \item A chaque étape, on obtient une nouvelle solution
     \[ x^{(k+1)} := x^{(k)} - \textcolor{blue}{\lambda^{(k)}} \alert{{\nabla f}(x^{(k)})}, \ \lambda^{(k)} > 0. \]
-    (c-à-d. qu'on se déplace dans la direction du \alert{gradient},
+    (c-à-d. qu'on se déplace dans la direction opposée du \alert{gradient},
     d'un pas d'une certaine \textcolor{blue}{longueur})
   \item On s'arrête quand le gradient s'annule (ou presque)
   \end{itemize}
@@ -504,7 +452,7 @@
   \frametitle{La terminaison dépend de $f$ et de la solution initiale}
 
   \begin{itemize}
-    \item $f(x) = 2x\exp{-x^2}$
+    \item $f(x) = 2x\exp{(-x^2)}$
   \end{itemize}
   
   \begin{center}
@@ -796,13 +744,13 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
   \begin{center}  
   \begin{tabular}{l}
-    min \textcolor{red}{$f(x) := (x_1 - 3)^2 + (x_2 - 4)^2$} tel que : \\
+    min \textcolor{red}{$f(x_1,x_2) := (x_1 - 3)^2 + (x_2 - 4)^2$} tel que : \\
     \textcolor{blue}{$\left\{
     \begin{array}{l}
-      g_1(x) := x_1 + x_2 - 5 \leq 0 \\
-      g_2(x) := x_1 - x_2 - 2.5 \leq 0 \\
-      g_3(x) := -x_1 \leq 0 \\
-      g_4(x) := -x_2 \leq 0
+      g_1(x_1,x_2) := x_1 + x_2 - 5 \leq 0 \\
+      g_2(x_1,x_2) := x_1 - x_2 - 2.5 \leq 0 \\
+      g_3(x_1,x_2) := -x_1 \leq 0 \\
+      g_4(x_1,x_2) := -x_2 \leq 0
     \end{array}
     \right.$}
   \end{tabular}
@@ -867,14 +815,16 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \begin{itemize}
   \item Résolution des équations (KT) par des méthodes d'optimisation sans contrainte
     %ex. resoudre ax = b revient a minimiser (ax - b)^2  
-  \item Méthodes des pénalités : on élimine les contraintes en ajoutant à la fonction objectif des pénalités qui assurent
-    qu'un point $\bar{x} \notin X$ ne soit pas minimum   
-  \item Méthodes exploitant la théorie de la \emph{dualité} de Lagrange
+  \item Méthodes des pénalités
+    %: on élimine les contraintes en ajoutant à la fonction objectif des pénalités qui assurent
+    %qu'un point $\bar{x} \notin X$ ne soit pas minimum   
+  \item Méthodes exploitant la théorie de la dualité de Lagrange
     %algorithmes d'Uzawa, Arrow-Hurwicz, Dantzig, méthode des multiplicateurs 
-  \item Méthodes itératives : de la solution courante, on cherche un déplacement de descente vers un point de $X$
+  \item Méthodes de descente sous contrainte
+    %: de la solution courante, on cherche un déplacement de descente vers un point de $X$
     %méthodes des directions réalisables, du gradient projeté, du gradient réduit (généralisé)...
-  \item Méthodes de linéarisation : à chaque étape, on cherche le minimum d'une approximation linéaire de $f$ pour trouver le
-    déplacement 
+  \item Méthodes de linéarisation
+    %: à chaque étape, on cherche le minimum d'une approximation linéaire de $f$ pour trouver le déplacement 
     %méthode de Franck et Wolf, plans sécants de Kelley, génération de colonne de Dantzig...
   \end{itemize}
   
@@ -928,7 +878,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \begin{array}{c}
     \text{min} \ f(x) \ \text{tel que :} \\
     g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
-    x \in \alert{Z^n}
+    x \in \alert{\Z^n}
   \end{array}
   \right.
   \]
@@ -938,7 +888,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
     \item L'ensemble des solutions $X := \{ x \in \R^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$ \\
       est borné et non vide
     \item $f, \{g_i\}_{i \in I}$ sont \emph{linéaires} \\
-      (il existe beaucoup de d'astuces pour
+      (il existe beaucoup d'astuces pour
       linéariser le problème en introduisant des variables supplémentaires)
     \end{itemize}
   \end{block}
@@ -989,7 +939,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   %\item Il est possible de déterminer, pour chaque variable, l'ensemble des valeurs qu'elle peut prendre, de façon à ce que leur produit cartésien contienne $X$
   \item Mais il n'est pas envisageable en pratique de faire une énumération exhaustive ! \\
     ex. $50$ variables binaires $\rightarrow 2^{50} \approx 10^{15}$ vecteurs possibles  
-  \item Problème NP-difficile
+  \item (PNE) est un problème NP-difficile
   \end{itemize}
 
 \end{frame}
@@ -999,12 +949,14 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \frametitle{Représentation arborescente et principe de séparation}
   
   \begin{itemize}
-    \item $S \supseteq X$ est un ensemble de vecteurs $x^T = (x_1,\dots,x_n)$% et la racine d'un arbre. 
-    \item On partitionne $S$ en sous-ensembles
-      $\{ S_{(v_i)} \}_{i \in \{0,\dots,m\}}$ selon les valeurs prises par $x_1$
-      %Ces sous-ensembles sont les fils de $S$ par relation d'inclusion.
-    \item Pareil selon $x_2$ et ainsi de suite.
-      %Chacun d'eux peut être partionné de la même façon selon $x_2$ et ainsi de suite.
+  \item $S \supseteq X$ est un ensemble de vecteurs possibles
+    %$x^T = (x_1,\dots,x_n)$% et la racine d'un arbre. 
+  \item On partitionne $S$ en sous-ensembles $S_{(v)} := \{ (x_1,\dots,x_n) \in S \ | \ x_1 = v \}$ \\
+    %$\{ S_{(v)} \}_{v \in D(x_1)}$ 
+    selon les valeurs prises par $x_1$ 
+    %Ces sous-ensembles sont les fils de $S$ par relation d'inclusion.
+  \item Pareil selon $x_2$ et ainsi de suite.
+    %Chacun d'eux peut être partionné de la même façon selon $x_2$ et ainsi de suite.
   \end{itemize}
 
   {
@@ -1046,8 +998,8 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
   \item le choix de la variable à partir de laquelle on partitionne le noeud choisi
   \end{itemize}
 
-  Note : on combine souvent ce principe avec la méthode des \emph{coupes intégrales}
-  (\emph{Branch and Cut}). 
+  %% Note : on combine souvent ce principe avec la méthode des \emph{coupes intégrales}
+  %% (\emph{Branch and Cut}). 
   
 \end{frame}
 
@@ -1076,11 +1028,13 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
     \begin{itemize}
     \item On peut noter les inconnues et contraintes $x^T = (x_1,x_2,x_3,x_4)$,
       telles que $\forall i \in \{ 1,2,3,4\}, \ x_i \in \{ 1,2,3,4\}$ \\
-      (la valeur de la variable $x_i$ est la tâche affectée à l'ouvrier $i$).
+      ($x_i$ contient le numéro de tâche affectée à l'ouvrier $i$).
       
-    \item Pour exprimer la fonction objectif, on peut écrire $x_i := \sum_{j=1}^4 j d_{i,j}$.
+    \item Pour exprimer la fonction objectif, on peut écrire pour tout $i$
+      $x_i := \sum_{j=1}^4 j d_{i,j} = d_{i,1} + 2d_{i,2} + 3d_{i,3} + 4d_{i,4} $ \\
+      ($d_{i,j} = 1$ si la tâche $j$ est affectée à l'ouvrier $i$, $d_{i,j} = 0$ sinon).
       
-    \item Le problème s'exprime donc ainsi
+    \item Le problème s'exprime donc comme un (PNE)
       \[
       \left\{
       \begin{array}{c}
@@ -1102,7 +1056,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
     \item ensemble des affectations possibles : $S$ ($|S| = 4! = 24$) 
     \item fonction d'évaluation $e$ : on somme les coûts minimaux des tâches non affectées, aux coûts des tâches déjà affectées
     \item choix de l'ouvrier selon lequel on sépare : arbitraire %(variable) 
-    \item choix de la tâche à affecter en priorité : celle qui minimise $e$ %(valeur)
+    \item choix de la tâche à fixer en priorité : celle qui minimise $e$ %(valeur)
   \end{itemize}
 \end{frame}
 
@@ -1137,10 +1091,10 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
     \[
     \left(
     \begin{array}{cccc}
-      \mbox{\sout{8}}         & \mbox{\sout{3}}  & \mbox{\sout{1}}  & \mbox{\sout{5}} \\
-      \mbox{\sout{11}}        & 7         & \alert{1} & \alert{6} \\
-      \mbox{\sout{7}}         & 8         & 6         & 8 \\
-      \mbox{\sout{11}}        & \alert{6} & 4         & 9 
+      \cancel{8}         & \cancel{3}  & \cancel{1}  & \cancel{5} \\
+      \cancel{11}        & 7         & \alert{1} & \alert{6} \\
+      \cancel{7}         & 8         & 6         & 8 \\
+      \cancel{11}        & \alert{6} & 4         & 9 
     \end{array}
     \right)
     \]
@@ -1152,10 +1106,10 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
     \[
     \left(
     \begin{array}{cccc}
-      \mbox{\sout{8}}& \mbox{\sout{3}} & \mbox{\sout{1}}  & \mbox{\sout{5}} \\
-      11             & \mbox{\sout{7}} & \alert{1}        & \alert{6} \\
-      \alert{7}      & \mbox{\sout{8}} & 6                & 8 \\
-      11             & \mbox{\sout{6}} & 4                & 9 
+      \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
+      11             & \cancel{7} & \alert{1}        & \alert{6} \\
+      \alert{7}      & \cancel{8} & 6                & 8 \\
+      11             & \cancel{6} & 4                & 9 
     \end{array}
     \right)
     \]
@@ -1167,10 +1121,10 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
     \[
     \left(
     \begin{array}{cccc}
-      \mbox{\sout{8}}& \mbox{\sout{3}} & \mbox{\sout{1}}  & \mbox{\sout{5}} \\
-      11             & 7               & \mbox{\sout{1}}  & \alert{6} \\
-      \alert{7}      & 8               & \mbox{\sout{6}}  & 8 \\
-      11             & \alert{6}       & \mbox{\sout{4}}  & 9 
+      \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
+      11             & 7               & \cancel{1}  & \alert{6} \\
+      \alert{7}      & 8               & \cancel{6}  & 8 \\
+      11             & \alert{6}       & \cancel{4}  & 9 
     \end{array}
     \right)
     \]
@@ -1182,10 +1136,10 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
     \[
     \left(
     \begin{array}{cccc}
-      \mbox{\sout{8}}& \mbox{\sout{3}} & \mbox{\sout{1}}  & \mbox{\sout{5}} \\
-      11             & 7               & \alert{1}        & \mbox{\sout{6}} \\
-      \alert{7}      & 8               & 6                & \mbox{\sout{8}} \\
-      11             & \alert{6}       & 4                & \mbox{\sout{9}} 
+      \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
+      11             & 7               & \alert{1}        & \cancel{6} \\
+      \alert{7}      & 8               & 6                & \cancel{8} \\
+      11             & \alert{6}       & 4                & \cancel{9} 
     \end{array}
     \right)
     \]
@@ -1203,23 +1157,112 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 \begin{frame}
   \frametitle{Trace sous forme arborescente}
 
-  \includegraphics[width=1\textwidth]{ex-bb}
+  {
+    \includegraphics<+>[width=1\textwidth,page=1]{ex-bb}
+    \includegraphics<+>[width=1\textwidth,page=2]{ex-bb}
+  } 
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Résultat}
+
+
+  \[
+  e(S_{(4,3,1,2)}) = 5 + 1 + 7 + 6 = 19
+  \]
+  
+  \[
+  \left(
+  \begin{array}{cccc}
+    8 & 3 & 1 & \alert{5} \\
+    11 & 7 & \alert{1} & 6 \\
+    \alert{7} & 8 & 6 & 8 \\
+    11 & \alert{6} & 4 & 9 
+  \end{array}
+  \right)
+  \]
+
+  \begin{block}{Minimum global}
+  \begin{itemize}
+    \item ouvrier 1 $\leftarrow$ tâche 4
+    \item ouvrier 2 $\leftarrow$ tâche 3
+    \item ouvrier 3 $\leftarrow$ tâche 1
+    \item ouvrier 4 $\leftarrow$ tâche 2
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Autres méthodes}
+
+  \begin{itemize}
+  \item relaxation continue dans certains cas particuliers
+  \item méthode des coupes (intégrales, mixtes)
+  \item \emph{Branch and Bound} + coupes $=$ \emph{Branch and cut}
+  \item programmation par contraintes
+  \item méta-heuristiques : \\
+      glouton, meilleur voisin, tabou, recuit-simulé, algorithme génétique, colonie de fourmis, \dots
+  \end{itemize}
   
 \end{frame}
+
 
 % ----------------------------------------------------------------------
 \section{Conclusion}
 % ----------------------------------------------------------------------
 
+% ----------------------------------------------------------------------
+\begin{frame}<beamer>
+  \frametitle{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
+% ----------------------------------------------------------------------
 \begin{frame}
   \frametitle{Différentes classes de problèmes et d'algorithmes}
 
+  \[
+  \text{(P)} \left\{
+  \begin{array}{c}
+    \text{min} \ f(x) \ \text{tel que :} \\
+    g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
+    x \in S \subseteq \R^n
+  \end{array}
+  \right.
+  \]
+
+  \begin{itemize}
+  \item Optimisation continue ($S = \R^n$)
+    \begin{itemize}
+    \item sans contrainte ($I = \emptyset$) \\
+      \emph{descente de gradient}
+    \item avec contraintes ($I \neq \emptyset$) 
+      \begin{itemize}
+        \item non-linéaires
+        \item linéaires \\
+        \emph{simplexe, points intérieurs}
+      \end{itemize}
+    \end{itemize}
+  \item Optimisation combinatoire ($S = \Z^n$)\\
+    \emph{branch and bound}, \emph{(meta)-heuristiques} 
+  \end{itemize}
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Référence}
+  \frametitle{Pour aller plus loin}
+
+  \begin{itemize}
+  \item Théorie de la dualité de Lagrange
+  \end{itemize}
+
+
+  \begin{itemize}
+  \item Livre de référence sur les aspects théoriques de l'optimisation
+  \end{itemize}
 
 \begin{thebibliography}{alpha}
 \bibitem{MM}
