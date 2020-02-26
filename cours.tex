@@ -301,7 +301,7 @@
 
   \begin{block}{Note:}
     Les valeurs propres d'une matrice carrée sont les composantes du vecteur
-    $\lambda^T := (\lambda_1, \lambda_2,\dots, \lambda_n)$, solution de
+    $\lambda^T := (\lambda_1, \lambda_2,\dots, \lambda_n)$, solutions de
     l'équation $\det{(\nabla^2f(x) - \lambda I)}$.  
   \end{block}
 
@@ -427,7 +427,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Schéma itératif général}
+  \frametitle{Schéma général de la descente de gradient}
 
   \begin{itemize}
   \item Soit $f : \R^n \rightarrow \R$ (+ hypothèses)
@@ -714,7 +714,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
   \only<2>{
     \begin{block}{Conditions nécessaires}
-      En supposant (H), (H2), (QC), si $x_0$ est un minimum local de $(\text{P}^\bullet)$,
+      En supposant (H1), (H2), (QC), si $x_0$ est un minimum local de $(\text{P}^\bullet)$,
       alors il existe $\{\lambda_i \geq 0\}_{i \in I}$ tels que:
       \[
       (\text{KT})
