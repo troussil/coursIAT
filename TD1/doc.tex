@@ -1,0 +1,167 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+%\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+
+\title{Optimisation sans contrainte, }
+\author{Tristan Roussillon}
+
+\begin{document}
+
+\maketitle
+
+Dans ce TD est traité le cas particulier de la minimisation, sans contrainte,
+d'une fonction objectif égale à une somme de fonctions. L'objectif est de se
+familiariser avec une famille de méthodes de minimisation par descente de
+gradient aussi bien que de s'entraîner à modéliser des problèmes d'optimisation.
+
+\section{Méthode des moindres carrés}
+%https://images.math.cnrs.fr/De-la-methode-des-moindres-carres-a-la-descente-de-gradient.html?lang=fr
+
+Nous observons deux caractéristiques, $u$ et $v$, sur un certain nombre d'individus :
+$\{(u_i,v_i)\}_{i = 1,\dots}$ est la liste de ces observations.
+Or, nous pensons que $u$ prédit $v$ selon la relation linéaire suivante :
+$v = x_1u + x_2$. La méthode des moindres carrés
+consiste à chercher les paramètres $x_1$ et $x_2$ qui minimisent
+la somme, sur tous les individus, des carrés des écarts entre la prédiction
+de $v$ à partir de $u$ et son observation. 
+
+\begin{exercice}
+  \'Ecrire le problème de la régression linéaire par la méthode des moindres carrés
+  sous la forme suivante
+  \[
+  \text{min} \ f(x), \ \text{telle que} \
+  f(x) = \sum_{i = \{1,\dots,l\}} q_i(x) \ \text{et} \ x \in \R^n
+  \]
+
+  \begin{itemize}
+  \item Que représente $x$ ? Que représente et que vaut $n$ ?
+  \item Que sont les fonctions $\{q_i\}_{i = \{1,\dots,l\}}$ ? Que vaut $l$ ?
+  \end{itemize}
+\end{exercice}
+
+\begin{solution}
+  $x(x_1,x_2)$ est le vecteur de paramètres à chercher ; il y a donc $n=2$ inconnues.
+  Les fonctions $\{q_i\}_{i = \{1,\dots,l\}}$ représentent, pour chacun des $l$ individus, les carrés des
+  écarts entre la prédiction, $(x_1u_i + x_2)$, et son observation, $v_i$, et valent pour tout $i$,
+  $(v_i - (x_1u_i + x_2))^2$.
+
+  D'où
+  \[
+  \text{min} \ f(x), \ \text{telle que} \
+  f(x) = \sum_{i = \{1,\dots,l\}} (v_i - (x_1u_i + x_2))^2 \ \text{et} \ x \in \R^n
+  \]
+\end{solution}
+
+\begin{exercice}
+En utilisant le Théorème~\ref{th:fonc-conv}, montrer que $f$ est convexe.   
+\end{exercice}
+
+\begin{Theorem}
+  \label{th:fonc-conv}
+  Une combinaison linéaire à coefficients positifs de fonctions convexes est une fonction convexe.
+\end{Theorem}
+
+\begin{solution}
+  D'après le Théorème~\ref{th:fonc-conv}, pour montrer que $f$ est convexe, il suffit de montrer que
+  pour tout $i$, $q_i$ est convexe.
+  Or, pour tout $i$, tout $x$,
+  \[
+  q_i(x) =  (v_i - (x_1u_i + x_2))^2 = x_1^2 u_i^2 + x_2^2 + 2u_ix_1x_2 - 2v_iu_ix_1 - 2v_ix_2 + v_i^2.
+  \]
+  On en déduit le hessien
+  \[
+  \nabla^2q_i(x) = 
+  \left(
+  \begin{array}{cc}
+    2u_i^2 & 2u_i \\
+    2u_i & 2 \\
+  \end{array}
+  \right)
+  \]
+  dont les valeurs propres sont les solutions de :
+  \[
+  \det{(\nabla^2q_i(x) - \lambda I)} = 0, 
+  \]
+  équivalent à
+  \[
+  \lambda^2 - \lambda\text{Trace}(\nabla^2q_i(x)) + \cancel{\det{(\nabla^2q_i(x))}}
+  = \lambda(\lambda - (2 + 2u_i^2)) = 0, 
+  \]
+  {\cad}, $0$ et $(2 + 2u_i^2)$, tous deux positifs.
+
+  On en conclut que pour tout $i$, $q_i$ est convexe car pour tout $x$,
+  $\nabla^2q_i(x)$ est semi-définie positive.  
+\end{solution}
+
+\begin{exercice}
+   Donner l'optimum global.
+\end{exercice}
+
+\begin{solution}
+  Comme $f$ est convexe, il suffit de trouver un point $x$ stationnaire,
+  {\cad} tel que $\nabla f(x) = 0$.
+
+  Or, pour tout $i$, ${\nabla q_i}^T(x) = \big( 2u_i (u_ix_1 + x_2 - v_i), 2(u_ix_1 + x_2 - v_i) \big)$.
+
+  On en déduit qu'il faut résoudre :
+  \[
+  \left\{
+  \begin{array}{cc}
+    \sum_i^l u_i (u_ix_1 + x_2 - v_i) &= 0 \\
+    \sum_i^l (u_ix_1 + x_2 - v_i) &= 0
+  \end{array}
+  \right.
+  \]
+  Du développement de la seconde équation découle :
+  \[
+  x_2 = \frac{1}{l} \sum_i^l (v_i - u_ix_1) = \frac{1}{l} \sum_i^l v_i - \frac{1}{l} \sum_i^l u_ix_1. 
+  \]
+  Remplaçant $x_2$ par sa valeur dans la première equation et développant :
+  \[
+  \sum_i^l u_i^2 x_1 + \sum_i^l u_i (\frac{1}{l} \sum_i^l v_i) - \sum_i^l u_i (\frac{1}{l} \sum_i^l u_ix_1) - \sum_i^l u_iv_i = 0,
+  \]
+  équivalent à 
+  \[
+  \sum_i^l u_i^2 x_1 + \frac{1}{l} (\sum_i^l v_i)(\sum_i^l u_i) - x_1 \frac{1}{l} (\sum_i^l u_i)(\sum_i^l u_i)  - \sum_i^l u_iv_i = 0.
+  \]
+  D'où
+  \[
+  x_1 = \frac{\sum_i^l u_iv_i - \frac{1}{l} (\sum_i^l v_i)(\sum_i^l u_i)}{\sum_i^l u_i^2 - \frac{1}{l} (\sum_i^l u_i)(\sum_i^l u_i)}
+  \]
+\end{solution}
+  
+%\bibliographystyle{plain}
+%\bibliography{refs}
+
+\end{document}
+
+
