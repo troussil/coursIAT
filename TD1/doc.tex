@@ -157,8 +157,22 @@ En utilisant le Théorème~\ref{th:fonc-conv}, montrer que $f$ est convexe.
   \[
   x_1 = \frac{\sum_i^l u_iv_i - \frac{1}{l} (\sum_i^l v_i)(\sum_i^l u_i)}{\sum_i^l u_i^2 - \frac{1}{l} (\sum_i^l u_i)(\sum_i^l u_i)}
   \]
-\end{solution}
+  ou plus simplement :
+  \[
+  x_1 = \frac{ \text{cov}(u,v) }{ \text{var}(u) } 
+  \]
   
+\end{solution}
+
+\section{Optimisation par descente de gradient}
+
+Même si on connait analytiquement une solution optimale pour ce problème, il est intéressant,
+d'un point de vue pédagogique, de comparer des algorithmes d'optimisation par descente de
+gradient pour ce problème car on peut facilement voir le chemin des solutions successives et
+la vitesse de convergence.
+
+
+
 %\bibliographystyle{plain}
 %\bibliography{refs}
 
