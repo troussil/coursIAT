@@ -1,5 +1,5 @@
 TEX=doc.tex
-BIB= #refs.bib
+BIB= refs.bib
 PDF=$(TEX:.tex=.pdf)
 
 ###################################################
@@ -8,8 +8,8 @@ all:  ${PDF}
 
 ${PDF}: ${TEX} ${BIB}
 	pdflatex  ${TEX}
-	#bibtex `basename -s .tex ${TEX}`
-	#pdflatex  ${TEX}
+	bibtex `basename -s .tex ${TEX}`
+	pdflatex  ${TEX}
 	pdflatex  ${TEX}
 
 clean:

@@ -28,10 +28,10 @@
 \newtheorem*{solution}{Solution}
 
 \usepackage{comment}
-%\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
 
 
-\title{Optimisation sans contrainte, }
+\title{Exemples et algorithmes d'optimisation sans contrainte}
 \author{Tristan Roussillon}
 
 \begin{document}
@@ -43,15 +43,16 @@ d'une fonction objectif égale à une somme de fonctions. L'objectif est de se
 familiariser avec une famille de méthodes de minimisation par descente de
 gradient aussi bien que de s'entraîner à modéliser des problèmes d'optimisation.
 
-\section{Méthode des moindres carrés}
+\section{Méthode des moindres carrés (30 min)}
 %https://images.math.cnrs.fr/De-la-methode-des-moindres-carres-a-la-descente-de-gradient.html?lang=fr
 
-Nous observons deux caractéristiques, $u$ et $v$, sur un certain nombre d'individus :
+Nous observons deux caractéristiques, $u$ et $v$, sur un certain nombre d'unités
+statistiques :
 $\{(u_i,v_i)\}_{i = 1,\dots}$ est la liste de ces observations.
 Or, nous pensons que $u$ prédit $v$ selon la relation linéaire suivante :
 $v = x_1u + x_2$. La méthode des moindres carrés
 consiste à chercher les paramètres $x_1$ et $x_2$ qui minimisent
-la somme, sur tous les individus, des carrés des écarts entre la prédiction
+la somme, sur toutes les unités, des carrés des écarts entre la prédiction
 de $v$ à partir de $u$ et son observation. 
 
 \begin{exercice}
@@ -164,17 +165,61 @@ En utilisant le Théorème~\ref{th:fonc-conv}, montrer que $f$ est convexe.
   
 \end{solution}
 
-\section{Optimisation par descente de gradient}
+\section{Optimisation par descente de gradient (45 min)}
 
 Même si on connait analytiquement une solution optimale pour ce problème, il est intéressant,
-d'un point de vue pédagogique, de comparer des algorithmes d'optimisation par descente de
-gradient pour ce problème car on peut facilement voir le chemin des solutions successives et
-la vitesse de convergence.
+d'un point de vue pédagogique, de mettre en oeuvre des algorithmes d'optimisation par descente de
+gradient pour résoudre ce problème : on peut facilement visualiser le chemin des solutions successives,
+observer des phénomènes d'oscillations, de non convergence, d'instabililité numérique et constater
+qu'il est souvent difficile de régler certains paramètres.
 
+\begin{exercice}
+Téléchargez l'archive \texttt{descGrad.zip} sur Moodle. Elle contient, entre autres, deux scripts python :
+\begin{itemize}
+\item
+  l'un permet de générer des données pour le problème de la prédiction à une variable expliquative
+  et une variable à expliquer.
+\begin{verbatim}
+python3 generateData.py -n 1000 > data1000.txt
+\end{verbatim}
+\item l'autre permet de comparer différents algorithmes d'optimisation par descente de gradient
+  pour trouver le meilleur modèle linéaire de prédiction par la méthode des moindres carrés.
+  Par exemple,  
+\begin{verbatim}
+python3 LeastSquareGradientDescent.py data10000.txt -m Newton 
+\end{verbatim}
+\end{itemize}
+\end{exercice}
 
+\begin{exercice}
+Parcourez le code et consultez l'aide affichée par
+\begin{verbatim}
+python3 LeastSquareGradientDescent.py -h 
+\end{verbatim}
+Notez le nom, la règle de mise à jour de la solution courante,
+les paramètres requis de chaque méthode. Jouez avec le script et
+notez vos observations quant à la performance de chaque méthode.  
+\end{exercice}
 
-%\bibliographystyle{plain}
-%\bibliography{refs}
+\section{Réseau de neurones (30 min)}
+
+Lisez l'article \cite{hinton86}. Il s'agit de l'un des articles pionniers
+de l'apprentissage par rétro-propagation dans les réseaux neuronaux. L'un des
+co-auteurs, G. Hinton, a reçu le prix Turing 2019 (en même temps de Y. LeCun)
+pour ses travaux en intelligence artificielle.  
+
+\begin{exercice}
+Qu'est-ce qu'un réseau de neurone ? Comment pourrait-on modéliser
+la méthode des moindres carrés par un réseau de neurone ? Faire un schéma. 
+\end{exercice}
+
+\begin{exercice}
+Quel est le problème d'optimisation posé ?
+Quelle méthode d'optimisation est employée pour le résoudre ?
+\end{exercice}
+
+\bibliographystyle{plain}
+\bibliography{refs}
 
 \end{document}
 

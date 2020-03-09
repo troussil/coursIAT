@@ -1,3 +1,4 @@
+import math
 import numpy
 import random
 
@@ -16,12 +17,13 @@ def nextByNormalizedStep(step):
 #-------------------------------------------------------------
 class nextByDecreasingStep(object):
     
-    def __init__(self):
+    def __init__(self, step):
+        self.step = step
         self.counter = 0
 
     def __call__(self, sol, grad):
         self.counter += 1
-        return sol - (1. / (self.counter * numpy.linalg.norm(grad))) * grad
+        return sol - (self.step / (self.counter * numpy.linalg.norm(grad))) * grad
 
 #-------------------------------------------------------------
 def nextByNewton(hessianF):
@@ -43,6 +45,19 @@ class nextByMomentum(object):
         self.lastVariation = variation
         return sol - self.lastVariation
 
+#-------------------------------------------------------------
+class nextByRMSProp(object):
+    
+    def __init__(self, step, forgettingFactor):
+        self.step = step
+        self.alpha = forgettingFactor
+        self.lastTerm = 0
+        
+    def __call__(self, sol, grad):
+        term = self.alpha * self.lastTerm + (1 - self.alpha) * numpy.linalg.norm(grad)**2
+        self.lastTerm = term
+        return sol - ( self.step / math.sqrt(self.lastTerm) ) * grad
+    
 #-------------------------------------------------------------
 def gradientDescent(maxiters, epsilon, gradientF, currentSol, nextSolF):
 
