@@ -8,8 +8,8 @@ if __name__ == "__main__":
 
     #parse command line    
     parser = argparse.ArgumentParser(description="\
-    generate a point cloud around a straight line \
-    and write each point to the standard output")
+    generates a point cloud around a straight line \
+    and writes each point to the standard output")
     
     parser.add_argument("-n", "--number",
                         help="number of samples",
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     parser.add_argument("-s", "--sigma",
                         help="standard deviation of the y-coordinate predication error",
                         type=float,
-                        default=0.25)
+                        default=0.01)
     parser.add_argument("-l", "--lowerBound",
                         help="minimal x-coordinate",
                         type=float,

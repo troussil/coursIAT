@@ -66,12 +66,11 @@ def gradientDescent(maxiters, epsilon, gradientF, currentSol, nextSolF):
     for _ in range(maxiters):
 
         grad = gradientF( currentSol )
-        currentSol = nextSolF(currentSol, grad)
-
-        sols.append(currentSol)
-
         if numpy.linalg.norm(grad) < epsilon:
             break
+
+        currentSol = nextSolF(currentSol, grad)
+        sols.append(currentSol)
 
     return sols
 

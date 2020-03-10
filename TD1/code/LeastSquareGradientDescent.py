@@ -60,8 +60,9 @@ if __name__ == "__main__":
                         default=0)
     parser.add_argument("-m", "--method",
                         help="method to be used",
-                        choices=["GivenStep", "NormalizedStep", "DecreasingStep", "Newton", "Momentum",
-                                 "SGD", "SGDMomentum", "SGDMiniBatch", "RMSProp", "SGDRMSProp"],
+                        choices=["GivenStep", "NormalizedStep", "DecreasingStep",
+                                 "Newton", "Momentum", "RMSProp",
+                                 "SGD", "SGDMiniBatch", "SGDMomentum", "SGDRMSProp"],
                         default="GivenStep")
     parser.add_argument("-s", "--step",
                         help="step size multiplier (also called learning rate)",
@@ -144,11 +145,12 @@ if __name__ == "__main__":
                                                computeNextSol)
 
     #print to standard output
-    print( f"#{(len(sols)-1)} iterations, time {(time.time() - start_time)} seconds" )
+    print( (len(sols)-1), "iterations" )
+    print( (time.time() - start_time), "seconds" )
     lastSol = sols[-1]
-    print( f"#last solution = {nparray21toString(lastSol)}" )
-    print( f"#grad norm = {numpy.linalg.norm(functionProvider.gradient(lastSol))}" )
-    print( f"#dist to analytical minimum = {numpy.linalg.norm(lastSol - optSol)}" )
+    print( "#last solution = ", nparray21toString(lastSol) )
+    print( "#grad norm = ", numpy.linalg.norm(functionProvider.gradient(lastSol)) )
+    print( "#dist to analytical minimum = ", numpy.linalg.norm(lastSol - optSol) )
 
     if args.verbose:
         for (k,s) in enumerate(sols):
