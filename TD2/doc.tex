@@ -1,0 +1,261 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+%\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+
+\title{Optimisation linéaire}
+\author{Tristan Roussillon}
+
+\begin{document}
+
+\maketitle
+
+Dans ce TD est abordé le problème de l'optimisation linéaire, défini,
+pour des fonctions $f$ et $\{g_i\}_{\{1, \dots, m\}}$ linéaires (ou affines),
+comme :
+\[
+\text{(PL)} \left\{
+\begin{array}{c}
+  \min_x \ f(x) \ \text{tel que :} \\
+  g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
+  x \in \R^n \\
+\end{array}
+\right.
+\]
+
+(PL) est résolu en pratique par la méthode du \emph{simplexe}
+ou celle \emph{des points intérieurs}. La bibliothèque python
+\texttt{SciPy}, par exemple, fournit des
+\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html}{solveurs}
+basés sur ces deux méthodes.
+
+\section{Formulation matricielle canonique et standard}
+
+La plupart des solveurs attendent la description du problème sous une forme matricielle particulière.
+
+\begin{tabular}{c|c}
+forme canonique & forme standard \\ \hline
+\begin{minipage}{.4\textwidth}
+  \[
+\left\{
+\begin{array}{c}
+  \min_x \ c^T x \ \text{tel que :} \\
+  Ax \leq b \\
+  x \geq 0 \\
+\end{array}
+\right.
+\]
+\end{minipage}
+&
+\begin{minipage}{.4\textwidth}
+\[
+\left\{
+\begin{array}{c}
+  \min_x \ c^T x \ \text{tel que :} \\
+  Ax = b \\
+  x \geq 0 \\
+\end{array}
+\right.
+\]
+\end{minipage}
+\end{tabular}
+
+\begin{exercice}
+  Expliquez pourquoi on ne perd pas en généralité en supposant (i)
+  que la fonction objectif s'écrit comme un produit scalaire, (ii)
+  que $x \geq 0$. 
+  Expliquez comment passer de la forme canonique à la forme standard.
+\end{exercice}
+
+\begin{solution}
+  (i) Si la fonction objectif est affine, on peut ajouter une variable,
+  contrainte à être égale à 1. 
+  
+  (ii) S'il existe un variable $x_k$ pouvant prendre n'importe quelle valeur réelle,
+  on pourra remplacer $x_k$ par la différence $x_k^+ - x_k^-$ de deux variables
+  $x_k^+ - x_k^-$ astreintes, elles, à ne prendre que des valeurs non-négatives.
+
+  Enfin, pour passer de la forme canonique à la forme standard, il convient de remplacer
+  toute inégalité par une égalité et une inégalité de signe
+  en introduisant une variable d'écart. Par exemple $g(x) \leq 0$ est équivalent
+  à $g(x) + y = 0$ et $y \geq 0$.
+\end{solution}
+
+\begin{exercice}
+  \label{ex:ex}
+  Dans (PL), on a $f(x) = -x_1 + x_2 + 1$, $g_1(x) = -x_1 + x_2$, $g_2(x) = -x_2$, 
+  et $g_3(x) = x_1 + x_2 - 1$. Donnez une représentation graphique du problème
+  et déduisez-en le minimum global. \'Ecrivez le problème dans sa forme standard.
+\end{exercice}
+
+\begin{solution}
+Le minimum global est $x^\star = (1,0)$, avec $f(x^\star) = 0$ (Fig.~\ref{fig:exPL}).  
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{PL}
+  \caption{Représentation graphique du problème de l'exercice~\ref{ex:ex}.
+    En bleu, les numéros des contraintes}
+  \label{fig:exPL}
+\end{figure}
+  
+  \begin{itemize}
+  \item Comme je n'ai pas de contrainte de signe sur $x_1$, je le remplace
+    par la différence $x_1 - x_3$ de deux variables à valeurs non-négatives.
+  \item Pour avoir une fonction objectif linéaire, j'introduis une variable
+    $x_4$ astreinte à être égale à $1$.
+  \item Pour les contraintes $1$ et $3$, j'introduis deux variables d'écart $x_5$ et $x_6$
+    à valeurs non-négatives. 
+  \end{itemize}
+En résumé, on a 
+\[
+\left\{
+\begin{array}{cl}
+  \min_x \ -x_1 + x_2 + x_3 + x_4 \ \text{tel que :} & \\
+  x_1, \dots, x_6 \geq 0 & \text{(contrainte 2 et non-négativité)} \\
+  x_4 = 1 & \text{(fct. obj. linéaire)} \\
+  -x_1 + x_2 + x_3 + x_5  = 0 & \text{(contrainte 1)} \\
+  x_1 + x_2 - x_3 + x_6 = 0   & \text{(contrainte 3)} \\
+\end{array}
+\right.
+\]
+On a donc la forme standard en définissant
+\begin{itemize}
+\item $x^T := (x_1, \dots, x_6) \in \R^6$
+\item $c^T := (-1, 1, 1, 1, 0, 0)$,
+\item $b^T := (1, 0, 0)$
+\item $A :=
+  \left(
+  \begin{array}{cccccc}
+    0 & 0 & 0 & 1 & 0 & 0 \\
+    -1 & 1 & 1 & 0 & 1 & 0 \\
+    1 & 1 & -1 & 0 & 0 & 1 \\
+  \end{array}
+  \right)$
+\end{itemize}
+\end{solution}
+
+\section{Condition d'optimalité nécessaires et suffisantes}
+
+Comme la fonction objectif et les contraintes sont linéaires, non seulement
+l'hypothèse de qualifications des contraintes est vérifiée, mais les conditions
+nécessaires d'optimalité de Kuhn et Tucker sont suffisantes.
+
+Ces dernières s'expriment ainsi : il existe $\{\lambda_i \geq 0\}_{i \in I}$ tels que:
+\[
+(\text{KT})
+\left\{
+\begin{array}{l}
+  -{\nabla f}(x) = \sum_{i \in I} \lambda_i {\nabla g_i}(x) \\
+  \lambda_i g_i(x) = 0, \ \forall i \in I \\
+\end{array}
+\right.
+\]
+
+\begin{exercice}
+Vérifiez que le minimum global de l'exercice~\ref{ex:ex} satisfait (KT). 
+\end{exercice}
+
+\begin{solution}
+  D'après la représentation graphique, $g_2$ et $g_3$ sont saturés, donc
+  $\lambda_1 = 0$, $g_2(x) = 0$ et $g_3(x) = 0$. Or, pour tout $x$,
+  ${\nabla f}^T(x) = (-1,1)$, ${\nabla g_2}^T(x) = (0,-1)$ et ${\nabla g_2}^T(x) = (1,1)$,
+  d'où
+\[
+\left\{
+\begin{array}{l}
+  - x_2 = 0 \\
+  x_1 + x_2 - 1 = 0 \\
+  \lambda_2(0) + \lambda_3 (1) = 1 \\
+  \lambda_2(-1) + \lambda_3 (1) = -1 
+\end{array}
+\right.
+\]
+ce qui donne
+\[
+\left\{
+\begin{array}{l}
+  x_2 = 0 \\
+  x_1 = 1 \\
+  \lambda_3 = 1 \\
+  \lambda_2 = 2 
+\end{array}
+\right.
+\]
+\end{solution}
+
+\begin{exercice}
+  Exprimez les conditions d'optimalité avec les notations de la forme matricielle standard. 
+\end{exercice}
+
+\begin{solution}
+  On sépare les coefficients en deux vecteurs :
+  $\lambda^= \in \R^m$ (pour les $m$ contraintes d'égalité) et
+  $\lambda^\geq \in \R^n$ (pour les $n$ contraintes de positivité).
+
+  Par ailleurs, les gradients sont constants pour tout $x$.
+  Celui de $f$ est égal à $c$.
+  Si $g_i$ décrit une contrainte d'égalité, son gradient est
+  égal à la $i$-ème ligne de $A$ et si $g_i$ décrit une
+  contrainte de positivité sur la composante $k$, son gradient
+  est un vecteur dont la $k$-ième composante est 1, les autres
+  étant nulles. 
+  
+  Ainsi, $x$ est le minimum global ssi il existe
+  $\lambda^= \geq 0$ et $\lambda^\geq \geq 0$ tels que : 
+  \[
+  \left\{
+  \begin{array}{ll}
+    -c =  A^T \lambda^= + \lambda^\geq  & \text{(combinaison linéaire)} \\
+    Ax = b & \text{(saturation des contraintes d'égalité)} \\
+    x^T \lambda^\geq = 0 & \text{(saturation des contraintes de positivité)} 
+  \end{array}
+  \right.
+  \]
+  Remarque : la première ligne s'écrit aussi sous la forme d'une inégalité  :
+  \[
+  A^T \lambda^= \leq -c
+  \]
+\end{solution}
+
+\section{Transport optimal}
+
+%formulation de Kantorovitch du probleme de TO
+%exemple
+%mise sous forme standard
+
+%dualite et principe de convoyeur
+%https://images.math.cnrs.fr/Transport-optimal-de-mesure-coup-de-neuf-pour-un-tres-vieux-probleme.html?lang=fr
+%https://weave.eu/le-transport-optimal-un-couteau-suisse-pour-la-data-science/
+
+%resolution de l'exemple par un solveur quelconque
+
+\end{document}
+
+
