@@ -38,13 +38,13 @@
 
 \maketitle
 
-Dans ce TD est abordé le problème de l'optimisation linéaire, défini,
+Ce TD aborde le problème de l'optimisation linéaire, défini,
 pour des fonctions $f$ et $\{g_i\}_{\{1, \dots, m\}}$ linéaires (ou affines),
 comme :
 \[
 \text{(PL)} \left\{
 \begin{array}{c}
-  \min_x \ f(x) \ \text{tel que :} \\
+  \min_x \ f(x) \ \text{telle que :} \\
   g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
   x \in \R^n \\
 \end{array}
@@ -57,6 +57,73 @@ ou celle \emph{des points intérieurs}. La bibliothèque python
 \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html}{solveurs}
 basés sur ces deux méthodes.
 
+\section{Condition d'optimalité nécessaires et suffisantes}
+
+
+\begin{exercice}
+  \label{ex:ex}
+  Dans (PL), on a $f(x) = -x_1 + x_2 + 1$, $g_1(x) = -x_1 + x_2$, $g_2(x) = -x_2$, 
+  et $g_3(x) = x_1 + x_2 - 1$. Donnez une représentation graphique du problème
+  et déduisez-en le minimum global.
+\end{exercice}
+
+\begin{solution}
+Le minimum global est $x^\star = (1,0)$, avec $f(x^\star) = 0$ (Fig.~\ref{fig:exPL}).  
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{PL}
+  \caption{Représentation graphique du problème de l'exercice~\ref{ex:ex}.
+    En bleu, les numéros des contraintes}
+  \label{fig:exPL}
+\end{figure}
+\end{solution}
+
+Comme la fonction objectif et les contraintes sont linéaires, non seulement
+l'hypothèse de qualifications des contraintes est vérifiée, mais les conditions
+nécessaires d'optimalité de Kuhn et Tucker sont suffisantes : 
+il existe $\{\lambda_i \geq 0\}_{i \in I}$ tels que:
+\[
+(\text{KT})
+\left\{
+\begin{array}{ll}
+  -{\nabla f}(x) = \sum_{i \in I} \lambda_i {\nabla g_i}(x) & \text{(combinaison linéaire)}\\
+  \lambda_i g_i(x) = 0, \ \forall i \in I  & \text{(saturation)}\\
+\end{array}
+\right.
+\]
+
+\begin{exercice}
+Vérifiez que le minimum global de l'exercice~\ref{ex:ex} satisfait (KT). 
+\end{exercice}
+
+\begin{solution}
+  D'après la représentation graphique, $g_2$ et $g_3$ sont saturés, donc
+  $\lambda_1 = 0$, $g_2(x) = 0$ et $g_3(x) = 0$. Or, pour tout $x$,
+  ${\nabla f}^T(x) = (-1,1)$, ${\nabla g_2}^T(x) = (0,-1)$ et ${\nabla g_3}^T(x) = (1,1)$,
+  d'où le système linéaire de 4 équations et 4 inconnues : 
+\[
+\left\{
+\begin{array}{ll}
+  - x_2 &= 0 \\
+  x_1 + x_2 - 1 &= 0 \\
+  \lambda_2 \left(\begin{array}{c} 0 \\ -1 \end{array}\right)
+  + \lambda_3 \left(\begin{array}{c} 1 \\ 1 \end{array}\right)
+  &= \left(\begin{array}{c} -1 \\ 1 \end{array}\right)
+\end{array}
+\right.
+\]
+qui donne
+\[
+\left\{
+\begin{array}{l}
+  x_2 = 0 \\
+  x_1 = 1 \\
+  \lambda_3 = 1 \\
+  \lambda_2 = 2 
+\end{array}
+\right.
+\]
+\end{solution}
+
 \section{Formulation matricielle canonique et standard}
 
 La plupart des solveurs attendent la description du problème sous une forme matricielle particulière.
@@ -67,7 +134,7 @@ forme canonique & forme standard \\ \hline
   \[
 \left\{
 \begin{array}{c}
-  \min_x \ c^T x \ \text{tel que :} \\
+  \min_x \ c^T x \ \text{telle que :} \\
   Ax \leq b \\
   x \geq 0 \\
 \end{array}
@@ -79,7 +146,7 @@ forme canonique & forme standard \\ \hline
 \[
 \left\{
 \begin{array}{c}
-  \min_x \ c^T x \ \text{tel que :} \\
+  \min_x \ c^T x \ \text{telle que :} \\
   Ax = b \\
   x \geq 0 \\
 \end{array}
@@ -99,9 +166,9 @@ forme canonique & forme standard \\ \hline
   (i) Si la fonction objectif est affine, on peut ajouter une variable,
   contrainte à être égale à 1. 
   
-  (ii) S'il existe un variable $x_k$ pouvant prendre n'importe quelle valeur réelle,
-  on pourra remplacer $x_k$ par la différence $x_k^+ - x_k^-$ de deux variables
-  $x_k^+ - x_k^-$ astreintes, elles, à ne prendre que des valeurs non-négatives.
+  (ii) S'il existe une variable $x_k$ pouvant prendre n'importe quelle valeur réelle,
+  on pourra remplacer $x_k$ par la différence $x_k - x_k'$ de deux variables
+  $x_k$ et $x_k'$ astreintes, elles, à ne prendre que des valeurs non-négatives.
 
   Enfin, pour passer de la forme canonique à la forme standard, il convient de remplacer
   toute inégalité par une égalité et une inégalité de signe
@@ -110,21 +177,10 @@ forme canonique & forme standard \\ \hline
 \end{solution}
 
 \begin{exercice}
-  \label{ex:ex}
-  Dans (PL), on a $f(x) = -x_1 + x_2 + 1$, $g_1(x) = -x_1 + x_2$, $g_2(x) = -x_2$, 
-  et $g_3(x) = x_1 + x_2 - 1$. Donnez une représentation graphique du problème
-  et déduisez-en le minimum global. \'Ecrivez le problème dans sa forme standard.
+\'Ecrivez le problème de l'exercice~\ref{ex:ex} dans sa forme standard.
 \end{exercice}
 
 \begin{solution}
-Le minimum global est $x^\star = (1,0)$, avec $f(x^\star) = 0$ (Fig.~\ref{fig:exPL}).  
-\begin{figure}
-  \includegraphics[width=0.5\textwidth]{PL}
-  \caption{Représentation graphique du problème de l'exercice~\ref{ex:ex}.
-    En bleu, les numéros des contraintes}
-  \label{fig:exPL}
-\end{figure}
-  
   \begin{itemize}
   \item Comme je n'ai pas de contrainte de signe sur $x_1$, je le remplace
     par la différence $x_1 - x_3$ de deux variables à valeurs non-négatives.
@@ -137,7 +193,7 @@ En résumé, on a
 \[
 \left\{
 \begin{array}{cl}
-  \min_x \ -x_1 + x_2 + x_3 + x_4 \ \text{tel que :} & \\
+  \min_x \ -x_1 + x_2 + x_3 + x_4 \ \text{telle que :} & \\
   x_1, \dots, x_6 \geq 0 & \text{(contrainte 2 et non-négativité)} \\
   x_4 = 1 & \text{(fct. obj. linéaire)} \\
   -x_1 + x_2 + x_3 + x_5  = 0 & \text{(contrainte 1)} \\
@@ -161,100 +217,63 @@ On a donc la forme standard en définissant
 \end{itemize}
 \end{solution}
 
-\section{Condition d'optimalité nécessaires et suffisantes}
-
-Comme la fonction objectif et les contraintes sont linéaires, non seulement
-l'hypothèse de qualifications des contraintes est vérifiée, mais les conditions
-nécessaires d'optimalité de Kuhn et Tucker sont suffisantes.
-
-Ces dernières s'expriment ainsi : il existe $\{\lambda_i \geq 0\}_{i \in I}$ tels que:
-\[
-(\text{KT})
-\left\{
-\begin{array}{l}
-  -{\nabla f}(x) = \sum_{i \in I} \lambda_i {\nabla g_i}(x) \\
-  \lambda_i g_i(x) = 0, \ \forall i \in I \\
-\end{array}
-\right.
-\]
-
 \begin{exercice}
-Vérifiez que le minimum global de l'exercice~\ref{ex:ex} satisfait (KT). 
+  Calculer la solution optimale de l'exercice~\ref{ex:ex} à l'aide d'un solveur
+  de votre choix. 
 \end{exercice}
 
 \begin{solution}
-  D'après la représentation graphique, $g_2$ et $g_3$ sont saturés, donc
-  $\lambda_1 = 0$, $g_2(x) = 0$ et $g_3(x) = 0$. Or, pour tout $x$,
-  ${\nabla f}^T(x) = (-1,1)$, ${\nabla g_2}^T(x) = (0,-1)$ et ${\nabla g_2}^T(x) = (1,1)$,
-  d'où
-\[
-\left\{
-\begin{array}{l}
-  - x_2 = 0 \\
-  x_1 + x_2 - 1 = 0 \\
-  \lambda_2(0) + \lambda_3 (1) = 1 \\
-  \lambda_2(-1) + \lambda_3 (1) = -1 
-\end{array}
-\right.
-\]
-ce qui donne
-\[
-\left\{
-\begin{array}{l}
-  x_2 = 0 \\
-  x_1 = 1 \\
-  \lambda_3 = 1 \\
-  \lambda_2 = 2 
-\end{array}
-\right.
-\]
+  TODO
 \end{solution}
 
+
+\section{Classification linéaire}
+
+On suppose donnés $l$ points de $\R^n$, $\{u^k\}_{k \in \{1,\dots,l\}}$ divisés en deux sous-ensembles :
+un sous-ensemble d'observations positives $S^+ = \{ u^k, k \in K^+ \}$ et un sous-emsemble
+d'observations négatives $S^- = \{ u^k, k \in K^- \}$. On veut déterminer une règle de décision linéaire
+permettant de discriminer au mieux les observations positives et les observations négatives. Ce problème
+peut être vu comme la recherche de $x \in \R^n$ tel que, en projetant les points de $S^+$ et $S^-$ le
+long de $x$, c'est-à-dire en regardant la quantité $u^T x$, on ait deux intervalles disjoints aussi
+distants que possible l'un de l'autre.
+
 \begin{exercice}
-  Exprimez les conditions d'optimalité avec les notations de la forme matricielle standard. 
+  Pourquoi est-il nécessaire d'introduire une condition de normalisation sur $u$ ?
 \end{exercice}
 
 \begin{solution}
-  On sépare les coefficients en deux vecteurs :
-  $\lambda^= \in \R^m$ (pour les $m$ contraintes d'égalité) et
-  $\lambda^\geq \in \R^n$ (pour les $n$ contraintes de positivité).
-
-  Par ailleurs, les gradients sont constants pour tout $x$.
-  Celui de $f$ est égal à $c$.
-  Si $g_i$ décrit une contrainte d'égalité, son gradient est
-  égal à la $i$-ème ligne de $A$ et si $g_i$ décrit une
-  contrainte de positivité sur la composante $k$, son gradient
-  est un vecteur dont la $k$-ième composante est 1, les autres
-  étant nulles. 
-  
-  Ainsi, $x$ est le minimum global ssi il existe
-  $\lambda^= \geq 0$ et $\lambda^\geq \geq 0$ tels que : 
-  \[
-  \left\{
-  \begin{array}{ll}
-    -c =  A^T \lambda^= + \lambda^\geq  & \text{(combinaison linéaire)} \\
-    Ax = b & \text{(saturation des contraintes d'égalité)} \\
-    x^T \lambda^\geq = 0 & \text{(saturation des contraintes de positivité)} 
-  \end{array}
-  \right.
-  \]
-  Remarque : la première ligne s'écrit aussi sous la forme d'une inégalité  :
-  \[
-  A^T \lambda^= \leq -c
-  \]
+  Sinon, le problème d'optimisation n'est pas borné. En effet, l'unité pour la distance entre les deux
+  intervalles est la norme du vecteur. Donc, pour toute une direction admissible pour le vecteur $u$,
+  on pourra toujours diminuer sa norme, afin d'avoir des intervalles encore plus distants l'un de
+  l'autre.  
 \end{solution}
 
-\section{Transport optimal}
+\begin{exercice}
+  Montrez qu'en imposant l'une des conditions suivantes, on a un problème d'optimisation linéaire :
+  \begin{itemize}
+  \item $\underset{k \in K^-}{\max} (u^T x^k) = \pm 1$
+  \item $\|u\|_\infty = 1$
+  \item $\|u\|_1 = 1$
+  \end{itemize}
+\end{exercice}
 
-%formulation de Kantorovitch du probleme de TO
-%exemple
-%mise sous forme standard
+\begin{solution}
+%p 618
+\end{solution}
 
-%dualite et principe de convoyeur
-%https://images.math.cnrs.fr/Transport-optimal-de-mesure-coup-de-neuf-pour-un-tres-vieux-probleme.html?lang=fr
-%https://weave.eu/le-transport-optimal-un-couteau-suisse-pour-la-data-science/
+\begin{exercice}
+\`A l'aide de l'un des \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html}{solveurs}
+de \texttt{SciPy}, complétez le code disponible sur Moodle pour résoudre le problème de classification linéaire. 
+\end{exercice}
 
-%resolution de l'exemple par un solveur quelconque
+\begin{solution}
+TODO
+\end{solution}
+
+Notez que l'application des techniques de programmation linéaire à la résolution de ce type de problème
+est à la base des méthodes d'apprentissage connues sous le nom de \emph{Support Vector Machines}
+\href{https://en.wikipedia.org/wiki/Support-vector_machine}{(SVM)}
+
 
 \end{document}
 
