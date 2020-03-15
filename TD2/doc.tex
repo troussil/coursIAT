@@ -163,7 +163,9 @@ forme canonique & forme standard \\ \hline
 \end{exercice}
 
 \begin{solution}
-  (i) Si la fonction objectif est affine, on peut ajouter une variable,
+  (i) Si la fonction objectif est affine (il y a une constante $c_0$ ajoutée à une
+  combinaison linéaire des variables), on peut soit l'ignorer, car $f'(x)  := f(x)
+  - c_0$ aura, s'il existe, le même minimum que $f(x)$, soit ajouter une variable,
   contrainte à être égale à 1. 
   
   (ii) S'il existe une variable $x_k$ pouvant prendre n'importe quelle valeur réelle,
@@ -197,7 +199,7 @@ En résumé, on a
   x_1, \dots, x_6 \geq 0 & \text{(contrainte 2 et non-négativité)} \\
   x_4 = 1 & \text{(fct. obj. linéaire)} \\
   -x_1 + x_2 + x_3 + x_5  = 0 & \text{(contrainte 1)} \\
-  x_1 + x_2 - x_3 + x_6 = 0   & \text{(contrainte 3)} \\
+  x_1 + x_2 - x_3 + x_6 = 1   & \text{(contrainte 3)} \\
 \end{array}
 \right.
 \]
@@ -205,7 +207,7 @@ On a donc la forme standard en définissant
 \begin{itemize}
 \item $x^T := (x_1, \dots, x_6) \in \R^6$
 \item $c^T := (-1, 1, 1, 1, 0, 0)$,
-\item $b^T := (1, 0, 0)$
+\item $b^T := (1, 0, 1)$
 \item $A :=
   \left(
   \begin{array}{cccccc}
@@ -223,7 +225,9 @@ On a donc la forme standard en définissant
 \end{exercice}
 
 \begin{solution}
-  TODO
+\begin{verbatim}
+    cf. TD2/code/exemple.py
+\end{verbatim}
 \end{solution}
 
 
