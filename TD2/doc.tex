@@ -28,7 +28,7 @@
 \newtheorem*{solution}{Solution}
 
 \usepackage{comment}
-%\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
 
 
 \title{Optimisation linéaire}
@@ -272,7 +272,7 @@ On a donc la forme standard en définissant
 \label{sec:classif}
 
 On suppose donnés des points de $\R^n$, $\{u^j\}_{j \in J}$ divisés en deux sous-ensembles :
-un sous-ensemble d'observations positives $S^+ := \{ u^j, j \in K^+ \}$ et un sous-emsemble
+un sous-ensemble d'observations positives $S^+ := \{ u^j, j \in J^+ \}$ et un sous-emsemble
 d'observations négatives $S^- := \{ u^j, j \in J^- \}$. On veut déterminer une règle de décision linéaire
 permettant de discriminer au mieux les observations positives et les observations négatives. Ce problème
 peut être vu comme la recherche de $x \in \R^n$ tel que, en projetant les points de $S^+$ et $S^-$ le
@@ -361,6 +361,20 @@ on ait deux intervalles disjoints aussi distants que possible l'un de l'autre (F
   En reprenant le code Python disponible sur Moodle, programmez la résolution du problème
   de classification linéaire correspondant aux conditions de normalisation~\ref{L1}. 
 \end{exercice}
+
+\begin{solution}
+  Il faut arriver à construire les matrices nécessaires pour appeler la fonction 
+  \href{https://docs.scipy.org/doc/scipy-0.19.1/reference/optimize.linprog-simplex.html}{\texttt{linprog}} 
+  comme sur la Fig.~\ref{fig:stdForm}. 
+  
+  \begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth,page=1]{standardForm}
+  \includegraphics[width=0.49\textwidth,page=2]{standardForm}
+  \caption{}
+  \label{fig:stdForm}
+\end{figure}
+\end{solution}
 
 Notez que l'application des techniques de programmation linéaire à la résolution de ce type de problème
 est à la base des méthodes d'apprentissage connues sous le nom de \emph{Support Vector Machines}

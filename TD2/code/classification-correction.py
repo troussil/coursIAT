@@ -71,7 +71,7 @@ def getArrayFromDataFile(path, delimiter):
     for line in dataFile.readlines():
         fields = line.split(delimiter)
         if len(fields) != 3:
-            raise ValueError
+	            raise ValueError
         x = float(fields[0])
         y = float(fields[1])
         mark = int(fields[2])
