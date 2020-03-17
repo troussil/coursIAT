@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70206" creator="Ipe 7.2.7">
-<info created="D:20200311161905" modified="D:20200317094545"/>
+<info created="D:20200316075120" modified="D:20200316140820"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -255,47 +255,90 @@ h
 <layer name="alpha"/>
 <layer name="beta"/>
 <view layers="alpha beta" active="beta"/>
-<path layer="alpha" stroke="black" arrow="normal/normal">
-192 640 m
-320 640 l
+<path layer="alpha" matrix="0.576158 0 0 0.576158 71.5279 283.532" stroke="lightgray">
+192 576 m
+144 768 l
+</path>
+<use name="mark/disk(sx)" pos="192 704" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos="208 720" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos="224 704" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos="240 720" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos="256 736" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos="288 720" size="normal" stroke="black"/>
+<use name="mark/circle(sx)" pos="192 672" size="normal" stroke="black"/>
+<use name="mark/circle(sx)" pos="224 688" size="normal" stroke="black"/>
+<use name="mark/circle(sx)" pos="240 672" size="normal" stroke="black"/>
+<use name="mark/circle(sx)" pos="224 656" size="normal" stroke="black"/>
+<use name="mark/circle(sx)" pos="272 672" size="normal" stroke="black"/>
+<use name="mark/circle(sx)" pos="272 688" size="normal" stroke="black"/>
+<use name="mark/circle(sx)" pos="288 656" size="normal" stroke="black"/>
+<use name="mark/circle(sx)" pos="304 688" size="normal" stroke="black"/>
+<path matrix="0.764706 0 0 0.764706 60.2353 124.235" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="0.382353 0 0 0.382353 110.118 414.118" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="0.617647 0 0 0.617647 81.8824 225.882" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="0.235294 0 0 0.235294 131.765 515.765" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="0.970588 0 0 0.970588 39.5294 -56.4706" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="0.441176 0 0 0.441176 111.059 335.059" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="0.176471 0 0 0.176471 146.824 530.824" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="1 0 0 1 42.3529 -105.412" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="1.03134 0 0 1.02776 39.9777 -134.21" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="1 0 0 1 46.1176 -120.471" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="0.382353 0 0 0.382353 126.118 350.118" stroke="lightgray">
+128 768 m
+256 800 l
+</path>
+<path matrix="1 0 0 1 50.8235 -139.294" stroke="lightgray">
+128 768 m
+256 800 l
 </path>
 <path stroke="black" arrow="normal/normal">
-192 640 m
-192 736 l
-</path>
-<use name="mark/cross(sx)" pos="256 640" size="large" stroke="black"/>
-<path stroke="black">
-176 624 m
-272 720 l
-</path>
-<path stroke="black">
 176 640 m
-272 640 l
+160 704 l
 </path>
-<path stroke="black">
-176 720 m
-272 624 l
+<path layer="beta" matrix="0.576158 0 0 0.576158 67.7939 282.222" stroke="lightgray" pen="fat">
+192 576 m
+144 768 l
 </path>
-<path stroke="black" fill="lightgray">
-192 640 m
-224 672 l
-256 640 l
-h
+<path matrix="0.12055 0 0 0.12055 136.949 617.936" stroke="red" pen="fat">
+192 576 m
+144 768 l
 </path>
-<text transformations="translations" pos="256 624" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">1</text>
-<text matrix="1 0 0 1 -64 0" transformations="translations" pos="256 624" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">0</text>
-<text matrix="1 0 0 1 -76.056 75.592" transformations="translations" pos="256 624" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">1</text>
-<text matrix="1 0 0 1 -19.4522 34.9425" transformations="translations" pos="224 624" stroke="blue" type="label" width="4.981" height="6.42" depth="0" valign="baseline">1</text>
-<text matrix="1 0 0 1 -2.21283 7.81475" transformations="translations" pos="224 624" stroke="blue" type="label" width="4.981" height="6.42" depth="0" valign="baseline">2</text>
-<text matrix="1 0 0 1 17.1682 32.712" transformations="translations" pos="224 624" stroke="blue" type="label" width="4.981" height="6.42" depth="0" valign="baseline">3</text>
-<text matrix="1 0 0 1 64 0" transformations="translations" pos="256 624" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="baseline" style="math">x_1</text>
-<text matrix="1 0 0 1 -80 112" transformations="translations" pos="256 624" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="baseline" style="math">x_2</text>
-<path layer="beta" stroke="red">
-224 608 m
-320 704 l
+<path matrix="0.237133 0 0 0.237113 129.564 490.804" stroke="red" pen="fat">
+192 576 m
+144 768 l
 </path>
-<text matrix="1 0 0 1 -47.9027 4.73562" transformations="translations" pos="320 672" stroke="red" type="label" width="35.423" height="7.473" depth="2.49" valign="baseline">f(x) = 0</text>
-<text matrix="1 0 0 1 -63.6294 28.0243" transformations="translations" pos="320 672" stroke="red" type="label" width="37.657" height="7.473" depth="2.49" valign="baseline" style="math">f(x) \geq 0</text>
-<text matrix="1 0 0 1 -28.5112 -21.6719" transformations="translations" pos="320 672" stroke="red" type="label" width="37.657" height="7.473" depth="2.49" valign="baseline" style="math">f(x) \leq 0</text>
+<text transformations="translations" pos="272 736" stroke="black" type="label" width="13.297" height="7.933" depth="0" valign="baseline" style="math">S^+</text>
+<text matrix="1 0 0 1 32 -64" transformations="translations" pos="272 736" stroke="black" type="label" width="13.408" height="7.933" depth="0" valign="baseline" style="math">S^-</text>
+<text transformations="translations" pos="176 640" stroke="black" type="label" width="5.694" height="4.289" depth="0" valign="baseline" style="math">x</text>
 </page>
 </ipe>
