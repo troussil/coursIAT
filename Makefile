@@ -3,7 +3,7 @@ TEX=cours
 
 FIGSRC = $(wildcard fig/*.ipe)
 FIGOBJ = $(FIGSRC:.ipe=.pdf)
- 
+
 all: fig slides
 
 fig: $(FIGOBJ)
@@ -18,9 +18,10 @@ slides:
 show:
 	$(LOG) $(TEX).pdf
 
-proper:
+clean:
 	rm -f *.log *.toc *.aux *.nav *.snm *.out *.bbl *.blg *.dvi
 	rm -f *.backup *~
+	rm -f $(FIGOBJ)
 
-clean:	proper
+proper:	proper
 	rm -f $(TEX).ps $(TEX).pdf
