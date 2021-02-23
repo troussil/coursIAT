@@ -4,29 +4,43 @@ import numpy
 import scipy.optimize
 
 #-------------------------------------------------------------
-def exemple():
+def exempleStandardForm():
     A = numpy.array([[0,0,0,1,0,0],
                      [-1,1,1,0,1,0],
                      [1,1,-1,0,0,1]])
-    b = numpy.array([1,0,0])
+    b = numpy.array([1,0,1])
     c = numpy.array([-1,1,1,1,0,0])
-    return (A,b,c)
+    return (c,None,None,A,b,None)
+
+#-------------------------------------------------------------
+def exempleCanonicForm():
+    A = numpy.array([[-1,1],
+                     [0,-1],
+                     [1,1]])
+    b = numpy.array([0,0,1])
+    c = numpy.array([-1,1])
+    bds = [(-numpy.inf,numpy.inf), (-numpy.inf,numpy.inf)]
+    return (c,A,b,None,None,bds)
+
+#-------------------------------------------------------------
+def findSolution(c, A_ub, b_ub, A_eq, b_eq, bds):
+    
+    res = scipy.optimize.linprog(c, A_ub=A_ub, b_ub=b_ub,
+                                 A_eq=A_eq, b_eq=b_eq,
+                                 bounds=bds,
+                                 options={'bland':True})
+    print(res)
+
+    if res.success:
+        sol  = "(" + str(res.x[0]) + "," + str(res.x[1]) + ")"
+        print("=> optimal solution found", sol)
+        print()
 
 #-------------------------------------------------------------
 def main():
 
-    A, b, c = exemple()
-    res = scipy.optimize.linprog(c, A_eq=A, b_eq=b, options={'bland':True})
-    print(res)
-
-    x = numpy.array([1,0,1,1,0,0])
-    print( c.dot(x) )
-    print(A)
-    print(A.dot(x), b)
-
-    if res.success:
-        print("#optimal solution",res.x)
-
+    findSolution(*exempleStandardForm())
+    findSolution(*exempleCanonicForm())
         
 #-------------------------------------------------------------
 if __name__ == "__main__":

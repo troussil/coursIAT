@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70206" creator="Ipe 7.2.7">
-<info created="D:20200311161905" modified="D:20200317094545"/>
+<info created="D:20200601155813" modified="D:20200601155901"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -220,13 +220,13 @@ h
 <dashstyle name="dash dotted" value="[4 2 1 2] 0"/>
 <dashstyle name="dash dot dotted" value="[4 2 1 2 1 2] 0"/>
 <textsize name="large" value="\large"/>
-<textsize name="small" value="\small"/>
-<textsize name="tiny" value="\tiny"/>
 <textsize name="Large" value="\Large"/>
 <textsize name="LARGE" value="\LARGE"/>
 <textsize name="huge" value="\huge"/>
 <textsize name="Huge" value="\Huge"/>
+<textsize name="small" value="\small"/>
 <textsize name="footnote" value="\footnotesize"/>
+<textsize name="tiny" value="\tiny"/>
 <textstyle name="center" begin="\begin{center}" end="\end{center}"/>
 <textstyle name="itemize" begin="\begin{itemize}" end="\end{itemize}"/>
 <textstyle name="item" begin="\begin{itemize}\item{}" end="\end{itemize}"/>
@@ -253,49 +253,39 @@ h
 </ipestyle>
 <page>
 <layer name="alpha"/>
-<layer name="beta"/>
-<view layers="alpha beta" active="beta"/>
-<path layer="alpha" stroke="black" arrow="normal/normal">
-192 640 m
-320 640 l
-</path>
-<path stroke="black" arrow="normal/normal">
-192 640 m
-192 736 l
-</path>
-<use name="mark/cross(sx)" pos="256 640" size="large" stroke="black"/>
-<path stroke="black">
-176 624 m
-272 720 l
-</path>
-<path stroke="black">
-176 640 m
-272 640 l
-</path>
-<path stroke="black">
-176 720 m
-272 624 l
-</path>
-<path stroke="black" fill="lightgray">
-192 640 m
-224 672 l
-256 640 l
+<view layers="alpha" active="alpha"/>
+<path layer="alpha" stroke="black">
+192 656 m
+192 624 l
+224 624 l
+224 656 l
 h
 </path>
-<text transformations="translations" pos="256 624" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">1</text>
-<text matrix="1 0 0 1 -64 0" transformations="translations" pos="256 624" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">0</text>
-<text matrix="1 0 0 1 -76.056 75.592" transformations="translations" pos="256 624" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">1</text>
-<text matrix="1 0 0 1 -19.4522 34.9425" transformations="translations" pos="224 624" stroke="blue" type="label" width="4.981" height="6.42" depth="0" valign="baseline">1</text>
-<text matrix="1 0 0 1 -2.21283 7.81475" transformations="translations" pos="224 624" stroke="blue" type="label" width="4.981" height="6.42" depth="0" valign="baseline">2</text>
-<text matrix="1 0 0 1 17.1682 32.712" transformations="translations" pos="224 624" stroke="blue" type="label" width="4.981" height="6.42" depth="0" valign="baseline">3</text>
-<text matrix="1 0 0 1 64 0" transformations="translations" pos="256 624" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="baseline" style="math">x_1</text>
-<text matrix="1 0 0 1 -80 112" transformations="translations" pos="256 624" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="baseline" style="math">x_2</text>
-<path layer="beta" stroke="red">
-224 608 m
-320 704 l
+<use name="mark/disk(sx)" pos="208 656" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos="208 624" size="normal" stroke="black"/>
+<text matrix="1 0 0 1 -4.82557 -9.96804" transformations="translations" pos="208 640" stroke="black" type="label" width="9.354" height="4.297" depth="1.93" valign="baseline" style="math">y_3</text>
+<text matrix="1 0 0 1 -4.52436 22.3031" transformations="translations" pos="208 640" stroke="black" type="label" width="9.354" height="6.926" depth="1.93" valign="baseline" style="math">\hat{y}_3</text>
+<use name="mark/disk(sx)" pos="160 576" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos="256 576" size="normal" stroke="black"/>
+<text matrix="1 0 0 1 -52.8256 -73.968" transformations="translations" pos="208 640" stroke="black" type="label" width="9.354" height="4.297" depth="1.93" valign="baseline" style="math">y_1</text>
+<text matrix="1 0 0 1 43.1744 -73.968" transformations="translations" pos="208 640" stroke="black" type="label" width="27.619" height="6.428" depth="1.93" valign="baseline" style="math">y_2 = 1</text>
+<text transformations="translations" pos="80 576" stroke="black" type="label" width="30.248" height="6.918" depth="0" valign="baseline">entr\&apos;ees</text>
+<path stroke="black">
+160 576 m
+208 624 l
 </path>
-<text matrix="1 0 0 1 -47.9027 4.73562" transformations="translations" pos="320 672" stroke="red" type="label" width="35.423" height="7.473" depth="2.49" valign="baseline">f(x) = 0</text>
-<text matrix="1 0 0 1 -63.6294 28.0243" transformations="translations" pos="320 672" stroke="red" type="label" width="37.657" height="7.473" depth="2.49" valign="baseline" style="math">f(x) \geq 0</text>
-<text matrix="1 0 0 1 -28.5112 -21.6719" transformations="translations" pos="320 672" stroke="red" type="label" width="37.657" height="7.473" depth="2.49" valign="baseline" style="math">f(x) \leq 0</text>
+<path stroke="black">
+208 624 m
+256 576 l
+</path>
+<path stroke="black">
+199.782 638.918 m
+216.37 648.569 l
+</path>
+<text matrix="1 0 0 1 0.00003024 84.7491" transformations="translations" pos="80 576" stroke="black" type="label" width="23.883" height="6.654" depth="0" valign="baseline">sortie</text>
+<text matrix="1 0 0 1 23.8258 -10.8733" transformations="translations" pos="208 640" stroke="black" type="label" width="84.668" height="5.819" depth="1.93" valign="baseline" style="math">y_3 = w_{13} y_1 + w_{23} y_2</text>
+<text matrix="1 0 0 1 22.0161 20.7954" transformations="translations" pos="208 640" stroke="black" type="label" width="31.991" height="6.926" depth="1.93" valign="baseline" style="math">\hat{y}_3 = y_3</text>
+<text matrix="1 0 0 1 -5.42876 -1.80959" transformations="translations" pos="175.353 604.234" stroke="black" type="label" width="15.573" height="4.294" depth="1.49" valign="baseline">$w_{13}$</text>
+<text matrix="1 0 0 1 55.4937 -2.71426" transformations="translations" pos="175.353 604.234" stroke="black" type="label" width="15.573" height="4.294" depth="1.49" valign="baseline" style="math">w_{23}</text>
 </page>
 </ipe>

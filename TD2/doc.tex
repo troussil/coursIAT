@@ -39,45 +39,73 @@
 \maketitle
 
 Ce TD aborde le problème de l'optimisation linéaire, défini,
-pour des fonctions $f$ et $\{g_i\}_{\{1, \dots, m\}}$ linéaires (ou affines),
+pour des fonctions $f$ et $\{g_i\}_{\{1, \dots, m\}}$ linéaires
+\footnote{le terme exact serait \emph{affine}, mais \emph{linéaire}
+  est le terme consacré du fait de transformations possibles des
+  fonctions affines en fonctions linéaires (cf. section~\ref{sec:formes})}
 comme :
 \[
 \text{(PL)} \left\{
 \begin{array}{c}
-  \min_x \ f(x) \ \text{telle que :} \\
+  \min_x \ f(x) \ \text{tel que :} \\
   g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
   x \in \R^n \\
 \end{array}
 \right.
 \]
 
-(PL) est résolu en pratique par la méthode du \emph{simplexe}
-ou celle \emph{des points intérieurs}. La bibliothèque python
-\texttt{SciPy}, par exemple, fournit des
-\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html}{solveurs}
-basés sur ces deux méthodes.
+(PL) peut
+\begin{itemize}
+\item être \emph{infaisable} s'il n'y aucune solution,
+  c'est-à-dire aucun $x$ ne satisfaisant les contraintes,
+\item \emph{ne pas être borné} si, d'une solution donnée, on peut
+  toujours se déplacer vers une solution qui fait décroitre $f$,
+\item avoir une ou plusieurs solutions optimales, situées
+  sur le bord du polytope convexe décrit par les contraintes,
+\item être résolu par la méthode du \emph{simplexe}
+  (en temps exponentiel au pire cas, mais souvent linéaire en
+  pratique) ou celle \emph{des points intérieurs} (en temps
+  polynomial et dont les implémentations récentes sont encore
+  plus performantes). Il existe une multitude de solveurs,
+  mais nous utiliserons la bibliothèque python
+  \href{https://docs.scipy.org/doc/}{\texttt{SciPy}} dans
+  ce TD.
+\end{itemize} 
 
-\section{Condition d'optimalité nécessaires et suffisantes}
-
+\section{Conditions d'optimalité nécessaires et suffisantes}
+\label{sec:conditions}
 
 \begin{exercice}
   \label{ex:ex}
-  Dans (PL), on a $f(x) = -x_1 + x_2 + 1$, $g_1(x) = -x_1 + x_2$, $g_2(x) = -x_2$, 
-  et $g_3(x) = x_1 + x_2 - 1$. Donnez une représentation graphique du problème
+  Donnez une représentation graphique du problème suivant
   et déduisez-en le minimum global.
+  \[
+\left\{
+\begin{array}{c}
+  \min_x \ f(x) := -x_1 + x_2 + 1 \ \text{tel que :} \\
+  \begin{array}{ll}
+    g_1(x) &:= -x_1 + x_2 \leq 0 \\
+    g_2(x) &:= -x_2 \leq 0 \\
+    g_3(x) &:= x_1 + x_2 - 1 \leq 0 \\
+  \end{array} \\
+  x \in \R^n \\
+\end{array}
+\right.
+\]
 \end{exercice}
 
 \begin{solution}
 Le minimum global est $x^\star = (1,0)$, avec $f(x^\star) = 0$ (Fig.~\ref{fig:exPL}).  
 \begin{figure}
-  \includegraphics[width=0.5\textwidth]{PL}
+  \centering
+  \includegraphics[width=0.4\textwidth]{PL}
   \caption{Représentation graphique du problème de l'exercice~\ref{ex:ex}.
     En bleu, les numéros des contraintes}
   \label{fig:exPL}
 \end{figure}
 \end{solution}
 
-Comme la fonction objectif et les contraintes sont linéaires, non seulement
+Comme la fonction objectif et les contraintes sont affines, non seulement
 l'hypothèse de qualifications des contraintes est vérifiée, mais les conditions
 nécessaires d'optimalité de Kuhn et Tucker sont suffisantes : 
 il existe $\{\lambda_i \geq 0\}_{i \in I}$ tels que:
@@ -97,14 +125,19 @@ Vérifiez que le minimum global de l'exercice~\ref{ex:ex} satisfait (KT).
 
 \begin{solution}
   D'après la représentation graphique, $g_2$ et $g_3$ sont saturés, donc
-  $\lambda_1 = 0$, $g_2(x) = 0$ et $g_3(x) = 0$. Or, pour tout $x$,
-  ${\nabla f}^T(x) = (-1,1)$, ${\nabla g_2}^T(x) = (0,-1)$ et ${\nabla g_3}^T(x) = (1,1)$,
+  $g_2(x^\star) = 0$ et $g_3(x^\star) = 0$ par définition et $\lambda_1 = 0$,
+  d'après la seconde ligne de (KT). Or, pour tout $x$,
+  \begin{itemize}
+  \item ${{\nabla f}(x)}^T = (-1,1)$,
+  \item ${{\nabla g_2}(x)}^T = (0,-1)$,
+  \item ${{\nabla g_3}(x)}^T = (1,1)$,
+  \end{itemize}
   d'où le système linéaire de 4 équations et 4 inconnues : 
 \[
 \left\{
 \begin{array}{ll}
-  - x_2 &= 0 \\
-  x_1 + x_2 - 1 &= 0 \\
+  - x^\star_2 &= 0 \\
+  x^\star_1 + x^\star_2 - 1 &= 0 \\
   \lambda_2 \left(\begin{array}{c} 0 \\ -1 \end{array}\right)
   + \lambda_3 \left(\begin{array}{c} 1 \\ 1 \end{array}\right)
   &= \left(\begin{array}{c} -1 \\ 1 \end{array}\right)
@@ -115,8 +148,8 @@ qui donne
 \[
 \left\{
 \begin{array}{l}
-  x_2 = 0 \\
-  x_1 = 1 \\
+  x^\star_2 = 0 \\
+  x^\star_1 = 1 \\
   \lambda_3 = 1 \\
   \lambda_2 = 2 
 \end{array}
@@ -125,8 +158,11 @@ qui donne
 \end{solution}
 
 \section{Formulation matricielle canonique et standard}
+\label{sec:formes}
 
 La plupart des solveurs attendent la description du problème sous une forme matricielle particulière.
+Même si ce n'est pas vraiment le cas du module de \href{https://docs.scipy.org/doc/}{\texttt{SciPy}}
+que nous utiliserons, il reste important de savoir changer de représentation facilement.
 
 \begin{tabular}{c|c}
 forme canonique & forme standard \\ \hline
@@ -134,7 +170,7 @@ forme canonique & forme standard \\ \hline
   \[
 \left\{
 \begin{array}{c}
-  \min_x \ c^T x \ \text{telle que :} \\
+  \min_x \ c^T x \ \text{tel que :} \\
   Ax \leq b \\
   x \geq 0 \\
 \end{array}
@@ -146,7 +182,7 @@ forme canonique & forme standard \\ \hline
 \[
 \left\{
 \begin{array}{c}
-  \min_x \ c^T x \ \text{telle que :} \\
+  \min_x \ c^T x \ \text{tel que :} \\
   Ax = b \\
   x \geq 0 \\
 \end{array}
@@ -163,8 +199,11 @@ forme canonique & forme standard \\ \hline
 \end{exercice}
 
 \begin{solution}
-  (i) Si la fonction objectif est affine, on peut ajouter une variable,
-  contrainte à être égale à 1. 
+  (i) Si la fonction objectif est affine (il y a une constante $c_0$ ajoutée à une
+  combinaison linéaire des variables), on peut soit l'ignorer, car $x^\star$ qui
+  minimise $f'(x^\star)  := f(x^\star) - c_0$, minimise aussi $f(x^\star)$, soit
+  ajouter une variable, contrainte à être égale à 1 et destinée à être multipliée
+  par $c_0$ de façon à n'avoir plus qu'une combinaison linéaire de variables. 
   
   (ii) S'il existe une variable $x_k$ pouvant prendre n'importe quelle valeur réelle,
   on pourra remplacer $x_k$ par la différence $x_k - x_k'$ de deux variables
@@ -172,7 +211,7 @@ forme canonique & forme standard \\ \hline
 
   Enfin, pour passer de la forme canonique à la forme standard, il convient de remplacer
   toute inégalité par une égalité et une inégalité de signe
-  en introduisant une variable d'écart. Par exemple $g(x) \leq 0$ est équivalent
+  en introduisant une \emph{variable d'écart}. Par exemple $g(x) \leq 0$ est équivalent
   à $g(x) + y = 0$ et $y \geq 0$.
 \end{solution}
 
@@ -181,6 +220,8 @@ forme canonique & forme standard \\ \hline
 \end{exercice}
 
 \begin{solution}
+  ~
+  
   \begin{itemize}
   \item Comme je n'ai pas de contrainte de signe sur $x_1$, je le remplace
     par la différence $x_1 - x_3$ de deux variables à valeurs non-négatives.
@@ -193,11 +234,11 @@ En résumé, on a
 \[
 \left\{
 \begin{array}{cl}
-  \min_x \ -x_1 + x_2 + x_3 + x_4 \ \text{telle que :} & \\
+  \min_x \ -x_1 + x_2 + x_3 + x_4 \ \text{tel que :} & \\
   x_1, \dots, x_6 \geq 0 & \text{(contrainte 2 et non-négativité)} \\
   x_4 = 1 & \text{(fct. obj. linéaire)} \\
   -x_1 + x_2 + x_3 + x_5  = 0 & \text{(contrainte 1)} \\
-  x_1 + x_2 - x_3 + x_6 = 0   & \text{(contrainte 3)} \\
+  x_1 + x_2 - x_3 + x_6 = 1   & \text{(contrainte 3)} \\
 \end{array}
 \right.
 \]
@@ -205,7 +246,7 @@ On a donc la forme standard en définissant
 \begin{itemize}
 \item $x^T := (x_1, \dots, x_6) \in \R^6$
 \item $c^T := (-1, 1, 1, 1, 0, 0)$,
-\item $b^T := (1, 0, 0)$
+\item $b^T := (1, 0, 1)$
 \item $A :=
   \left(
   \begin{array}{cccccc}
@@ -218,62 +259,224 @@ On a donc la forme standard en définissant
 \end{solution}
 
 \begin{exercice}
-  Calculer la solution optimale de l'exercice~\ref{ex:ex} à l'aide d'un solveur
-  de votre choix. 
+  Calculer la solution optimale de l'exercice~\ref{ex:ex} à l'aide
+  du module \texttt{scipy.optimize} de \texttt{SciPy}
+  \footnote{Il s'agit d'utiliser précisément la fonction
+    \href{https://docs.scipy.org/doc/scipy-0.19.1/reference/optimize.linprog-simplex.html}{\texttt{linprog}}
+    du \href{https://docs.scipy.org/doc/scipy-0.19.1/reference/optimize.html\#module-scipy.optimize}{module}.
+    Ces liens et la correction utilisent la version 0.19.1, un peu ancienne, mais qui est la version disponible
+    dans les dépôts sur Ubuntu 18.04.}. 
 \end{exercice}
 
-\begin{solution}
-  TODO
-\end{solution}
-
-
 \section{Classification linéaire}
+\label{sec:classif}
 
-On suppose donnés $l$ points de $\R^n$, $\{u^k\}_{k \in \{1,\dots,l\}}$ divisés en deux sous-ensembles :
-un sous-ensemble d'observations positives $S^+ = \{ u^k, k \in K^+ \}$ et un sous-emsemble
-d'observations négatives $S^- = \{ u^k, k \in K^- \}$. On veut déterminer une règle de décision linéaire
+On suppose donnés des points de $\R^n$, $\{u^j\}_{j \in J}$ divisés en deux sous-ensembles :
+un sous-ensemble d'observations positives $S^+ := \{ u^j, j \in J^+ \}$ et un sous-emsemble
+d'observations négatives $S^- := \{ u^j, j \in J^- \}$. On veut déterminer une règle de décision linéaire
 permettant de discriminer au mieux les observations positives et les observations négatives. Ce problème
 peut être vu comme la recherche de $x \in \R^n$ tel que, en projetant les points de $S^+$ et $S^-$ le
-long de $x$, c'est-à-dire en regardant la quantité $u^T x$, on ait deux intervalles disjoints aussi
-distants que possible l'un de l'autre.
+long de $x$, c'est-à-dire en regardant le produit scalaire entre $x$ et les points de $S^+$ et $S^-$,
+on ait deux intervalles disjoints aussi distants que possible l'un de l'autre (Fig.~\ref{fig:classif}).
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.4\textwidth]{classif}
+  \caption{Illustration du problème 2d de la classification linéaire.
+    La flèche représente une solution.
+    Les intervalles, ici disjoints, des projections des observations
+    positives (noir) et négatives (blanc) sont représentés en rouge.  }
+  \label{fig:classif}
+\end{figure}
 
 \begin{exercice}
-  Pourquoi est-il nécessaire d'introduire une condition de normalisation sur $u$ ?
+  Pourquoi est-il nécessaire d'introduire une condition de normalisation sur $x$ ?
 \end{exercice}
 
 \begin{solution}
   Sinon, le problème d'optimisation n'est pas borné. En effet, l'unité pour la distance entre les deux
-  intervalles est la norme du vecteur. Donc, pour toute une direction admissible pour le vecteur $u$,
-  on pourra toujours diminuer sa norme, afin d'avoir des intervalles encore plus distants l'un de
-  l'autre.  
+  intervalles est la norme du vecteur. Donc, pour toute direction du vecteur $x$ qui sépare les
+  projections en deux intervalles disjoints, on peut toujours augmenter sa norme, afin d'avoir des
+  intervalles encore plus distants l'un de l'autre.  
 \end{solution}
 
 \begin{exercice}
   Montrez qu'en imposant l'une des conditions suivantes, on a un problème d'optimisation linéaire :
-  \begin{itemize}
-  \item $\underset{k \in K^-}{\max} (u^T x^k) = \pm 1$
-  \item $\|u\|_\infty = 1$
-  \item $\|u\|_1 = 1$
-  \end{itemize}
+  \begin{enumerate}
+  %\item $$
+  \item\label{L1} $\|x\|_1 = 1$
+  \item\label{Linf} $\|x\|_\infty = 1$
+  \end{enumerate}
+  Expliquez pourquoi ce ne serait pas le cas pour $\|x\|_2 = 1$.
 \end{exercice}
 
 \begin{solution}
-%p 618
+  D'abord, on introduit deux variables supplémentaires
+  $z^-$ et $z^+$ qui, à l'optimal, devraient être égales
+  à $\max_{j \in J^-} (x^T u^j)$ et $\min_{j \in J^+} (x^T u^j)$
+  (avec $z^+ > z^-$ si les intervalles sont disjoints).
+  
+  Dans le cas~\ref{Linf}, la norme $L_\infty$ de $x$ est fixée à $1$.
+  Mais au lieu d'ajouter explicitement la contrainte $\max_k |x_k| = 1$,
+  on requière seulement que pour tout $\forall k = 1, \dots, n$, on ait
+  $-1 \leq x_k \leq 1$ et pour la même raison que celle indiquée dans
+  la réponse à la question précédente la norme $L_\infty$ de $x$ sera maximisée
+  pour atteindre $1$ à l'optimal. Finalement, on a :  
+  \[
+  \left\{
+  \begin{array}{ll}
+    \max_x z^+ - z^- \ \text{tel que} & \\
+    x^T u^j \geq z^+ & \forall j \in J^+ \\ 
+    x^T u^j \leq z^- & \forall j \in J^- \\
+    -1 \leq x_k \leq 1 & \forall k = 1, \dots, n \\
+  \end{array}
+  \right.
+  \]
+
+  Dans le cas~\ref{L1}, on a : 
+  \[
+  \left\{
+  \begin{array}{ll}
+    \max_x z^+ - z^- \ \text{tel que} & \\
+    x^T u^j \geq z^+ & \forall j \in J^+ \\ 
+    x^T u^j \leq z^- & \forall j \in J^- \\
+    \sum_k^n |x_k| \leq 1 \\
+  \end{array}
+  \right.
+  \]
+  Mais comme dans le cas~\ref{Linf}, au lieu d'utiliser explicitement la contrainte
+  que la norme $L_1$ vaut $1$, ce qui implique des valeurs absolues, l'astuce consiste
+  à réexprimer chaque variable $x_k$ comme la différence de deux variables $x_k^+$ et
+  $x_k^-$, toutes deux asteintes à être non-négatives. Il suffit alors de demander à
+  ce que $x_k^+ + x_k^- \leq 1$, ce qui revient à demander à ce que la différence
+  entre $x_k^+$ et $x_k^-$ soit inférieure à $1$ et donc à ce que $|x_k|$ soit inférieure
+  à $1$.
+
+  Enfin, il serait naturel d'opter pour la norme $L_2$, mais cela ferait intervenir
+  une contrainte d'égalité quadratique : $\sum_k^n x_k^2 = 1$. Nous n'aurions plus dans
+  ce cas un problème d'optimisation linéaire. 
 \end{solution}
 
 \begin{exercice}
-\`A l'aide de l'un des \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html}{solveurs}
-de \texttt{SciPy}, complétez le code disponible sur Moodle pour résoudre le problème de classification linéaire. 
+  En reprenant le code Python disponible sur Moodle, programmez la résolution du problème
+  de classification linéaire correspondant aux conditions de normalisation~\ref{L1}. 
 \end{exercice}
 
 \begin{solution}
-TODO
+  Il faut arriver à construire les matrices nécessaires pour appeler la fonction 
+  \href{https://docs.scipy.org/doc/scipy-0.19.1/reference/optimize.linprog-simplex.html}{\texttt{linprog}} 
+  comme sur la Fig.~\ref{fig:stdForm}. 
+  
+  \begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth,page=1]{standardForm}
+  \includegraphics[width=0.49\textwidth,page=2]{standardForm}
+  \caption{}
+  \label{fig:stdForm}
+\end{figure}
 \end{solution}
 
 Notez que l'application des techniques de programmation linéaire à la résolution de ce type de problème
 est à la base des méthodes d'apprentissage connues sous le nom de \emph{Support Vector Machines}
 \href{https://en.wikipedia.org/wiki/Support-vector_machine}{(SVM)}
 
+\section{Transport optimal}
+\label{sec:transport}
+
+Un problème de transport optimal peut se décrire de la manière suivante :
+$n$ clients numérotés de $j = 1, \dots, n$, demandent la livraison d'un
+certain produit, les quantités demandées étant notées $d_1, \dots, d_n$.
+Chaque client $j$ peut être approvisionné à partir d'un ou plusieurs entrepôts.
+Il y a $m$ entrepôts numérotés de $i = 1, \dots, m$ et chaque entrepôt $i$
+dispose d'une quantité de produit connue, notée $a_i$. On doit décider quelles
+quantités $x_{ij}$ acheminer entre chaque dépôt $i$ et chaque client $j$ de façon
+à satisfaire la demande des clients, dans la limite des quantités disponibles
+et ce en minimisant le coût total de transport :
+\[
+\sum_{i = 1}^m \sum_{j = 1}^{n} c_{ij}x_{ij}
+\]
+où, $\forall (i,j), c_{ij}$ désigne le coût unitaire de transport entre l'entrepôt
+$i$ et le client $j$. Toutes le quantités sont positives et données.
+
+\begin{exercice}
+Exprimer le problème décrit comme un problème d'optimisation linéaire.% en les variables $x_{ij}$. 
+\end{exercice}
+
+\begin{solution}
+  Le problème consiste à maximiser $\sum_{i = 1}^m \sum_{j = 1}^{n} c_{ij}x_{ij}$ sous les con\-traintes : 
+  \begin{equation}
+    \label{eq:d}
+    \sum_{i = 1}^m x_{ij} = d_j, \ \forall j = 1, \dots, n
+  \end{equation}
+  \begin{equation}
+    \label{eq:a}
+    \sum_{j = 1}^n x_{ij} \leq a_i, \ \forall i = 1, \dots, m
+  \end{equation}
+  \begin{equation}
+    \label{eq:pos}
+    x_{ij} \geq 0, \ (\forall i = 1, \dots, m, \forall j = 1, \dots, n )
+  \end{equation}
+
+  Les contraintes de demandes~\ref{eq:d} expriment le fait que chaque client reçoit la quantité demandée.
+  Les contraintes de disponibilité~\ref{eq:a} expriment le fait que chaque entrepôt ne peut fournir plus
+  que la quantité dont il dispose. Les con\-traintes~\ref{eq:pos} expriment la non-négativité des quantités
+  transportées. 
+\end{solution}
+
+\begin{exercice}
+  Montrer qu'une condition nécessaire et suffisante pour que le problème ci-dessus ait au
+  moins une solution est que
+  \begin{equation}
+    \label{eq:cond}
+    \sum_{j = 1}^n d_j \leq \sum_{i = 1}^m a_i.
+  \end{equation}
+\end{exercice}
+
+\begin{solution}
+  Sommant sur $j$ toutes les contraintes~\ref{eq:d} et sur $i$ toutes les contraintes~\ref{eq:a},
+  on obtient :
+  \[
+  \sum_{j = 1}^n d_j = \sum_{i = 1}^m\sum_{j = 1}^n x_{ij} \leq \sum_{i = 1}^m a_i.
+  \]
+  Par conséquent, une solution vérifie forcément~\ref{eq:cond}. Inversement,
+  si la condition~\ref{eq:cond} est vérifiée, alors il est toujours possible de
+  constuire une solution (pas forcément optimale) de façon \emph{gloutonne} :
+  pour tous les clients $j$ et tous les entrepôts $i$, on transporte, soit
+  tout ce qui est demandé, si la demande est inférieure à ce qui est disponible,
+  soit tout ce qui est disponible, sinon, c'est-à-dire $x_{ij} = \min(d_j,a_i)$,
+  puis on met à jour les quantités demandées ou disponibles en conséquence. 
+\end{solution}
+
+\begin{exercice}
+  En exprimant le problème sous forme standard, expliquez pourquoi il n'est pas restrictif
+  de supposer que $\sum_{i = 1}^m a_i = \sum_{j = 1}^n d_j$ et que toutes les contraintes
+  sont d'égalité, exceptées celles de positivité des variables $x_{ij}$.
+\end{exercice}
+
+\begin{solution}
+  On rajoute $m$ variables d'écart, astreintes à être positives ou nulles
+  et qui n'interviennent pas dans la fonction objectif.
+  Si on note $x_{1,0}, x_{2,0}, \dots, x_{m,0}$ ces $m$ variables, on peut réécrire
+  les contraintes~\ref{eq:a} comme :
+  \[
+  \sum_{j = 1}^n x_{ij} + x_{i,0} = \sum_{j = 0}^n x_{ij} = a_i, \ \forall i = 1, \dots, m
+  \]
+  Si, par ailleurs, aux contraintes~\ref{eq:d} on rajoute
+  \[
+  \sum_{i = 0}^m x_{i,0} = d_0
+  \]
+  où $d_0 = \sum_{i = 1}^m a_i - \sum_{j = 1}^n d_j$, alors cette transformation s'interprète
+  comme l'ajout d'un client fictif, de numéro $0$, dont la demande est exactement égale à
+  la différence $\sum_{i = 1}^m a_i - \sum_{j = 1}^n d_j$ et dont les coûts d'acheminement
+  sont nuls.
+
+  Comme on n'a que des contraintes d'égalité ou d'inégalité de signe, le problème est
+  maintenant sour forme standard. 
+\end{solution}
+
+Notez que le transport optimal devient un outils de plus en plus utilisé pour résoudre
+des problèmes variées, notamment en
+\href{https://weave.eu/le-transport-optimal-un-couteau-suisse-pour-la-data-science/}{data science}. 
 
 \end{document}
 

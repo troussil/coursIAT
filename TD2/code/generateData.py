@@ -5,7 +5,7 @@ import random
 import math
 
 #-------------------------------------------------------------
-if __name__ == "__main__":
+def main():
 
     #parse command line    
     parser = argparse.ArgumentParser(description="\
@@ -19,42 +19,43 @@ if __name__ == "__main__":
     parser.add_argument("-a", "--slope",
                         help="slope of the straight line",
                         type=float,
-                        default=0.5)
+                        default=1.)
     parser.add_argument("-b", "--intercept",
                         help="intercept of the straight line",
                         type=float,
                         default=0.)
-    parser.add_argument("-d", "--maxDistance",
-                        help="maximal orthogonal distance to the straight line",
+    parser.add_argument("-m", "--minDistance",
+                        help="minimal vertical distance to the straight line",
                         type=float,
-                        default=3.)
+                        default=0.5)
+    parser.add_argument("-M", "--maxDistance",
+                        help="maximal vertical distance to the straight line",
+                        type=float,
+                        default=3.5)
     parser.add_argument("-l", "--lowerBound",
                         help="minimal x-coordinate",
                         type=float,
-                        default=0.)
+                        default=-2.5)
     parser.add_argument("-u", "--upperBound",
                         help="maximal x-coordinate",
                         type=float,
-                        default=5.)
+                        default=2.5)
     parser.add_argument("-w", "--visualize", help="show the scatter plot of the point cloud",
                         action="store_true")
-
     args = parser.parse_args()
 
     #creating data
     data = []
     for _ in range(args.number):
-        #take a random point on the straight line
+        #take a random x-coordinate
         x = random.uniform(args.lowerBound, args.upperBound)
-        y = args.slope * x + args.intercept
-        #shift it along the orthogonal direction
-        orthDirNorm = math.sqrt(args.slope**2 + 1)
+        #take a random label
         label = 1
         if random.gauss(0, 1) < 0:
             label = -1
-        shift = label * random.uniform(0, args.maxDistance)
-        x += -args.slope * shift / orthDirNorm 
-        y += shift / orthDirNorm
+        #compute the y-coordinate
+        shift = label * random.uniform(args.minDistance, args.maxDistance)
+        y = args.slope * x + args.intercept + shift
         #store the point
         data.append( (x,y,label) ) 
 
@@ -72,3 +73,10 @@ if __name__ == "__main__":
         plt.scatter([x for (x,_,l) in data if l == -1],
                     [y for (_,y,l) in data if l == -1], marker = '.') 
         plt.show() 
+        plt.close()
+        
+#-------------------------------------------------------------
+if __name__ == "__main__":
+    main()
+        
+        
