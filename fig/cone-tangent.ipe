@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
-<ipe version="70206" creator="Ipe 7.2.7">
-<info created="D:20200217115021" modified="D:20200217154204"/>
+<ipe version="70212" creator="Ipe 7.2.13">
+<info created="D:20200217115021" modified="D:20210223110946"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -258,7 +258,7 @@ h
 <layer name="delta"/>
 <layer name="epsilon"/>
 <layer name="zeta"/>
-<view layers="alpha beta gamma" active="beta"/>
+<view layers="alpha beta gamma" active="alpha"/>
 <view layers="alpha delta epsilon" active="delta"/>
 <view layers="alpha beta gamma zeta" active="zeta"/>
 <path layer="alpha" matrix="1 0 0 1 -0.695995 -0.231998" stroke="black" arrow="normal/normal">
@@ -322,8 +322,8 @@ h
 <text matrix="1 0 0 1 0 -16" transformations="translations" pos="176 736" stroke="blue" type="label" width="72.124" height="7.473" depth="2.49" valign="baseline" style="math">g_2(x) = - x_2 \leq 0</text>
 <text layer="delta" matrix="1 0 0 1 0 -32" transformations="translations" pos="176 736" stroke="blue" type="label" width="83.235" height="8.11" depth="2.49" valign="baseline" style="math">g_3(x) = - (1-x_1)^3</text>
 <text layer="beta" matrix="1 0 0 1 0 -32" transformations="translations" pos="176 736" stroke="blue" type="label" width="86.715" height="7.473" depth="2.49" valign="baseline" style="math">g_3(x) =  x_1 + x_2 \leq 1</text>
-<text layer="alpha" matrix="1 0 0 1 -38.0241 -4.87197" transformations="translations" pos="160 672" stroke="blue" type="label" width="4.608" height="5.778" depth="0" valign="baseline" size="small">2</text>
-<text matrix="1 0 0 1 -6.24 -39.6717" transformations="translations" pos="160 672" stroke="blue" type="label" width="4.608" height="5.778" depth="0" valign="baseline" size="small">1</text>
+<text layer="alpha" matrix="1 0 0 1 -38.0241 -4.87197" transformations="translations" pos="160 672" stroke="blue" type="label" width="4.608" height="5.778" depth="0" valign="baseline" size="small">1</text>
+<text matrix="1 0 0 1 -6.24 -39.6717" transformations="translations" pos="160 672" stroke="blue" type="label" width="4.608" height="5.778" depth="0" valign="baseline" size="small">2</text>
 <text layer="delta" matrix="1 0 0 1 -5.10391 -9.04792" transformations="translations" pos="160 672" stroke="blue" type="label" width="4.608" height="5.778" depth="0" valign="baseline" size="small">3</text>
 <text layer="beta" matrix="1 0 0 1 2.08804 1.15999" transformations="translations" pos="160 672" stroke="blue" type="label" width="4.608" height="5.778" depth="0" valign="baseline" size="small">3</text>
 <text layer="delta" matrix="1 0 0 1 4.40797 3.01598" transformations="translations" pos="208 688" stroke="blue" type="label" width="33.437" height="5.852" depth="1.36" valign="baseline" size="small" style="math"> + x_2 \leq 0</text>
