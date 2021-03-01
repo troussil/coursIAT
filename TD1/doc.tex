@@ -16,6 +16,8 @@
 
 \usepackage{cprotect} %verbatim in footnote
 
+\usepackage[english,linesnumbered,ruled,vlined]{algorithm2e}
+
 \newcommand{\cad}{c.-à-d.}
 \newcommand{\Z}{{\ensuremath\mathbb{Z}}}
 \newcommand{\N}{{\ensuremath\mathbb{N}}}
@@ -28,10 +30,10 @@
 \newtheorem*{solution}{Solution}
 
 \usepackage{comment}
-\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+%\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
 
 
-\title{Exemples et algorithmes d'optimisation sans contrainte}
+\title{Optimisation sans contrainte}
 \author{Tristan Roussillon}
 
 \begin{document}
@@ -39,11 +41,12 @@
 \maketitle
 
 Dans ce TD est traité le cas particulier de la minimisation, sans contrainte,
-d'une fonction objectif égale à une somme de fonctions. L'objectif est de se
-familiariser avec une famille de méthodes de minimisation par descente de
-gradient aussi bien que de s'entraîner à modéliser des problèmes d'optimisation.
+d'une fonction objectif égale à une somme de fonctions. Cette situation est
+très courante dans le contexte de l'apprentissage. L'objectif est de s'entraîner
+à modéliser des problèmes d'optimisation et de connaître le lien entre apprentissage
+et optimisation. 
 
-\section{Méthode des moindres carrés (30 min)}
+\section{Prédiction et méthode des moindres carrés}
 \label{sec:mc}
 %https://images.math.cnrs.fr/De-la-methode-des-moindres-carres-a-la-descente-de-gradient.html?lang=fr
 
@@ -59,8 +62,8 @@ prédiction et son observation.
   \'Ecrire le problème de la régression linéaire par la méthode des moindres carrés
   sous la forme suivante
   \[
-  \text{min} \ f(x), \ \text{telle que} \
-  f(x) = \sum_{i = \{1,\dots,l\}} q_i(x) \ \text{et} \ x \in \R^n
+  \min_{x \in \R^n} \ f(x), \ \text{telle que} \
+  f(x) = \sum_{i = 1}^l q_i(x) 
   \]
 
   \begin{itemize}
@@ -77,8 +80,8 @@ prédiction et son observation.
 
   D'où
   \[
-  \text{min} \ f(x), \ \text{telle que} \
-  f(x) = \sum_{i = \{1,\dots,l\}} (v_i - (x_1u_i + x_2))^2 \ \text{et} \ x \in \R^n
+  \min_{x \in \R^n} \ f(x), \ \text{telle que} \
+  f(x) = \sum_{i = 1}^l (v_i - (x_1u_i + x_2))^2 
   \]
 \end{solution}
 
@@ -169,43 +172,187 @@ En utilisant le Théorème~\ref{th:fonc-conv}, montrer que $f$ est convexe.
   
 \end{solution}
 
-\section{Optimisation par descente de gradient (45 min)}
+\section{Le perceptron, l'ancêtre des résaux de neurones}
 
-Même si on connait analytiquement une solution optimale pour ce problème, il est intéressant,
-d'un point de vue pédagogique, de mettre en oeuvre des algorithmes d'optimisation par descente de
-gradient pour résoudre ce problème : on peut facilement visualiser le chemin des solutions successives,
-observer des phénomènes d'oscillations, de non convergence, d'instabililité numérique et constater
-qu'il est souvent difficile de régler certains paramètres.
+\let\vec\mathbf
+
+Dans cette section, nous nous écartons des notations du cours pour adopter les
+notations utilisées habituellement dans le contexte des réseaux de neurones.
+
+Nous observons des grandeurs réelles représentées par un vecteur $\vec{x}$
+(par ex. l'âge et la pression sanguine), ainsi qu'un état binaire $y$
+(par ex. être atteint d'une maladie ou non), sur un certain nombre d'unités
+statistiques : $\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$ est l'\emph{ensemble d'apprentissage}.
+Or, il existe une règle de décision permettant de prédire $y$ en fonction de $\vec{x}$
+de la forme suivante :
+\[
+\forall i, \quad
+\hat{y}_i :=
+\left\{
+\begin{array}{ll}
+  +1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x}_i + b > 0 \\
+  -1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x}_i + b < 0 \\
+\end{array}
+\right.
+\]
+Le vecteur $\vec{w}$ (de même dimension que $\vec{x}$)
+est appelé \emph{poids} et le scalaire $b$, \emph{biais}.
+
+Le perceptron, qui est l'ancêtre des réseaux de neurones, modélise ce type
+de problème de classification linéaire et est associé à un algorithme qui
+permet de trouver, à partir de l'ensemble d'apprentissage, les paramètres
+$\vec{w},b$ inconnus. 
 
 \begin{exercice}
-Téléchargez l'archive \texttt{descGrad.zip} sur Moodle. Elle contient, entre autres, deux scripts python :
-\begin{itemize}
-\item
-  l'un permet de générer des données pour le problème de la prédiction à une variable expliquative
-  et une variable à expliquer.
-\begin{verbatim}
-python3 generateData.py -n 10000 > data10000.txt
-\end{verbatim}
-\item l'autre permet de comparer différents algorithmes d'optimisation par descente de gradient
-  pour trouver le meilleur modèle linéaire de prédiction par la méthode des moindres carrés.
-  Par exemple,  
-\begin{verbatim}
-python3 LeastSquareGradientDescent.py data10000.txt -m Newton 
-\end{verbatim}
-\end{itemize}
+  Pourquoi le perceptron ne fait aucune erreur de classification
+  si et seulement si $y_i (\vec{w}\cdot\vec{x}_i + b) > 0$ pour tout $i$ ?
+  Pourquoi avec une paire $\vec{w}^\star,b^\star$ qui minimise la fonction 
+  \[
+  Q(\vec{w},b) := - \sum^n_{i=1} y_i (\vec{w}\cdot\vec{x}_i + b)
+  \]
+  le perceptron classifie sans erreur les données de l'ensemble d'apprentissage ?
+  Quel problème pose ce type d'optimisation ?
 \end{exercice}
+
+\begin{solution}
+Le perceptron ne fait aucune erreur si et seulement si 
+\[
+\forall i, \quad
+\left\{
+\begin{array}{ll}
+  y_i = 1 & \quad \mathrm{et}\quad \vec{w}\cdot\vec{x}_i + b > 0 \\
+  y_i = -1 & \quad \mathrm{et}\quad \vec{w}\cdot\vec{x}_i + b < 0 \\
+\end{array}
+\right.
+\]
+ce qui est équivalent à $- y_i (\vec{w}\cdot\vec{x}_i + b) < 0$ pour tout $i$.
+Par conséquent, s'il existe une paire $(\vec{w}^0,b^0)$ pour laquelle
+le perceptron ne fait aucune erreur, alors pour tout $i$,
+$- y_i (\vec{w}^0\cdot\vec{x}_i + b^0) < 0$ et donc $Q(\vec{w}^0,b^0) < 0$.
+La paire $(\vec{w}^\star,b^\star)$ qui donne la plus petite valeur de $Q$
+fait aussi bien l'affaire car $Q(\vec{w}^\star,b^\star) \leq Q(\vec{w}^0,b^0) < 0$.
+
+S'il existe une paire $(\vec{w}^0,b^0)$ telle que $Q(\vec{w}^0,b^0) < 0$.
+Il suffit de multiplier $\vec{w}^0$ et $\vec{b}^0$ par une constante positive
+$\lambda > 0$ pour avoir une plus petite valeur de $Q$. La
+fonction $Q$ n'est pas bornée inférieurement et sa valeur minimale
+est en ce sens mal définie. 
+\end{solution}
 
 \begin{exercice}
-Parcourez le code et consultez l'aide affichée par
-\begin{verbatim}
-python3 LeastSquareGradientDescent.py -h 
-\end{verbatim}
-Notez le nom, la règle de mise à jour de la solution courante,
-les paramètres requis de chaque méthode. Jouez avec le script et
-notez vos observations quant à la performance de chaque méthode.  
+  Soient $E_{\vec{w},b} := \{i \ | \ y_i (\vec{w}\cdot\vec{x}_i + b) < 0\}$, l'ensemble des erreurs,
+  c-à-d. l'ensemble des cas mal classés par le perceptron, 
+  et la fonction objectif restreinte à $E_{\vec{w},b}$ suivante :
+  \[
+  Q'(\vec{w},b) := - \sum_{i \in E_{\vec{w},b}} y_i (\vec{w}\cdot\vec{x}_i + b).
+  \]
+
+  Expliquez pourquoi $Q'$ est bornée inférieurement. 
+  Calculez le gradient de $Q'$\footnote{Vous devez dériver $Q'$ par rapport aux
+    composantes du vecteur $\vec{w}$ et par rapport à $b$.}.
+  En utilisant le schéma général de la descente de gradient,
+  proposez une règle de mise à jour des paramètres $\vec{w}$ et $b$
+  pour trouver la paire qui minimise $Q'$. 
 \end{exercice}
 
-\section{Réseau de neurones (30 min)}
+\begin{solution}
+  Par définition, pour tout $i$ de $E_{\vec{w},b}$,
+  $- y_i (\vec{w}\cdot\vec{x}_i + b) > 0$ et $0$ est donc un minorant pour $Q'$. 
+  
+  Pour tout $i$, la dérivée partielle de $-y_i (\vec{w}\cdot\vec{x}_i + b)$
+  par rapport à $\vec{w}$ est $-y_i\vec{x}_i$, tandis que celle par
+  rapport à $b$ est $-y_i$, d'où l'on déduit que le gradient
+  de $-y_i (\vec{w}\cdot\vec{x}_i + b)$ par rapport à un vecteur
+  composé de $\vec{w}$ et $b$ est un vecteur composé de $-y_i\vec{x}_i$
+  et $-y_i$. 
+  Comme le gradient est un opérateur linéaire, $\nabla Q'$ s'obtient comme
+  la somme de ces vecteurs pour tout $i\in E_{\vec{w},b}$.
+  
+  Pour une constante positive $\lambda > 0$, qu'on appelle dans ce
+  contexte \emph{taux d'apprentissage}, la descente de gradient
+  s'exprime ainsi:
+  \[
+  \left(\begin{array}{c}
+    \vec{w} \\
+    b \\
+  \end{array}
+  \right)
+  \leftarrow
+  \left(\begin{array}{c}
+    \vec{w} \\
+    b \\
+  \end{array}
+  \right)
+  +
+  \lambda
+  \sum_{i\in E}
+  \left(\begin{array}{c}
+    y_i\vec{x}_i \\
+    y_i \\
+  \end{array}
+  \right).
+  \]  
+\end{solution}
+
+\begin{exercice}
+  Comme $Q'$ est une somme de fonctions, une alternative à la descente de gradient classique
+  consiste à mettre à jour les paramètres $\vec{w}$ et $b$ après chaque paire $(\vec{x}_i, y_i)$
+  considérée, c'est ce qu'on appelle le \emph{gradient stochastique}.
+  Cette pratique est souvent choisie quand l'ensemble d'apprentissage est grand.
+  \'Ecrire l'algorithme d'apprentissage complet mettant en oeuvre cette stratégie. 
+\end{exercice}
+
+\begin{solution}
+  La règle de mise à jour est maintenant exécutée pour chaque paire $(\vec{x}_i, y_i)$
+  qui a été mal classée et s'écrit plus simplement ainsi: 
+  \[
+  \left(\begin{array}{c}
+    \vec{w} \\
+    b \\
+  \end{array}
+  \right)
+  \leftarrow
+  \left(\begin{array}{c}
+    \vec{w} \\
+    b \\
+  \end{array}
+  \right)
+  +
+  \lambda
+  \left(\begin{array}{c}
+    y_i\vec{x}_i \\
+    y_i \\
+  \end{array}
+  \right).
+  \]
+  D'où l'algorithme:
+  \begin{algorithm}[htbp]
+    \caption{Algorithme d'apprentissage du perceptron}
+    \KwIn{l'ensemble d'apprentissage $\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$,\\
+      le taux d'apprentissage $\lambda$}
+    \KwOut{poids $\vec{w}$ et biais $b$ du perceptron}
+    \Repeat{$\forall i, \ y_i(\vec{w}\cdot\vec{x}_i + b) \geq 0$}{
+      \ForEach{$i = 1,\dots, n$}{
+        \If{$y_i(\vec{w}\cdot\vec{x}_i + b) < 0$}{
+          $\vec{w} \leftarrow \vec{w} + \lambda y_i\vec{x}_i$ \;
+          $b \leftarrow b + \lambda y_i$ \;
+        }
+      }
+    }(\tcp*[h]{plus d'erreurs})
+    \Return{$\vec{w}, b$} \;
+  \end{algorithm}
+\end{solution}
+
+Le perceptron est un cas particulier de réseau de neurones à une couche
+avec une fonction d'activation de type signe. Ce modèle et l'algorithme
+d'apprentissage qui lui est associé ont de nombreuses limitations,
+notamment l'incapacité de traiter des données non linéairement
+séparables. En revanche, il a été montré plus tard que les réseaux de
+neurones d'au moins deux couches (avec des fonctions d'activation non
+linéaires et comportant suffisamment de neurones), sont capables d'approximer
+n'importe quelles fonctions. 
+
+\section{Pour aller plus loin}
 
 Lisez l'article \cite{hinton86}. Il s'agit de l'un des articles pionniers
 de l'apprentissage par rétro-propagation dans les réseaux neuronaux. L'un des
@@ -213,8 +360,7 @@ co-auteurs, G. Hinton, a reçu le prix Turing 2019 (en même temps de Y. LeCun)
 pour ses travaux en intelligence artificielle.  
 
 \begin{exercice}
-Qu'est-ce qu'un réseau de neurone ? Comment pourrait-on modéliser
-la méthode des moindres carrés par un réseau de neurone ? Faire un schéma. 
+Qu'est-ce qu'un réseau de neurone ?
 \end{exercice}
 
 \begin{solution}
@@ -236,18 +382,6 @@ la méthode des moindres carrés par un réseau de neurone ? Faire un schéma.
   \end{equation}
 
   Certaines unités, appelées biais, ont une valeur d'entrée fixée à 1.
-  Le réseau de la figure \ref{fig:rn} modélise la méthode des moindres carrés
-  à l'aide d'un biais.
-  \begin{figure}
-    \centering
-    \includegraphics[width=0.7\textwidth]{rn.pdf}
-    \caption{Modélisation de la méthode des moindre carrés par un réseau de neurones.
-      En reprenant les notations de la section~\ref{sec:mc}, à chaque fois qu'on nourrit
-      le réseau avec la valeur $\hat{y}_1 = u_i$, le réseau retourne la prédiction $\hat{y}_3 = \hat{v}_i$,
-      calculée à partir des valeurs $x_1 = w_{13}$ et $x_2 = w_{23}$. }
-    \label{fig:rn}
-  \end{figure}
-  
 \end{solution}
 
 \begin{exercice}
