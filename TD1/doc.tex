@@ -80,7 +80,7 @@ prédiction et son observation.
 
   D'où
   \[
-  \min_{x \in \R^n} \ f(x), \ \text{telle que} \
+  \min_{x \in \R^2} \ f(x), \ \text{telle que} \
   f(x) = \sum_{i = 1}^l (v_i - (x_1u_i + x_2))^2 
   \]
 \end{solution}
@@ -186,12 +186,11 @@ statistiques : $\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$ est l'\emph{ensemble d'app
 Or, il existe une règle de décision permettant de prédire $y$ en fonction de $\vec{x}$
 de la forme suivante :
 \[
-\forall i, \quad
-\hat{y}_i :=
+\hat{y} :=
 \left\{
 \begin{array}{ll}
-  +1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x}_i + b > 0 \\
-  -1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x}_i + b < 0 \\
+  +1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x} + b > 0 \\
+  -1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x} + b < 0 \\
 \end{array}
 \right.
 \]
@@ -206,12 +205,13 @@ $\vec{w},b$ inconnus.
 \begin{exercice}
   Pourquoi le perceptron ne fait aucune erreur de classification
   si et seulement si $y_i (\vec{w}\cdot\vec{x}_i + b) > 0$ pour tout $i$ ?
-  Pourquoi avec une paire $\vec{w}^\star,b^\star$ qui minimise la fonction 
+  S'il existe $\vec{w}^0$ et $b^0$ pour lesquels le perceptron ne fait
+  aucune erreur, en quoi cela serait-il intéressant de chercher $\vec{w}^\star$
+  et $b^\star$ qui minimisent la fonction suivante ? 
   \[
   Q(\vec{w},b) := - \sum^n_{i=1} y_i (\vec{w}\cdot\vec{x}_i + b)
   \]
-  le perceptron classifie sans erreur les données de l'ensemble d'apprentissage ?
-  Quel problème pose ce type d'optimisation ?
+  Quel est le problème avec cette fonction objectif ?
 \end{exercice}
 
 \begin{solution}
@@ -229,22 +229,29 @@ ce qui est équivalent à $- y_i (\vec{w}\cdot\vec{x}_i + b) < 0$ pour tout $i$.
 Par conséquent, s'il existe une paire $(\vec{w}^0,b^0)$ pour laquelle
 le perceptron ne fait aucune erreur, alors pour tout $i$,
 $- y_i (\vec{w}^0\cdot\vec{x}_i + b^0) < 0$ et donc $Q(\vec{w}^0,b^0) < 0$.
-La paire $(\vec{w}^\star,b^\star)$ qui donne la plus petite valeur de $Q$
-fait aussi bien l'affaire car $Q(\vec{w}^\star,b^\star) \leq Q(\vec{w}^0,b^0) < 0$.
 
-S'il existe une paire $(\vec{w}^0,b^0)$ telle que $Q(\vec{w}^0,b^0) < 0$.
-Il suffit de multiplier $\vec{w}^0$ et $\vec{b}^0$ par une constante positive
-$\lambda > 0$ pour avoir une plus petite valeur de $Q$. La
-fonction $Q$ n'est pas bornée inférieurement et sa valeur minimale
-est en ce sens mal définie. 
+Cependant, il suffit de multiplier $\vec{w}^0$ et $b^0$ par une constante
+strictement positive pour avoir une plus petite valeur de $Q$ et s'approcher
+d'une paire qui minimise $Q$.
+
+En revanche, cela signifie aussi que $Q$ n'est pas bornée inférieurement. 
+Dans un tel cas, on ne peut espérer trouver numériquement une paire qui
+minimise $Q$.
 \end{solution}
 
 \begin{exercice}
   Soient $E_{\vec{w},b} := \{i \ | \ y_i (\vec{w}\cdot\vec{x}_i + b) < 0\}$, l'ensemble des erreurs,
   c-à-d. l'ensemble des cas mal classés par le perceptron, 
-  et la fonction objectif restreinte à $E_{\vec{w},b}$ suivante :
+  et la fonction objectif suivante :
   \[
-  Q'(\vec{w},b) := - \sum_{i \in E_{\vec{w},b}} y_i (\vec{w}\cdot\vec{x}_i + b).
+  Q'(\vec{w},b) :=
+  \quad
+  \left\{
+  \begin{array}{ll}
+    - \sum_{i \in E_{\vec{w},b}} y_i (\vec{w}\cdot\vec{x}_i + b) & \text{si}\quad E_{\vec{w},b} \neq \emptyset \\
+    0 & \text{sinon} \\
+  \end{array}
+  \right.
   \]
 
   Expliquez pourquoi $Q'$ est bornée inférieurement. 
@@ -257,7 +264,8 @@ est en ce sens mal définie.
 
 \begin{solution}
   Par définition, pour tout $i$ de $E_{\vec{w},b}$,
-  $- y_i (\vec{w}\cdot\vec{x}_i + b) > 0$ et $0$ est donc un minorant pour $Q'$. 
+  $- y_i (\vec{w}\cdot\vec{x}_i + b) > 0$ et $0$ est donc un minorant pour $Q'$,
+  atteint dans le cas où il n'y a aucune erreur. 
   
   Pour tout $i$, la dérivée partielle de $-y_i (\vec{w}\cdot\vec{x}_i + b)$
   par rapport à $\vec{w}$ est $-y_i\vec{x}_i$, tandis que celle par
@@ -285,7 +293,7 @@ est en ce sens mal définie.
   \right)
   +
   \lambda
-  \sum_{i\in E}
+  \sum_{i\in E_{\vec{w},b}}
   \left(\begin{array}{c}
     y_i\vec{x}_i \\
     y_i \\
@@ -297,7 +305,7 @@ est en ce sens mal définie.
 \begin{exercice}
   Comme $Q'$ est une somme de fonctions, une alternative à la descente de gradient classique
   consiste à mettre à jour les paramètres $\vec{w}$ et $b$ après chaque paire $(\vec{x}_i, y_i)$
-  considérée, c'est ce qu'on appelle le \emph{gradient stochastique}.
+  considérée, c'est ce qu'on appelle la descente de \emph{gradient stochastique}.
   Cette pratique est souvent choisie quand l'ensemble d'apprentissage est grand.
   \'Ecrire l'algorithme d'apprentissage complet mettant en oeuvre cette stratégie. 
 \end{exercice}
@@ -331,6 +339,8 @@ est en ce sens mal définie.
     \KwIn{l'ensemble d'apprentissage $\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$,\\
       le taux d'apprentissage $\lambda$}
     \KwOut{poids $\vec{w}$ et biais $b$ du perceptron}
+    $\vec{w} \leftarrow \vec{0}$ \;
+    $b \leftarrow 1$ \;
     \Repeat{$\forall i, \ y_i(\vec{w}\cdot\vec{x}_i + b) \geq 0$}{
       \ForEach{$i = 1,\dots, n$}{
         \If{$y_i(\vec{w}\cdot\vec{x}_i + b) < 0$}{
@@ -348,8 +358,8 @@ avec une fonction d'activation de type signe. Ce modèle et l'algorithme
 d'apprentissage qui lui est associé ont de nombreuses limitations,
 notamment l'incapacité de traiter des données non linéairement
 séparables. En revanche, il a été montré plus tard que les réseaux de
-neurones d'au moins deux couches (avec des fonctions d'activation non
-linéaires et comportant suffisamment de neurones), sont capables d'approximer
+neurones d'au moins deux couches (avec suffisamment de neurones et des
+fonctions d'activation non linéaires) sont capables d'approximer
 n'importe quelles fonctions. 
 
 \section{Pour aller plus loin}
