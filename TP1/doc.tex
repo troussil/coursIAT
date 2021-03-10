@@ -1,0 +1,471 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+
+\title{Optimisation sous contraintes linéaires}
+\author{Tristan Roussillon}
+
+\begin{document}
+
+\maketitle
+
+Ce TP aborde le problème de l'optimisation linéaire, défini,
+pour des fonctions $f$ et $\{g_i\}_{\{1, \dots, m\}}$ linéaires
+\footnote{le terme exact serait \emph{affine}, mais \emph{linéaire}
+  est le terme consacré du fait de transformations possibles des
+  fonctions affines en fonctions linéaires (cf. section~\ref{sec:formes})}
+comme :
+\[
+\text{(PL)} \left\{
+\begin{array}{c}
+  \min_{x \in \R^n} \ f(x) \ \text{tel que :} \\
+  g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
+\end{array}
+\right.
+\]
+
+(PL) peut
+\begin{itemize}
+\item être \emph{infaisable} s'il n'y aucune solution,
+  c'est-à-dire aucun $x$ ne satisfaisant les contraintes,
+\item \emph{ne pas être borné} si, d'une solution donnée, on peut
+  toujours se déplacer vers une solution qui fait décroitre $f$,
+\item avoir une ou plusieurs solutions optimales, situées
+  sur le bord du polytope convexe décrit par les contraintes,
+\item être résolu par la méthode du \emph{simplexe}
+  (en temps exponentiel au pire cas, mais souvent linéaire en
+  pratique) ou celle \emph{des points intérieurs} (en temps
+  polynomial et dont les implémentations récentes sont encore
+  plus performantes). Il existe une multitude de solveurs,
+  mais nous utiliserons la bibliothèque python
+  \href{https://docs.scipy.org/doc/}{\texttt{SciPy}} dans
+  ce TD.
+\end{itemize} 
+
+\section{Conditions d'optimalité nécessaires et suffisantes}
+\label{sec:conditions}
+
+\begin{exercice}
+  \label{ex:ex}
+  Donnez une représentation graphique du problème suivant
+  et déduisez-en le minimum global.
+  \[
+\left\{
+\begin{array}{c}
+  \min_{x \in \R^2} \ f(x) := -x_1 + x_2 + 1 \ \text{tel que :} \\
+  \begin{array}{ll}
+    g_1(x) &:= -x_1 + x_2 \leq 0 \\
+    g_2(x) &:= -x_2 \leq 0 \\
+    g_3(x) &:= x_1 + x_2 - 1 \leq 0 \\
+  \end{array} 
+\end{array}
+\right.
+\]
+\end{exercice}
+
+\begin{solution}
+Le minimum global est $x^\star = (1,0)$, avec $f(x^\star) = 0$ (Fig.~\ref{fig:exPL}).  
+\begin{figure}
+  \centering
+  \includegraphics[width=0.4\textwidth]{PL}
+  \caption{Représentation graphique du problème de l'exercice~\ref{ex:ex}.
+    En bleu, les numéros des contraintes}
+  \label{fig:exPL}
+\end{figure}
+\end{solution}
+
+Comme la fonction objectif et les contraintes sont affines, non seulement
+l'hypothèse de qualifications des contraintes est vérifiée, mais les conditions
+nécessaires d'optimalité de Kuhn et Tucker sont suffisantes : 
+il existe $\{\lambda_i \ | \ i \in I, \lambda_i \geq 0\}$ et un minimum global
+$x^\star$ tels que:
+\[
+(\text{KT})
+\left\{
+\begin{array}{ll}
+  -{\nabla f}(x^\star) = \sum_{i \in I} \lambda_i {\nabla g_i}(x^\star) & \text{(combinaison linéaire)}\\
+  \lambda_i g_i(x^\star) = 0, \ \forall i \in I  & \text{(saturation)}\\
+\end{array}
+\right.
+\]
+
+\begin{exercice}
+Vérifiez que le minimum global de l'exercice~\ref{ex:ex} satisfait (KT). 
+\end{exercice}
+
+\begin{solution}
+  D'après la représentation graphique, $g_2$ et $g_3$ sont saturés, donc
+  $g_2(x^\star) = 0$ et $g_3(x^\star) = 0$ par définition et $\lambda_1 = 0$,
+  d'après la seconde ligne de (KT). Or, pour tout $x$,
+  \begin{itemize}
+  \item ${{\nabla f}(x)}^T = (-1,1)$,
+  \item ${{\nabla g_2}(x)}^T = (0,-1)$,
+  \item ${{\nabla g_3}(x)}^T = (1,1)$,
+  \end{itemize}
+  d'où le système linéaire de 4 équations et 4 inconnues : 
+\[
+\left\{
+\begin{array}{ll}
+  - x^\star_2 &= 0 \\
+  x^\star_1 + x^\star_2 - 1 &= 0 \\
+  \lambda_2 \left(\begin{array}{c} 0 \\ -1 \end{array}\right)
+  + \lambda_3 \left(\begin{array}{c} 1 \\ 1 \end{array}\right)
+  &= \left(\begin{array}{c} 1 \\ -1 \end{array}\right)
+\end{array}
+\right.
+\]
+qui donne
+\[
+\left\{
+\begin{array}{l}
+  x^\star_2 = 0 \\
+  x^\star_1 = 1 \\
+  \lambda_3 = 1 \\
+  \lambda_2 = 2 
+\end{array}
+\right.
+\]
+\end{solution}
+
+\section{Forme matricielle}
+\label{sec:formes}
+
+La plupart des solveurs attendent la description du problème sous une forme matricielle :
+
+\begin{tabular}{c|c}
+forme canonique & forme standard \\ \hline
+\begin{minipage}{.4\textwidth}
+  \[
+\left\{
+\begin{array}{c}
+  \min_x \ c^T x \ \text{tel que :} \\
+  Ax \leq b \\
+  x \geq 0 \\
+\end{array}
+\right.
+\]
+\end{minipage}
+&
+\begin{minipage}{.4\textwidth}
+\[
+\left\{
+\begin{array}{c}
+  \min_x \ c^T x \ \text{tel que :} \\
+  Ax = b \\
+  x \geq 0 \\
+\end{array}
+\right.
+\]
+\end{minipage}
+\end{tabular}
+
+\begin{itemize}
+\item $x$ est le vecteur solution du problème. S'il y a $n$ inconnues, c'est un vecteur $n \times 1$.
+\item $c$ est un vecteur de même dimension que $x$ et sert à définir la fonction objectif.
+\item $A$ et $b$ servent à décrire $m$ inégalités linéaires : $b$ est un vecteur $m \times 1$,
+  $A$ est une matrice $m \times n$ et le signe $\leq$ s'applique composante par composante et pour
+  toutes les composantes des vecteurs.
+\item Enfin, $0$ représente le vecteur nul de dimension $n \times 1$. 
+\end{itemize}
+
+\begin{exercice}
+  \label{ex:ex-mat}
+  Expliquez pourquoi on ne perd pas en généralité en supposant (i)
+  que la fonction objectif s'écrit comme un produit scalaire, (ii)
+  que $x \geq 0$.
+  Exprimez le problème de l'exercice~\ref{ex:ex} dans sa forme
+  canonique, puis dans sa forme standard, en expliquant comment
+  on peut toujours passer de l'un à l'autre. 
+\end{exercice}
+
+\begin{solution}
+  (i) Si la fonction objectif est affine (il y a une constante $c_0$ ajoutée à une
+  combinaison linéaire des variables), on peut soit l'ignorer, car $x^\star$ qui
+  minimise $f'(x^\star)  := f(x^\star) - c_0$, minimise aussi $f(x^\star)$, soit
+  ajouter une variable, contrainte à être égale à 1 et destinée à être multipliée
+  par $c_0$ de façon à n'avoir plus qu'une combinaison linéaire de variables. 
+  
+  (ii) S'il existe une variable $x_k$ pouvant prendre n'importe quelle valeur réelle,
+  on pourra remplacer $x_k$ par la différence $x'_k - x_k''$ de deux variables
+  $x'_k$ et $x_k''$ astreintes, elles, à ne prendre que des valeurs non-négatives.
+
+  Ainsi, pour obtenir la forme canonique de l'exercice~\ref{ex:ex}:
+  \begin{itemize}
+  \item On a une contrainte de signe sur $x_2$. On peut donc poser $x'_2 := x_2$
+    avec $x'_2 \geq 0$ à cause de $g_2$. Pour ajouter une contrainte de signe
+    sur $x_1$ (puisqu'il n'y en a pas \emph{a priori}), on pose $x_1 := x'_1 - x'_3$,
+    avec $x'_1, x'_3 \geq 0$. 
+  \item Pour avoir une fonction objectif linéaire, on va minimiser simplement
+    $f'(x'_1, x'_2, x'_3) := -x'_1 + x'_2 + x'_3$. 
+  \end{itemize}
+  Sous forme matricielle on a donc: 
+  \begin{itemize}
+  \item $x^T := (x'_1, \dots, x'_3) \in \R^3$
+  \item $c^T := (-1, 1, 1)$,
+  \item $b^T := (0, 1)$
+  \item $A :=
+    \left(
+    \begin{array}{cccccc}
+      -1 & 1 & 1 \\
+      1 & 1 & -1 \\
+    \end{array}
+    \right)$
+  \end{itemize}
+  Note: les deux lignes de $A$ correspondent aux contraintes $g_1$ et $g_3$, $g_2$
+  étant prise en compte dans les contraintes de signe. 
+  
+  Enfin, pour passer de la forme canonique à la forme standard, il convient de remplacer
+  toute inégalité par une égalité et une inégalité de signe
+  en introduisant une \emph{variable d'écart}.
+  Par exemple $g(x) \leq 0$ est équivalent
+  à $g(x) + y = 0$ et $y \geq 0$.
+
+  Ainsi, pour les deux inégalités impliquant les contraintes $g_1$ et $g_3$,
+  on ajoute les variables d'écart $x'_4$ et $x'_5$ respectivement pour avoir: 
+  \[
+  \left\{
+  \begin{array}{cl}
+    \min \ -x'_1 + x'_2 + x'_3 \ \text{tel que :} & \\
+    x'_1, \dots, x'_5 \geq 0 & \text{(contrainte 2 et non-négativité)} \\
+    -x'_1 + x'_2 + x'_3 + x'_4  = 0 & \text{(contrainte 1)} \\
+    x'_1 + x'_2 - x'_3 + x'_5 = 1   & \text{(contrainte 3)} \\
+  \end{array}
+  \right.
+  \]
+  D'où la forme standard en définissant
+  \begin{itemize}
+  \item $x^T := (x'_1, \dots, x'_5) \in \R^5$
+  \item $c^T := (-1, 1, 1, 0, 0)$,
+  \item $b^T := (0, 1)$
+  \item $A :=
+    \left(
+    \begin{array}{cccccc}
+      -1 & 1 & 1 & 1 & 0 \\
+      1 & 1 & -1 & 0 & 1 \\
+    \end{array}
+    \right)$
+  \end{itemize}
+\end{solution}
+
+\section{Classification linéaire}
+\label{sec:classif}
+
+On suppose donnés des points de $\R^2$, $\{u^j \ | \ {j \in J} \}$ partitionnés en deux sous-ensembles :
+un sous-ensemble d'observations positives $S^+ := \{ u^j, j \in J^+ \}$ et un sous-emsemble
+d'observations négatives $S^- := \{ u^j, j \in J^- \}$
+(avec $J = J^+ \cup J^-$ et $J^+ \cap J^- = \emptyset$).
+On veut déterminer une règle de décision linéaire permettant de discriminer au mieux
+les observations positives et les observations négatives. Ce problème peut être vu comme la recherche
+d'un élément $x \in \R^2$ tel que, en considérant le produit scalaire entre $x$ et les points de $S^+$ et $S^-$,
+on ait deux intervalles séparables, aussi écartés que possible l'un de l'autre (Fig.~\ref{fig:classif}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.4\textwidth]{classif}
+  \caption{Illustration du problème 2d de la classification linéaire.
+    La flèche représente une solution.
+    Les intervalles, ici disjoints, des projections des observations
+    positives (noir) et négatives (blanc) sont représentés en rouge.  }
+  \label{fig:classif}
+\end{figure}
+
+\begin{exercice}
+  En introduisant deux variables supplémentaires
+  $z^-$ et $z^+$ qui, à l'optimal, devraient être égales
+  à $\max_{j \in J^-} (x^T u^j)$ et $\min_{j \in J^+} (x^T u^j)$
+  (avec $z^+ > z^-$ si les intervalles sont disjoints),
+  décrivez le problème décrit ci-dessus comme un problème d'optimisation linéaire.
+  Pourquoi est-il nécessaire d'introduire une condition de normalisation sur $x$ ?
+\end{exercice}
+
+\begin{solution}
+  Le problème s'écrit naturellement ainsi : 
+  \[
+  \left\{
+  \begin{array}{ll}
+    \max z^+ - z^- \ \text{tel que} & \\
+    x^T u^j \geq z^+ & \forall j \in J^+ \\ 
+    x^T u^j \leq z^- & \forall j \in J^- \\
+  \end{array}
+  \right.
+  \]
+
+  Le produit scalaire entre $x$ et les points de $S^+$ et $S^-$ a toujours $\|x\|$
+  comme facteur. Par conséquent, plus $x$ est grand et plus les produits scalaires
+  seront distants les uns des autres et maximiser l'écart est un problème non
+  borné. Il faut ajouter des contraintes de normalisation pour empêcher qu'une
+  solution candidate $x$ puisse être arbitrairement grande. 
+\end{solution}
+
+\begin{exercice}
+  Nous allons maintenant ajouter des contraintes au problème d'optimisation
+  de la question précédente afin que l'optimum global vérifie : 
+  \begin{enumerate}
+  \item\label{Linf} $\|x^\star\|_\infty = 1$,
+  \item\label{L1} $\|x^\star\|_1 = 1$.
+  \end{enumerate}
+  
+  Expliquez pourquoi contraindre que chaque composante $x_k, \forall k \in \{1, 2\}$
+  soit entre -1 et 1 abouti au cas~\ref{Linf}.
+  
+  Pour le cas suivant, $\forall k \in \{1, 2\}$, on introduit deux variables $x_k'$ et
+  $x_k''$ non-négatives et telles que $x_k := x_k' - x_k''$. Expliquez pourquoi la
+  contrainte $\sum_k x_k' + x_k'' \leq 1$ abouti au cas~\ref{L1}. 
+\end{exercice}
+
+\begin{solution}
+  Dans le cas~\ref{Linf}, la norme $L_\infty$ de $x$ est fixée à $1$.
+  Mais au lieu d'ajouter explicitement la contrainte $\max_k |x_k| = 1$
+  (qui implique max et valeurs absolues),
+  on demande seulement que pour tout $\forall k \in \{1, 2\}$, on ait
+  $-1 \leq x_k \leq 1 \Leftrightarrow -1 \leq |x_k| \leq 1$ et pour la même
+  raison que celle indiquée dans la réponse à la question précédente
+  la norme $L_\infty$ de $x$ sera maximisée pour atteindre $1$ à l'optimal.
+  
+  Finalement, on a le problème d'optimisation linéaire suivant :  
+  \[
+  \left\{
+  \begin{array}{ll}
+    \max z^+ - z^- \ \text{tel que} & \\
+    x^T u^j \geq z^+ & \forall j \in J^+ \\ 
+    x^T u^j \leq z^- & \forall j \in J^- \\
+    -1 \leq x_k \leq 1 & \forall k \in \{1, 2\} \\
+  \end{array}
+  \right.
+  \]
+
+  Dans le cas~\ref{L1}, au lieu d'énoncer explicitement la contrainte
+  que la norme $L_1$ vaut $1$, ce qui implique des valeurs absolues, l'astuce consiste
+  à réexprimer chaque variable $x_k$ comme la différence de deux variables non-négatives.
+  Il suffit alors de vérifier que :
+  \[ \sum_k |x_k| \leq \sum_k x_k' + x_k'' \leq 1. \]
+  En effet, comme $x_k'$ et $x_k''$ sont non-négatives, $\forall k \in \{1, 2\}$,
+  si $x_k \leq 0$, alors $x_k \leq 0 \leq x_k' + x_k''$
+  et si $x_k > 0$, alors $x_k = x_k' - x_k'' \leq x_k' + x_k''$,
+  d'où $|x_k| \leq x_k' + x_k''$.
+  Et comme précédemment, la norme $L_1$ de $x$ sera maximisée pour atteindre $1$ à l'optimal.
+  
+  Finalement, on a : 
+  \[
+  \left\{
+  \begin{array}{ll}
+    \max z^+ - z^- \ \text{tel que} & \\
+    \sum_k (x_k' - x_k'') u_k^j \geq z^+ & \forall j \in J^+ \\ 
+    \sum_k (x_k' - x_k'') u_k^j \leq z^- & \forall j \in J^- \\
+    \sum_k x_k' + x_k'' \leq 1 \\
+    x_k' \geq 0 & \forall k \in \{1, 2\} \\
+    x_k'' \geq 0 & \forall k \in \{1, 2\} \\
+  \end{array}
+  \right.
+  \]
+  
+  Remarque : il serait naturel d'opter pour la norme $L_2$, mais cela ferait intervenir
+  une contrainte d'égalité quadratique : $\sum_k x_k^2 = 1$. Nous n'aurions plus dans
+  ce cas un problème d'optimisation linéaire. 
+\end{solution}
+
+\begin{exercice}
+  En reprenant le code Python disponible sur Moodle\footnote{
+    le code utilise la version 1.3.3 de SciPy qui est la version
+    disponible dans les dépôts sur Ubuntu 20.04.}, programmez la résolution du problème
+  de classification linéaire correspondant aux deux conditions de normalisation évoquées
+  ci-dessus.
+  Que vous utilisiez 
+  \href{https://docs.scipy.org/doc/scipy-1.3.3/reference/generated/scipy.optimize.linprog.html#scipy.optimize.linprog}{\texttt{linprog}} ou
+  \href{https://docs.scipy.org/doc/scipy-1.3.3/reference/generated/scipy.optimize.minimize.html}{\texttt{minimize}},
+  le plus délicat est de décrire correctement les données nécessaires au solveur.
+  Vous aurez aussi besoin de
+  \href{https://docs.scipy.org/doc/numpy/reference/routines.array-creation.html}{créer} et
+  \href{https://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html}{manipuler} des
+  tableaux
+  \href{https://numpy.org/doc/stable/contents.html#numpy-docs-mainpage}{\texttt{NumPy}}. 
+\end{exercice}
+
+\begin{solution}
+  Il faut arriver à construire correctement les vecteurs et les matrices nécessaires
+  au solveur, comme sur la Fig.~\ref{fig:stdForm} pour le cas~\ref{L1}. Le code complet
+  se trouve sur Moodle.  
+  
+  \begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.49\textwidth,page=1]{standardForm}
+  \includegraphics[width=0.49\textwidth,page=2]{standardForm}
+  \caption{}
+  \label{fig:stdForm}
+  \end{figure}
+\end{solution}
+
+\section{Séparateurs à vaste marge}
+\label{sec:svm}
+
+Notez que le problème précédent est exactement celui considéré dans les
+méthodes d'apprentissage connues sous le nom de \emph{Support Vector Machines}
+\href{https://en.wikipedia.org/wiki/Support-vector_machine}{(SVM)} ou
+\emph{Séparateurs à Vaste Marge} en français. Ce sont des classifieurs
+linéaires\footnote{Ils peuvent aussi être adaptés au cas où les données
+  ne sont pas parfaitement séparables ou au cas où les données sont
+  non-linéairement séparables.} 
+qui ont de meilleurs capacités de généralisation que le perceptron 
+parce qu'ils maximisent la marge de séparation.
+
+Si on note $z := \frac{\min_{j \in J^+} (x^T u^j) + \max_{j \in J^-} (x^T u^j)}{2}$,
+la normalisation choisie dans la formulation du SVM consiste à faire
+en sorte que $\min_{j \in J^+} (x^T u^j) = z + 1$ et
+$\max_{j \in J^-} (x^T u^j) = z - 1$.
+Dans ce cas, l'épaisseur euclidienne de la marge est égale à $2/\|x\|_2$.
+Mais au lieu de maximiser cette quantité qui fait intervenir la fonction inverse,
+de manière équivalente, on minimise, la quantité $\|x\|_2^2$\footnote{
+  le carré permet de se débarrasser de la fonction racine carré et
+  les facteurs ne changent rien au problème.}.
+
+Les contraintes restent linéaires, mais la fonction objectif est maintenant
+quadratique ; il s'agit d'un problème d'optimisation quadratique sous contraintes
+linéaires : 
+\[
+\left\{
+\begin{array}{ll}
+  \min_{x,z} \|x\|_2^2 \ \text{tel que} & \\
+  x^T u^j \geq z + 1 & \forall j \in J^+ \\ 
+  x^T u^j \leq z - 1 & \forall j \in J^- \\
+\end{array}
+\right.
+\]
+
+\begin{exercice}
+  Complétez le code de la section précédente pour ajouter la résolution du problème
+  ci-dessus par l'algorithme de
+  \href{https://en.wikipedia.org/wiki/Frank%E2%80%93Wolfe_algorithm}{Franck et Wolfe}. 
+\end{exercice}
+
+\end{document}
+
+
