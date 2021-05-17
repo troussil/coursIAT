@@ -64,8 +64,8 @@
 
   \begin{block}{Les problèmes d'optimisation sont fréquents}
   \begin{itemize}
-  \item à la question ``y a-t-il une solution ?'' (existence)
-  \item suit ``quelle est la meilleure solution ?'' (optimisation)
+  \item à la question ``y a-t-il une solution ?'' (existence)\\
+    suit ``quelle est la meilleure solution ?'' (optimisation)
   \item l'optimisation peut être sous-jacente : par ex., en apprentissage supervisé, on cherche
     une fonction de prédiction qui minimise une fonction de coût.
     %exemple du salaire d'une personne qui arrive
@@ -114,7 +114,7 @@
   \[
   \text{(P)} \left\{
   \begin{array}{c}
-    \text{min} \ f(x) \ \text{tel que :} \\
+    \min_x \ f(x) \ \text{tel que :} \\
     g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
     x \in S \subseteq \R^n
   \end{array}
@@ -138,9 +138,9 @@
   \only<2>{
     \begin{block}{Remarques}
     \begin{itemize}
-    \item nombre d'inconnues $n \geq 1$ 
     \item max $f'$ $\Leftrightarrow$ min $-f'$
-    \item sans contrainte ($I = \emptyset$) ou avec ($I \neq \emptyset$)
+    \item nombre d'inconnues $n \geq 1$ 
+    \item nombre de contraintes $m \geq 0$
     \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \leq 0$ et $-g'(x) \leq 0$
     \item généralement pas d'inégalités strictes
     \end{itemize}
@@ -155,8 +155,8 @@
   \only<3->{
     \begin{block}{Résoudre (P) peut être difficile...}
     \begin{itemize}
-    \item $n$ peut être grand
-    \item l'ensemble des solutions peut être vide, très grand ou infini
+    \item $n, m$ peuvent être grands
+    \item l'ensemble des solutions peut être vide, très grand, voire infini
     \item $f$ et les $g_i$ peuvent être quelconques %ni differentiable, ni convexe, ni lineaire
     \item $f$ peut être (quasiment) plat autour du min
       %si plat, plusieurs solutions optimales, si quasiment, instabilités numériques 
@@ -164,30 +164,6 @@
     \end{itemize}
     \end{block}
   }
-\end{frame}
-
-\begin{frame}
-  \frametitle{Optimum local vs optimum global}
-
-  \begin{block}{Définition}
-    La solution $x^0$ est un optimum local du problème (P) s'il existe un voisinage
-    $V(x^0)$ autour de $x^0$ tel que $x^0$ soit optimum global du problème
-  \[
-  \left\{
-  \begin{array}{c}
-    \text{min} \ f(x) \ \text{tel que :} \\
-    g_i(x) \leq 0, \ i = 1, \dots, m \\
-    x \in S \alert{\cap V(x^0)}
-  \end{array}
-  \right.
-  \]
-  \end{block}
-
-  \begin{exampleblock}{Exemple dans $\R$}
-    \centering
-    \includegraphics[width=0.7\textwidth]{opt-loc}
-  \end{exampleblock}
-  
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -201,7 +177,6 @@
   \frametitle{Sommaire}
   \tableofcontents[currentsection]
 \end{frame}
-
 
 % ----------------------------------------------------------------------
 \begin{frame}
@@ -302,9 +277,35 @@
   \begin{block}{Note:}
     Les valeurs propres d'une matrice carrée sont les composantes du vecteur
     $\lambda^T := (\lambda_1, \lambda_2,\dots, \lambda_n)$, solutions de
-    l'équation $\det{(\nabla^2f(x) - \lambda I)} = 0$.  
+    l'équation $\det{(\lambda I - \nabla^2f(x))} = 0$.  
   \end{block}
 
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Optimum local}
+
+  \begin{block}{Définition}
+    La solution $x^0$ est un optimum local du problème (P) s'il existe un voisinage
+    $V(x^0)$ autour de $x^0$ tel que $x^0$ soit optimum global du problème restreint
+    à $V(x^0)$: 
+  \[
+  \left\{
+  \begin{array}{c}
+    \min_x \ f(x) \ \text{tel que :} \\
+    g_i(x) \leq 0, \ i = 1, \dots, m \\
+    x \in S, \alert{x \in V(x^0)}
+  \end{array}
+  \right.
+  \]
+  \end{block}
+
+  \begin{exampleblock}{Exemple dans $\R$}
+    \centering
+    \includegraphics[width=0.7\textwidth]{opt-loc}
+  \end{exampleblock}
+  
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -636,13 +637,13 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Saturation et cône tangent en un point $x_0 \in X$}
+  \frametitle{Saturation et cône tangent en un point $x^0 \in X$}
 
   \begin{itemize}
-    \item Une contrainte $g_i$ est \emph{saturée} en $x_0$ ssi $g_i(x_0) = 0$
-    \item L'ensemble des contraintes saturées en $x_0$ est
-      $\{g_i\}_{i \in I_0}, \ I_0 := \{i \ | \ g_i(x_0) = 0 \}$
-    \item Le cône tangent en $x_0$ est donné par le gradient des contraintes saturées en $x_0$ :
+    \item Une contrainte $g_i$ est \emph{saturée} en $x^0$ ssi $g_i(x^0) = 0$
+    \item L'ensemble des contraintes saturées en $x^0$ est
+      $\{g_i\}_{i \in I_0}, \ I_0 := \{i \ | \ g_i(x^0) = 0 \}$
+    \item Le cône tangent en $x^0$ est donné par le gradient des contraintes saturées en $x^0$ :
       $G_0 := \{ y \in \R^n \ | \ {\nabla g_i}^T \cdot y \leq 0, \ \forall i \in I_0 \}$ 
   \end{itemize}
 
@@ -657,18 +658,19 @@
 \begin{frame}
   \frametitle{Hypothèse de qualification des contraintes (QC)}
 
-$X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi 
-  on peut se déplacer de $x_0$ vers tout point de $G_0$ suffisamment proche en restant dans $X$.
+  $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi pour tout $\epsilon$
+  positif suffisamment petit, la boule $B(x^0,\epsilon)$ de centre $x^0$
+  et rayon $\epsilon$ est telle que $B(x^0,\epsilon) \cap G_0 \subset X$. 
 
   \only<1>{
-  \begin{exampleblock}{Cas où (QC) est vérifiée en $x_0$ : }
+  \begin{exampleblock}{Cas où (QC) est vérifiée en $x^0$ : }
   \begin{center}
       \includegraphics[width=0.5\textwidth,page=1]{cone-tangent}    
   \end{center}
   \end{exampleblock}
   }
   \only<2>{
-  \begin{exampleblock}{Cas où (QC) n'est pas vérifiée en $x_0$ : }
+  \begin{exampleblock}{Cas où (QC) n'est pas vérifiée en $x^0$ : }
   \begin{center}
       \includegraphics[width=0.5\textwidth,page=2]{cone-tangent}    
   \end{center}
@@ -678,7 +680,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
     \begin{block}{Théorème local}
       $(QC)$ est vérifiée \alert{en un point $x^0 \in X$}
       \begin{itemize}
-      \item si les gradients $\{ {\nabla g_i}(x^0) \}_{i \in I_0}$ des contraintes saturées en $x_0$
+      \item si les gradients $\{ {\nabla g_i}(x^0) \}_{i \in I_0}$ des contraintes saturées en $x^0$
         sont linéairement indépendants
       \end{itemize}
     \end{block}
@@ -706,15 +708,15 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
   \only<2>{
     \begin{block}{Conditions nécessaires}
-      En supposant (H1), (H2), (QC), si $x_0$ est un minimum local de $(\text{P}^\bullet)$,
+      En supposant (H1), (H2), (QC), si $x^0$ est un minimum local de $(\text{P}^\bullet)$,
       alors il existe $\{\lambda_i \geq 0\}_{i \in I}$ tels que:
       \[
       (\text{KT})
       \left\{
       \begin{array}{ll}
-        -{\nabla f}(x_0) = \sum_{i \in I} \lambda_i {\nabla g_i}(x_0)
-        & \text{(combinaison linéaire)} \\
-        \lambda_i g_i(x_0) = 0, \ \forall i \in I
+        -{\nabla f}(x^0) = \sum_{i \in I} \lambda_i {\nabla g_i}(x^0)
+        & \text{(combinaison convexe)} \\
+        \lambda_i g_i(x^0) = 0, \ \forall i \in I
         & (\Leftrightarrow \lambda_i = 0, \ \forall i \in I \setminus I_0) \\
       \end{array}
       \right.
@@ -723,7 +725,7 @@ $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi
 
     \begin{block}{Conditions suffisantes}
       Dans le cas où, en plus, $f$ et $\{g_i\}_{i\in I}$ sont \emph{convexes},
-      si les conditions (KT) sont vérifées pour $x_0$, alors $x_0$ est un minimum
+      si les conditions (KT) sont vérifées pour $x^0$, alors $x^0$ est un minimum
       (global) de $(\text{P}^\bullet)$.  
     \end{block}
   }

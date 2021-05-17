@@ -88,7 +88,9 @@ def getSolFromTwoDataSetsLinf(s1, s2):
     A = numpy.concatenate( (A_top, A_bot), axis=0 )
     
     #bounds
-    bounds = (-1,1)
+    r1 = (-1,1)
+    r = (-numpy.inf,numpy.inf)
+    bounds = [r1, r1, r, r]
 
     sol = getAndCheckSolution(c,A,b,None,None,bounds)
     return numpy.array([sol[0], sol[1], sol[2], sol[3]])
