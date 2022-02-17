@@ -22,7 +22,7 @@
 %figures
 \usepackage{graphicx}
 \graphicspath{{fig/}}
-\DeclareGraphicsExtensions{.eps,.pdf,.jpg}
+\DeclareGraphicsExtensions{.eps,.pdf,.jpg,.png}
 \usepackage{tikz}
 
 %math
@@ -40,6 +40,13 @@
 \renewcommand{\vec}[1]{\mathbf{#1}}
 \newcommand{\ve}[1]{\ensuremath{\vec{e}_{#1}}}
 
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\cat}{
+  \begin{tikzpicture}[baseline=-1mm]
+    \node at (0,0) {\includegraphics[width=1cm]{cat.png}};
+  \end{tikzpicture}
+}
 % ----------------------------------------------------------------------
 \title[]
  {4TC-IAT, Optimisation}
@@ -60,6 +67,54 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
+  \frametitle{Exemples (1/3)}
+
+\begin{block}{Moyenne des $\{v_i\}_{i=1,\dots,m}$ : }
+  \[ \frac{1}{m} \sum_{i=1}^{m} v_i = \min_x \sum_{i=1}^{m} (x - v_i)^2. \]
+\end{block}
+
+\begin{block}{Apprentissage supervisé : }
+  \begin{itemize}
+  \item fonction de prédiction $f$(\cat) = cat, 
+  \item \[ \min_f \sum_\text{ensemble d'apprentissage} (\text{erreur de prédiction de } f). \]
+  \end{itemize}
+\end{block}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Exemples (2/3)}
+
+  \begin{block}{Flot maximum : }
+    \centering
+    \includegraphics[width=3cm]{max-flow.png}
+  \end{block}
+  
+  \begin{block}{Plus courts chemins : }
+    \centering
+    \includegraphics[width=3cm]{shortest-path.png}
+  \end{block}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Exemples (3/3)}
+  
+  \begin{block}{Séparation linéaire avec marge maximale : }
+    \centering
+    \includegraphics[width=2cm]{linear-separation.png}
+  \end{block}
+  
+  \begin{block}{Plus petit cercle englobant : }
+    \centering
+    \includegraphics[width=2cm]{seb.png}
+  \end{block}
+  
+\end{frame}
+% ----------------------------------------------------------------------
+\begin{frame}
   \frametitle{Introduction}
 
   \begin{block}{Les problèmes d'optimisation sont fréquents}
@@ -67,11 +122,7 @@
   \item à la question ``y a-t-il une solution ?'' (existence)\\
     suit ``quelle est la meilleure solution ?'' (optimisation)
   \item l'optimisation peut être sous-jacente : par ex., en apprentissage supervisé, on cherche
-    une fonction de prédiction qui minimise une fonction de coût.
-    %exemple du salaire d'une personne qui arrive
-    %moyenne minimise les écarts quadratiques
-    %mediane minimise les écarts absolus
-    %mode, cad le plus probable. 
+    une fonction de prédiction qui minimise l'erreur de prédiction exprimée comme une fonction de coût.
   \item certains problèmes sont difficiles et requièrent des méthodes inhabituelles pour découvrir
     des solutions, mêmes approchées : c'est une partie de ce qu'on appelle l'IA.
   \end{itemize}
@@ -114,7 +165,7 @@
   \[
   \text{(P)} \left\{
   \begin{array}{c}
-    \min_x \ f(x) \ \text{tel que :} \\
+    \min \ f(x) \ \text{tel que :} \\
     g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
     x \in S \subseteq \R^n
   \end{array}
@@ -190,10 +241,20 @@
 
   \begin{exampleblock}{Exemple pour $S \subset \R^2$}
     \centering
-    \includegraphics[width=0.25\textwidth,page=1]{ens-conv} \hspace{0.05\textwidth}
-    \includegraphics[width=0.25\textwidth,page=2]{ens-conv}
+    \includegraphics[width=0.25\textwidth,page=2]{ens-conv}\hspace{0.05\textwidth}
+    \includegraphics[width=0.25\textwidth,page=1]{ens-conv}
   \end{exampleblock}
   
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Contrôle}
+
+  \includegraphics<+>[width=1\textwidth]{ens-conv-Q}%
+  \includegraphics<+>[width=1\textwidth]{ens-conv-A}%
+
+  \scriptsize{\url{https://www.youtube.com/playlist?list=PL9_jI1bdZmz0hIrNCMQW1YmZysAiIYSSS}}
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -209,75 +270,192 @@
 
   \begin{exampleblock}{Exemple pour $f:\R \rightarrow \R$}
     \centering
-    \includegraphics[width=0.45\textwidth,page=1]{fonc-conv} \hspace{0.05\textwidth}
-    \includegraphics[width=0.45\textwidth,page=2]{fonc-conv}
+    \includegraphics[width=0.45\textwidth,page=2]{fonc-conv}\hspace{0.05\textwidth}
+    \includegraphics[width=0.45\textwidth,page=1]{fonc-conv}
   \end{exampleblock}
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Différentiabilité pour $f: \R \rightarrow \R$}
+  \frametitle{Différentiabilité pour $f: \R \rightarrow \R$ (1/2) }
 
   \begin{block}{Dérivée première}
-    $f'(x) := \frac{\partial f}{\partial x} = \lim_{h \rightarrow 0} \frac{f(x+h) - f(x)}{h}$.\\
-    Géométriquement, c'est la pente de la tangente au graphe de $f$ 
+    \begin{columns}
+      \begin{column}{0.5\textwidth}
+        \begin{align*}
+          f'(x) &:= \frac{\partial f}{\partial x} \\
+          &= \lim_{h \rightarrow 0} \frac{f(x+h) - f(x)}{h}.
+        \end{align*}
+      \end{column}
+      \begin{column}{0.5\textwidth}
+        \begin{center}
+          \includegraphics<+>[width=1\textwidth,page=2]{derivee}%    
+          \includegraphics<+>[width=1\textwidth,page=1]{derivee}%
+          \includegraphics<+>[width=1\textwidth,page=3]{derivee}%
+        \end{center}
+      \end{column}
+    \end{columns}
   \end{block}
 
-  {
-    \begin{center}
-      \includegraphics<+>[width=0.5\textwidth,page=1]{derivee}    
-      \includegraphics<+>[width=0.5\textwidth,page=2]{derivee}
-    \end{center}
-  }
-  
-  \begin{block}{Dérivée seconde = dérivée de la dérivée première}
-    $f''(x) := \frac{\partial f'}{\partial x} = \frac{\partial ^{2}f}{\partial x^{2}}$.
+  \begin{block}{Interprétation en un point $x^0$}
+    \begin{itemize}
+    \item Le signe de $f'(x^0)$ indique comment évolue $f$ autour de $x^0$: 
+      \begin{itemize}
+      \item \alert<1-2>{si $f'(x^0) < 0$, $f$ $\downarrow$ quand $x^0$ $\uparrow$},
+      \item si $f'(x^0) > 0$, $f$ $\uparrow$ quand $x^0$ $\uparrow$,
+      \end{itemize}
+    \item La valeur absolue donne la \emph{vitesse} du changement. 
+      \begin{itemize}
+      \item \alert<3>{si $f'(x^0) = 0$, $f$ change peu autour de $x^0$}. 
+      \end{itemize}
+    \end{itemize}
   \end{block}
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Différentiabilité pour $f: \R^n \rightarrow \R$}
+  \frametitle{Différentiabilité pour $f: \R \rightarrow \R$ (2/2) }
+
+  \begin{block}{Dérivée seconde = dérivée de la dérivée première}
+    $f''(x) := \frac{\partial f'}{\partial x} = \frac{\partial ^{2}f}{\partial x^{2}}$.
+  \end{block}
+
+  \begin{block}{Interprétation en un point $x^0$}
+    \begin{itemize}
+    \item Le signe de $f''(x^0)$ indique comment évolue $f'$ - et donc $f$ - autour de $x^0$. 
+    \item La valeur absolue donne \emph{l'accélération} du changement.
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Interprétation pour tout $x$}
+    \begin{itemize}
+    \item si $\forall x, \ f''(x) \geq 0$,
+      $f$ \emph{accélère} toujours et partout. 
+    \end{itemize}
+  \end{block}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Exemples numériques pour $f:\R \rightarrow \R$}
+
+  \begin{block}{$f(x) = x^2 - 6x + 4$}
+    \begin{itemize}
+      \item $f'(x) =$\only<1>{?}\only<2>{$2x - 6$}
+      \item $f''(x) =$ \only<1>{?}\only<2>{$2$}
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{$f(x) = 2x^3 - x^2 + 2x + 5$}
+    \begin{itemize}
+      \item $f'(x) =$\only<1>{?}\only<2>{$6x^2 - 2x + 2$}
+      \item $f''(x) = $\only<1>{?}\only<2>{$12x - 2$}
+    \end{itemize}
+  \end{block}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Différentiabilité pour $f: \R^n \rightarrow \R$ (1/2)}
   
   \begin{block}{Gradient (vecteur), extension de la dérivée première}
     ${\nabla f}^T := (\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \dots, \frac{\partial f}{\partial x_n})$ \\
-    Géométriquement, il est perpendiculaire à la courbe de niveau projetée. 
+    \begin{itemize}
+    \item Il donne la direction dans laquelle $f$ augmente
+    \item (et est perpendiculaire à la courbe de niveau projetée),
+    \item sa magnitude donne la vitesse du changement. 
+    \end{itemize}
+  \end{block}
+
+  \begin{center}
+    \includegraphics<+>[width=0.9\textwidth]{gradient}    
+  \end{center}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Différentiabilité pour $f: \R^n \rightarrow \R$ (2/2)}
+  
+  \begin{block}{Hessien (matrice), extension de la dérivée seconde}
+    $\nabla^2 f :=
+    \begin{bmatrix}{\frac {\partial ^{2}f}{\partial x_{1}^{2}}}&{\frac {\partial ^{2}f}{\partial x_{1}\partial x_{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{1}\partial x_{n}}}\\{\frac {\partial ^{2}f}{\partial x_{2}\partial x_{1}}}&{\frac {\partial ^{2}f}{\partial x_{2}^{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{2}\partial x_{n}}}\\\vdots &\vdots &\ddots &\vdots \\{\frac {\partial ^{2}f}{\partial x_{n}\partial x_{1}}}&{\frac {\partial ^{2}f}{\partial x_{n}\partial x_{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{n}^{2}}}\end{bmatrix}$
+  \end{block}
+
+  \begin{block}{Matrice (semi-)définie positive, extension du signe}
+    Une matrice semi-définie positive (resp. définie positive) si 
+    ses valeurs propres sont $\geq 0$ (resp. $> 0$).
   \end{block}
 
   \only<1>{
-    \begin{center}
-      \includegraphics<+>[width=0.9\textwidth]{gradient}    
-    \end{center}
+    \begin{block}{Note 1 : }
+    Les valeurs propres d'une matrice carrée $M$ sont les composantes du vecteur
+    $\lambda^T := (\lambda_1, \lambda_2,\dots, \lambda_n)$, solutions de
+    l'équation $\det{(\lambda I - M)} = 0$.  
+  \end{block}
   }
   \only<2>{
-    \begin{block}{Hessien (matrice), extension de la dérivée seconde}
-      $\nabla^2 f :=
-      \begin{bmatrix}{\frac {\partial ^{2}f}{\partial x_{1}^{2}}}&{\frac {\partial ^{2}f}{\partial x_{1}\partial x_{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{1}\partial x_{n}}}\\{\frac {\partial ^{2}f}{\partial x_{2}\partial x_{1}}}&{\frac {\partial ^{2}f}{\partial x_{2}^{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{2}\partial x_{n}}}\\\vdots &\vdots &\ddots &\vdots \\{\frac {\partial ^{2}f}{\partial x_{n}\partial x_{1}}}&{\frac {\partial ^{2}f}{\partial x_{n}\partial x_{2}}}&\cdots &{\frac {\partial ^{2}f}{\partial x_{n}^{2}}}\end{bmatrix}$
-    \end{block}
+    \begin{block}{Note 2 :}
+    \begin{tabular}{ccc}
+      hessien & $\Leftrightarrow$ & dérivée seconde \\\hline
+      semi-définie positive & $\Leftrightarrow$ & $\geq 0$ \\\hline
+      définie positive & $\Leftrightarrow$ & $> 0$  
+    \end{tabular}
+  \end{block}
   }
 \end{frame}
 
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Exemple numérique pour $f:\R^2 \rightarrow \R$}
+
+  \begin{block}{$f(x_1,x_2) = x_1^2 + x_2^2 - 4x_1 + 8x_2 - 5$}
+    \only<1-2>{
+      Dérivées partielles : 
+      \begin{itemize}
+      \item $\frac{\partial f}{\partial x_1} = $\only<1>{?}\only<2>{$2x_1 - 4$},
+      \item $\frac{\partial f}{\partial x_2} = $\only<1>{?}\only<2>{$2x_2 + 8$},
+      \item $\frac{\partial^2 f}{\partial x_1^2} = $\only<1>{?}\only<2>{$2$},
+      \item $\frac{\partial^2 f}{\partial x_1x_2} = $\only<1>{?}\only<2>{$0$},
+      \item $\frac{\partial^2 f}{\partial x_2x_1} = $\only<1>{?}\only<2>{$0$},
+      \item $\frac{\partial^2 f}{\partial x_2^2} = $\only<1>{?}\only<2>{$2$}.
+      \end{itemize}
+    }
+    \only<3-4>{
+      gradient, hessien : 
+      \begin{itemize}
+      \item ${\nabla f}^T(x_1,x_2) =$\only<3>{?}
+        \only<4>{$\left(\begin{array}{l}
+            2x_1 - 4\\
+            2x_2 + 8
+          \end{array}
+          \right)$}
+      \item $\nabla^2f(x_1,x_2) =$\only<3>{?}
+        \only<4>{$\left(\begin{array}{cc}
+            2 & 0 \\
+            0 & 2 \\
+          \end{array}
+          \right)$}
+      \end{itemize}
+    }
+  \end{block}
+\end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
   \frametitle{Différentiabilité et convexité}
 
   \begin{block}{Théorème}
-    Si $f$ est continûment différentiable (deux fois), les conditions 1, 2 (et 3) sont équivalentes:
+    Si $f$ est continûment différentiable (deux fois), les conditions 1, 2 et 3 sont équivalentes:
     \begin{enumerate}
     \item $f$ est convexe,
     \item $\forall x, y, \ f(y) > f(x) + {\nabla f} ^T(x) \cdot (y - x)$,
-    \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice \emph{semi-définie positive},
-      c-à-d. ses valeurs propres sont \emph{positives ou nulles}.
+    \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice \emph{semi-définie positive}.
     \end{enumerate}
-  \end{block}
-
-  \begin{block}{Note:}
-    Les valeurs propres d'une matrice carrée sont les composantes du vecteur
-    $\lambda^T := (\lambda_1, \lambda_2,\dots, \lambda_n)$, solutions de
-    l'équation $\det{(\lambda I - \nabla^2f(x))} = 0$.  
   \end{block}
 
 \end{frame}
@@ -316,7 +494,7 @@
     Soit $f$ continue et deux fois continûment différentiable en tout $x \in \R^n$.
     $x^\star$ est un optimum local ssi
     \begin{itemize}
-    \item ${\nabla f}^T(x^\star) = 0$ (stationnarité) et
+    \item ${\nabla f}^T(x^\star) = 0$ (\alert{stationnarité}) et
     \item $\nabla^2f(x^\star)$ est une matrice \emph{définie positive},
       c-à-d. ses valeurs propres sont \emph{strictement positives}.
       %le strictement permet d'éviter les points d'inflexion ou
@@ -431,7 +609,7 @@
   \frametitle{Schéma général de la descente de gradient}
 
   \begin{itemize}
-  \item Soit $f : \R^n \rightarrow \R$ (+ hypothèses)
+  \item Soit $f : \R^n \rightarrow \R$ différentiable
   \item On part d'une solution initiale $x^{(0)}$
   \item A chaque étape, on obtient une nouvelle solution
     \[ x^{(k+1)} := x^{(k)} - \textcolor{blue}{\lambda^{(k)}} \alert{{\nabla f}(x^{(k)})}, \ \lambda^{(k)} > 0. \]
@@ -584,16 +762,20 @@
 
   \[
   (\text{P}^\circ) \quad
-    \text{min} \ f(x) := \sum_{i = \{1,\dots,l\}} q_i(x), \ x \in \R^n
+    \text{min} \ f(x) := \sum_{i = 1}^{m} q_i(x), \ x \in \R^n
   \]
 
-  \[ x^{(k+1)} := x^{(k)} - \lambda^{(k)} {\nabla f}(x^{(k)}), \ \lambda^{(k)} > 0. \]
+  \[ x^{(k+1)} := x^{(k)} - \lambda^{(k)} {\nabla f}(x^{(k)}), \ \lambda^{(k)} > 0, \]
+
+  \[ {\nabla f}(x) = \sum_{i = 1}^{m} {\nabla q_i}(x). \]
+
+  ~
   
   \begin{itemize}
   \item méthode du gradient stochastique : on évalue le gradient
     \begin{itemize}
-    \item sur 1 fonction $q_i(x), \ i \in \{1,\dots,l\}$ au hasard
-    \item ou sur plusieurs (\emph{mini-batch}), mais pas sur tout $f$
+    \item sur 1 fonction $q_i$ au hasard : ${\nabla f}(x) := {\nabla q_i}(x)$
+    \item ou sur plusieurs (\emph{mini-batch}), mais pas sur tout $f$.
     \end{itemize}
   \end{itemize}
   
@@ -725,7 +907,7 @@
 
     \begin{block}{Conditions suffisantes}
       Dans le cas où, en plus, $f$ et $\{g_i\}_{i\in I}$ sont \emph{convexes},
-      si les conditions (KT) sont vérifées pour $x^0$, alors $x^0$ est un minimum
+      si les conditions (KT) sont vérifiées pour $x^0$, alors $x^0$ est un minimum
       (global) de $(\text{P}^\bullet)$.  
     \end{block}
   }
@@ -904,290 +1086,305 @@
 \begin{frame}
   \frametitle{Un problème différent de sa relaxation continue}
 
-\alert{L'optimum entier est aussi éloigné qu'on veut de l'optimum continu}
-
-  \[
-  \left\{
-  \begin{array}{c}
-    \text{min} \ -10x_1 - 11x_2 \ \text{tel que :} \\
-    10x_1 + 12x_2 \leq 59, \ x_1 \geq 0, \ x_2 \geq 0 \\
-  \end{array}
-  \right.
-  \]
-
-  \begin{center}
-    \includegraphics[width=0.5\textwidth]{ex-plne}
-  \end{center}
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{\'Explosion combinatoire}
-
-  \begin{itemize}
-  \item L'ensemble des solutions $X$ est supposé fini
-  %\item Il est possible de déterminer, pour chaque variable, l'ensemble des valeurs qu'elle peut prendre, de façon à ce que leur produit cartésien contienne $X$
-  \item Mais il n'est pas envisageable en pratique de faire une énumération exhaustive ! \\
-    ex. $50$ variables binaires $\rightarrow 2^{50} \approx 10^{15}$ vecteurs possibles  
-  \item (PNE) est un problème NP-difficile
-  \end{itemize}
-
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Représentation arborescente et principe de séparation}
-  
-  \begin{itemize}
-  \item $S \supseteq X$ est un ensemble de vecteurs possibles
-    %$x^T = (x_1,\dots,x_n)$% et la racine d'un arbre. 
-  \item On partitionne $S$ en sous-ensembles $S_{(v)} := \{ (x_1,\dots,x_n) \in S \ | \ x_1 = v \}$ \\
-    %$\{ S_{(v)} \}_{v \in D(x_1)}$ 
-    selon les valeurs prises par $x_1$ 
-    %Ces sous-ensembles sont les fils de $S$ par relation d'inclusion.
-  \item Pareil selon $x_2$ et ainsi de suite.
-    %Chacun d'eux peut être partionné de la même façon selon $x_2$ et ainsi de suite.
-  \end{itemize}
-
-  {
-    \centering
-    \includegraphics<+>[width=0.9\textwidth,page=1]{arbre}
-    \includegraphics<+>[width=0.9\textwidth,page=2]{arbre}
-    \includegraphics<+>[width=0.9\textwidth,page=3]{arbre}
-    \includegraphics<+>[width=0.9\textwidth,page=4]{arbre}
-  }
-  
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Principe d'évaluation}
-
-  \begin{itemize}
-  \item fonction d'évaluation $e$ : pour tout ensemble $T$ descendant de $S$,
-    on choisit $e$ telle que $e(T) \leq \min_{x \in T} f(x)$
-  \item si on connait une solution $\bar{x} \in S$ et qu'au noeud $T$ on a
-    \[f(\bar{x}) < e(T) \leq \min_{x \in T} f(x) \]
-  \item alors $T$ ne contient aucune solution optimale et ses descendants
-    ne seront pas énumérés
-  \end{itemize}
-  
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Séparation-évaluation}
-
-  On résoud (exactement) de nombreux problèmes en combinant ces deux principes
-  (\emph{Branch and Bound}).
-
-  Il y a d'innombrables variantes selon :
-  \begin{itemize}
-  \item la fonction d'évaluation
-  \item le choix du noeud à explorer (et donc de la valeur à fixer)
-  \item le choix de la variable à partir de laquelle on partitionne le noeud choisi
-  \end{itemize}
-
-  %% Note : on combine souvent ce principe avec la méthode des \emph{coupes intégrales}
-  %% (\emph{Branch and Cut}). 
-  
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Exemple d'un problème d'affectation}
-
   \only<1>{
-  \begin{itemize}
-  \item 4 ouvriers $\{1,2,3,4\}$ et 4 tâches $\{1,2,3,4\}$
-  \item 1 matrice de coût
-    $C := \left(
-    \begin{array}{cccc}
-      8 & 3 & 1 & 5 \\
-      11 & 7 & 1 & 6 \\
-      7 & 8 & 6 & 8 \\
-      11 & 6 & 4 & 9 
+  \alert{L'optimum entier est aussi éloigné qu'on veut de l'optimum continu}
+
+    \[
+    \left\{
+    \begin{array}{c}
+      \text{min} \ -10x_1 - 11x_2 \ \text{tel que :} \\
+      10x_1 + 12x_2 \leq 59, \ x_1 \geq 0, \ x_2 \geq 0 \\
     \end{array}
-    \right)$ \\
-    par ex. affecter l'ouvrier 4 à la tâche 3 coûte $c_{4,3} = 4$ 
-  \item Trouver l'affectation de coût minimal
-  \end{itemize}
+    \right.
+    \]
+
+    \begin{center}
+      \includegraphics[width=0.5\textwidth]{ex-plne}
+    \end{center}
   }
 
   \only<2>{
-    \begin{itemize}
-    \item On peut noter les inconnues et contraintes $x^T = (x_1,x_2,x_3,x_4)$,
-      telles que $\forall i \in \{ 1,2,3,4\}, \ x_i \in \{ 1,2,3,4\}$ \\
-      ($x_i$ contient le numéro de tâche affectée à l'ouvrier $i$).
-      
-    \item Pour exprimer la fonction objectif, on peut écrire pour tout $i$
-      $x_i := \sum_{j=1}^4 j d_{i,j} = d_{i,1} + 2d_{i,2} + 3d_{i,3} + 4d_{i,4} $ \\
-      ($d_{i,j} = 1$ si la tâche $j$ est affectée à l'ouvrier $i$, $d_{i,j} = 0$ sinon).
-      
-    \item Le problème s'exprime donc comme un (PNE)
-      \[
-      \left\{
-      \begin{array}{c}
-        \text{min} \ \sum_{i,j} c_{i,j}d_{i,j} \ \text{tel que :} \\
-        \forall i \in \{ 1,2,3,4\}, \ x_i \in \{ 1,2,3,4\} \ \text{et} \ x_i = \sum_{j=1}^4 j d_{i,j} 
-      \end{array}
-      \right.
-      \]
-    \end{itemize}
+    \begin{block}{Cela change complètement le problème !}
+      \begin{itemize}
+      \item (PL) est un problème poynomial,
+        l'algorithme du simplexe est même plutôt efficace en pratique, 
+      \item (PNE) est un problème NP-difficile
+      \end{itemize}
+    \end{block}
   }
+\end{frame}
+
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{\'Explosion combinatoire}
+
+%%   \begin{itemize}
+%%   \item L'ensemble des solutions $X$ est supposé fini
+%%   %\item Il est possible de déterminer, pour chaque variable, l'ensemble des valeurs qu'elle peut prendre, de façon à ce que leur produit cartésien contienne $X$
+%%   \item Mais il n'est pas envisageable en pratique de faire une énumération exhaustive ! \\
+%%     ex. $50$ variables binaires $\rightarrow 2^{50} \approx 10^{15}$ vecteurs possibles  
+%%   \item (PNE) est un problème NP-difficile
+%%   \end{itemize}
+
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Représentation arborescente et principe de séparation}
+  
+%%   \begin{itemize}
+%%   \item $S \supseteq X$ est un ensemble de vecteurs possibles
+%%     %$x^T = (x_1,\dots,x_n)$% et la racine d'un arbre. 
+%%   \item On partitionne $S$ en sous-ensembles $S_{(v)} := \{ (x_1,\dots,x_n) \in S \ | \ x_1 = v \}$ \\
+%%     %$\{ S_{(v)} \}_{v \in D(x_1)}$ 
+%%     selon les valeurs prises par $x_1$ 
+%%     %Ces sous-ensembles sont les fils de $S$ par relation d'inclusion.
+%%   \item Pareil selon $x_2$ et ainsi de suite.
+%%     %Chacun d'eux peut être partionné de la même façon selon $x_2$ et ainsi de suite.
+%%   \end{itemize}
+
+%%   {
+%%     \centering
+%%     \includegraphics<+>[width=0.9\textwidth,page=1]{arbre}
+%%     \includegraphics<+>[width=0.9\textwidth,page=2]{arbre}
+%%     \includegraphics<+>[width=0.9\textwidth,page=3]{arbre}
+%%     \includegraphics<+>[width=0.9\textwidth,page=4]{arbre}
+%%   }
+  
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Principe d'évaluation}
+
+%%   \begin{itemize}
+%%   \item fonction d'évaluation $e$ : pour tout ensemble $T$ descendant de $S$,
+%%     on choisit $e$ telle que $e(T) \leq \min_{x \in T} f(x)$
+%%   \item si on connait une solution $\bar{x} \in S$ et qu'au noeud $T$ on a
+%%     \[f(\bar{x}) < e(T) \leq \min_{x \in T} f(x) \]
+%%   \item alors $T$ ne contient aucune solution optimale et ses descendants
+%%     ne seront pas énumérés
+%%   \end{itemize}
+  
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Séparation-évaluation}
+
+%%   On résoud (exactement) de nombreux problèmes en combinant ces deux principes
+%%   (\emph{Branch and Bound}).
+
+%%   Il y a d'innombrables variantes selon :
+%%   \begin{itemize}
+%%   \item la fonction d'évaluation
+%%   \item le choix du noeud à explorer (et donc de la valeur à fixer)
+%%   \item le choix de la variable à partir de laquelle on partitionne le noeud choisi
+%%   \end{itemize}
+
+%%   %% Note : on combine souvent ce principe avec la méthode des \emph{coupes intégrales}
+%%   %% (\emph{Branch and Cut}). 
+  
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Exemple d'un problème d'affectation}
+
+%%   \only<1>{
+%%   \begin{itemize}
+%%   \item 4 ouvriers $\{1,2,3,4\}$ et 4 tâches $\{1,2,3,4\}$
+%%   \item 1 matrice de coût
+%%     $C := \left(
+%%     \begin{array}{cccc}
+%%       8 & 3 & 1 & 5 \\
+%%       11 & 7 & 1 & 6 \\
+%%       7 & 8 & 6 & 8 \\
+%%       11 & 6 & 4 & 9 
+%%     \end{array}
+%%     \right)$ \\
+%%     par ex. affecter l'ouvrier 4 à la tâche 3 coûte $c_{4,3} = 4$ 
+%%   \item Trouver l'affectation de coût minimal
+%%   \end{itemize}
+%%   }
+
+%%   \only<2>{
+%%     \begin{itemize}
+%%     \item On peut noter les inconnues et contraintes $x^T = (x_1,x_2,x_3,x_4)$,
+%%       telles que $\forall i \in \{ 1,2,3,4\}, \ x_i \in \{ 1,2,3,4\}$ \\
+%%       ($x_i$ contient le numéro de tâche affectée à l'ouvrier $i$).
+      
+%%     \item Pour exprimer la fonction objectif, on peut écrire pour tout $i$
+%%       $x_i := \sum_{j=1}^4 j d_{i,j} = d_{i,1} + 2d_{i,2} + 3d_{i,3} + 4d_{i,4} $ \\
+%%       ($d_{i,j} = 1$ si la tâche $j$ est affectée à l'ouvrier $i$, $d_{i,j} = 0$ sinon).
+      
+%%     \item Le problème s'exprime donc comme un (PNE)
+%%       \[
+%%       \left\{
+%%       \begin{array}{c}
+%%         \text{min} \ \sum_{i,j} c_{i,j}d_{i,j} \ \text{tel que :} \\
+%%         \forall i \in \{ 1,2,3,4\}, \ x_i \in \{ 1,2,3,4\} \ \text{et} \ x_i = \sum_{j=1}^4 j d_{i,j} 
+%%       \end{array}
+%%       \right.
+%%       \]
+%%     \end{itemize}
+%%   }
  
-\end{frame}
+%% \end{frame}
 
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Résolution par séparation-évaluation}
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Résolution par séparation-évaluation}
 
-  \begin{itemize}
-    \item ensemble des affectations possibles : $S$ ($|S| = 4! = 24$) 
-    \item fonction d'évaluation $e$ : on somme les coûts minimaux des tâches non affectées, aux coûts des tâches déjà affectées
-    \item choix de l'ouvrier selon lequel on sépare : arbitraire %(variable) 
-    \item choix de la tâche à fixer en priorité : celle qui minimise $e$ %(valeur)
-  \end{itemize}
-\end{frame}
+%%   \begin{itemize}
+%%     \item ensemble des affectations possibles : $S$ ($|S| = 4! = 24$) 
+%%     \item fonction d'évaluation $e$ : on somme les coûts minimaux des tâches non affectées, aux coûts des tâches déjà affectées
+%%     \item choix de l'ouvrier selon lequel on sépare : arbitraire %(variable) 
+%%     \item choix de la tâche à fixer en priorité : celle qui minimise $e$ %(valeur)
+%%   \end{itemize}
+%% \end{frame}
 
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Déroulement de la méthode}
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Déroulement de la méthode}
 
-  \only<1>{
-    \[
-    \left(
-    \begin{array}{cccc}
-      8         & \alert{3} & \alert{1} & \alert{5} \\
-      11        & 7         & 1         & 6 \\
-      \alert{7} & 8         & 6         & 8 \\
-      11        & 6         & 4         & 9 
-    \end{array}
-    \right)
-    \]
+%%   \only<1>{
+%%     \[
+%%     \left(
+%%     \begin{array}{cccc}
+%%       8         & \alert{3} & \alert{1} & \alert{5} \\
+%%       11        & 7         & 1         & 6 \\
+%%       \alert{7} & 8         & 6         & 8 \\
+%%       11        & 6         & 4         & 9 
+%%     \end{array}
+%%     \right)
+%%     \]
 
-    \[ e(S) = (7 + 3 + 1 + 5) = 16 \]
+%%     \[ e(S) = (7 + 3 + 1 + 5) = 16 \]
 
-    \begin{itemize}
-    \item $\Rightarrow 16$ minorant du coût minimum
-    \item choix de l'ouvrier : $1$ 
-    \item choix de la tâche à affecter\dots
-    \end{itemize}
-  }
-  \only<2>{
-    \begin{center}
-    ouvrier 1 $\leftarrow$ tâche 1
-    \end{center}
-    \[
-    \left(
-    \begin{array}{cccc}
-      \cancel{8}         & \cancel{3}  & \cancel{1}  & \cancel{5} \\
-      \cancel{11}        & 7         & \alert{1} & \alert{6} \\
-      \cancel{7}         & 8         & 6         & 8 \\
-      \cancel{11}        & \alert{6} & 4         & 9 
-    \end{array}
-    \right)
-    \]
-  }
-  \only<3,6>{
-    \begin{center}
-    \alert<6>{ouvrier 1 $\leftarrow$ tâche 2}
-    \end{center}
-    \[
-    \left(
-    \begin{array}{cccc}
-      \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
-      11             & \cancel{7} & \alert{1}        & \alert{6} \\
-      \alert{7}      & \cancel{8} & 6                & 8 \\
-      11             & \cancel{6} & 4                & 9 
-    \end{array}
-    \right)
-    \]
-  }
-  \only<4>{
-    \begin{center}
-    ouvrier 1 $\leftarrow$ tâche 3
-    \end{center}
-    \[
-    \left(
-    \begin{array}{cccc}
-      \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
-      11             & 7               & \cancel{1}  & \alert{6} \\
-      \alert{7}      & 8               & \cancel{6}  & 8 \\
-      11             & \alert{6}       & \cancel{4}  & 9 
-    \end{array}
-    \right)
-    \]
-  }
-  \only<5>{
-    \begin{center}
-    ouvrier 1 $\leftarrow$ tâche 4
-    \end{center}
-    \[
-    \left(
-    \begin{array}{cccc}
-      \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
-      11             & 7               & \alert{1}        & \cancel{6} \\
-      \alert{7}      & 8               & 6                & \cancel{8} \\
-      11             & \alert{6}       & 4                & \cancel{9} 
-    \end{array}
-    \right)
-    \]
-  }
-  \begin{itemize}
-    \item<2-> $e(S_{(1)}) = 8 + (6 + 1 + 6) = 21$
-    \item<3-> \alert<6>{$e(S_{(2)}) = 3 + (7 + 1 + 6) = 17$}
-    \item<4-> $e(S_{(3)}) = 1 + (7 + 6 + 6) = 20$
-    \item<5-> $e(S_{(4)}) = 5 + (7 + 6 + 1) = 19$
-  \end{itemize}
+%%     \begin{itemize}
+%%     \item $\Rightarrow 16$ minorant du coût minimum
+%%     \item choix de l'ouvrier : $1$ 
+%%     \item choix de la tâche à affecter\dots
+%%     \end{itemize}
+%%   }
+%%   \only<2>{
+%%     \begin{center}
+%%     ouvrier 1 $\leftarrow$ tâche 1
+%%     \end{center}
+%%     \[
+%%     \left(
+%%     \begin{array}{cccc}
+%%       \cancel{8}         & \cancel{3}  & \cancel{1}  & \cancel{5} \\
+%%       \cancel{11}        & 7         & \alert{1} & \alert{6} \\
+%%       \cancel{7}         & 8         & 6         & 8 \\
+%%       \cancel{11}        & \alert{6} & 4         & 9 
+%%     \end{array}
+%%     \right)
+%%     \]
+%%   }
+%%   \only<3,6>{
+%%     \begin{center}
+%%     \alert<6>{ouvrier 1 $\leftarrow$ tâche 2}
+%%     \end{center}
+%%     \[
+%%     \left(
+%%     \begin{array}{cccc}
+%%       \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
+%%       11             & \cancel{7} & \alert{1}        & \alert{6} \\
+%%       \alert{7}      & \cancel{8} & 6                & 8 \\
+%%       11             & \cancel{6} & 4                & 9 
+%%     \end{array}
+%%     \right)
+%%     \]
+%%   }
+%%   \only<4>{
+%%     \begin{center}
+%%     ouvrier 1 $\leftarrow$ tâche 3
+%%     \end{center}
+%%     \[
+%%     \left(
+%%     \begin{array}{cccc}
+%%       \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
+%%       11             & 7               & \cancel{1}  & \alert{6} \\
+%%       \alert{7}      & 8               & \cancel{6}  & 8 \\
+%%       11             & \alert{6}       & \cancel{4}  & 9 
+%%     \end{array}
+%%     \right)
+%%     \]
+%%   }
+%%   \only<5>{
+%%     \begin{center}
+%%     ouvrier 1 $\leftarrow$ tâche 4
+%%     \end{center}
+%%     \[
+%%     \left(
+%%     \begin{array}{cccc}
+%%       \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
+%%       11             & 7               & \alert{1}        & \cancel{6} \\
+%%       \alert{7}      & 8               & 6                & \cancel{8} \\
+%%       11             & \alert{6}       & 4                & \cancel{9} 
+%%     \end{array}
+%%     \right)
+%%     \]
+%%   }
+%%   \begin{itemize}
+%%     \item<2-> $e(S_{(1)}) = 8 + (6 + 1 + 6) = 21$
+%%     \item<3-> \alert<6>{$e(S_{(2)}) = 3 + (7 + 1 + 6) = 17$}
+%%     \item<4-> $e(S_{(3)}) = 1 + (7 + 6 + 6) = 20$
+%%     \item<5-> $e(S_{(4)}) = 5 + (7 + 6 + 1) = 19$
+%%   \end{itemize}
     
-\end{frame}
+%% \end{frame}
 
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Trace sous forme arborescente}
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Trace sous forme arborescente}
 
-  {
-    \includegraphics<+>[width=1\textwidth,page=1]{ex-bb}
-    \includegraphics<+>[width=1\textwidth,page=2]{ex-bb}
-  } 
-\end{frame}
+%%   {
+%%     \includegraphics<+>[width=1\textwidth,page=1]{ex-bb}
+%%     \includegraphics<+>[width=1\textwidth,page=2]{ex-bb}
+%%   } 
+%% \end{frame}
 
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Résultat}
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Résultat}
 
 
-  \[
-  e(S_{(4,3,1,2)}) = 5 + 1 + 7 + 6 = 19
-  \]
+%%   \[
+%%   e(S_{(4,3,1,2)}) = 5 + 1 + 7 + 6 = 19
+%%   \]
   
-  \[
-  \left(
-  \begin{array}{cccc}
-    8 & 3 & 1 & \alert{5} \\
-    11 & 7 & \alert{1} & 6 \\
-    \alert{7} & 8 & 6 & 8 \\
-    11 & \alert{6} & 4 & 9 
-  \end{array}
-  \right)
-  \]
+%%   \[
+%%   \left(
+%%   \begin{array}{cccc}
+%%     8 & 3 & 1 & \alert{5} \\
+%%     11 & 7 & \alert{1} & 6 \\
+%%     \alert{7} & 8 & 6 & 8 \\
+%%     11 & \alert{6} & 4 & 9 
+%%   \end{array}
+%%   \right)
+%%   \]
 
-  \begin{block}{Minimum global}
-  \begin{itemize}
-    \item ouvrier 1 $\leftarrow$ tâche 4
-    \item ouvrier 2 $\leftarrow$ tâche 3
-    \item ouvrier 3 $\leftarrow$ tâche 1
-    \item ouvrier 4 $\leftarrow$ tâche 2
-  \end{itemize}
-  \end{block}
-\end{frame}
+%%   \begin{block}{Minimum global}
+%%   \begin{itemize}
+%%     \item ouvrier 1 $\leftarrow$ tâche 4
+%%     \item ouvrier 2 $\leftarrow$ tâche 3
+%%     \item ouvrier 3 $\leftarrow$ tâche 1
+%%     \item ouvrier 4 $\leftarrow$ tâche 2
+%%   \end{itemize}
+%%   \end{block}
+%% \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Autres méthodes}
+  \frametitle{Méthodes de résolution}
 
   \begin{itemize}
+  \item recherche exhaustive (très-très petits problèmes)
+  \item \alert{\emph{Branch and Bound}} (séparation-évaluation)
   \item relaxation continue dans certains cas particuliers
   \item méthode des coupes (intégrales, mixtes)
   \item \emph{Branch and Bound} + coupes $=$ \emph{Branch and cut}

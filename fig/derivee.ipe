@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
-<ipe version="70206" creator="Ipe 7.2.7">
-<info created="D:20200213151605" modified="D:20200213151839"/>
+<ipe version="70212" creator="Ipe 7.2.13">
+<info created="D:20200213151605" modified="D:20220217135955"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -220,13 +220,13 @@ h
 <dashstyle name="dash dotted" value="[4 2 1 2] 0"/>
 <dashstyle name="dash dot dotted" value="[4 2 1 2 1 2] 0"/>
 <textsize name="large" value="\large"/>
+<textsize name="small" value="\small"/>
+<textsize name="tiny" value="\tiny"/>
 <textsize name="Large" value="\Large"/>
 <textsize name="LARGE" value="\LARGE"/>
 <textsize name="huge" value="\huge"/>
 <textsize name="Huge" value="\Huge"/>
-<textsize name="small" value="\small"/>
 <textsize name="footnote" value="\footnotesize"/>
-<textsize name="tiny" value="\tiny"/>
 <textstyle name="center" begin="\begin{center}" end="\end{center}"/>
 <textstyle name="itemize" begin="\begin{itemize}" end="\end{itemize}"/>
 <textstyle name="item" begin="\begin{itemize}\item{}" end="\end{itemize}"/>
@@ -252,12 +252,15 @@ h
 <tiling name="rising" angle="30" step="4" width="1"/>
 </ipestyle>
 <page>
-<layer name="alpha"/>
+<layer name="other"/>
+<layer name="axis"/>
+<layer name="point"/>
 <layer name="beta"/>
-<layer name="gamma"/>
-<view layers="alpha beta" active="beta"/>
-<view layers="alpha gamma" active="gamma"/>
-<path layer="alpha" stroke="black">
+<layer name="delta"/>
+<view layers="axis point beta" active="beta"/>
+<view layers="axis point delta" active="delta"/>
+<view layers="other axis" active="other"/>
+<path layer="axis" stroke="black">
 192 768 m
 256 640
 320 768 c
@@ -272,18 +275,7 @@ h
 </path>
 <text matrix="1 0 0 1 97.8096 4.82557" transformations="translations" pos="224 672" stroke="black" type="label" width="5.694" height="4.289" depth="0" valign="baseline" style="math">x</text>
 <text matrix="1 0 0 1 -53.1272 96" transformations="translations" pos="224 672" stroke="black" type="label" width="19.393" height="7.473" depth="2.49" valign="baseline" style="math">f(x)</text>
-<group layer="beta">
-<path stroke="red">
-192 752 m
-256 688 l
-</path>
-<path stroke="black" dash="dotted">
-224 720 m
-224 688 l
-</path>
-<text matrix="1 0 0 1 -5.12716 4.22237" transformations="translations" pos="224 672" stroke="black" type="label" width="10.163" height="8.11" depth="0" valign="baseline" style="math">x^0</text>
-</group>
-<path layer="gamma" stroke="red">
+<path layer="other" stroke="red">
 192 704 m
 320 704 l
 </path>
@@ -292,5 +284,23 @@ h
 256 688 l
 </path>
 <text matrix="1 0 0 1 27.7776 4.22237" transformations="translations" pos="224 672" stroke="black" type="label" width="10.163" height="8.11" depth="0" valign="baseline" style="math">x^0</text>
+<path layer="delta" stroke="red">
+192 736 m
+288 688 l
+</path>
+<path layer="point" stroke="black" dash="dotted">
+224 720 m
+224 688 l
+</path>
+<text matrix="1 0 0 1 -5.12716 4.22237" transformations="translations" pos="224 672" stroke="black" type="label" width="10.163" height="8.11" depth="0" valign="baseline" style="math">x^0</text>
+<path layer="beta" stroke="red">
+192 752 m
+256 688 l
+</path>
+<path layer="delta" matrix="1 0 0 0.8 -16 137.6" stroke="black" dash="dotted">
+272 708 m
+272 688 l
+</path>
+<text matrix="1 0 0 1 26.8728 4.22237" transformations="translations" pos="224 672" stroke="black" type="label" width="28.08" height="8.11" depth="0.83" valign="baseline" style="math">x^0+h</text>
 </page>
 </ipe>

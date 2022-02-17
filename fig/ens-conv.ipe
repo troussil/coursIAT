@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
-<ipe version="70206" creator="Ipe 7.2.7">
-<info created="D:20200211115438" modified="D:20200211115855"/>
+<ipe version="70212" creator="Ipe 7.2.13">
+<info created="D:20200211115438" modified="D:20220217133357"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -220,13 +220,13 @@ h
 <dashstyle name="dash dotted" value="[4 2 1 2] 0"/>
 <dashstyle name="dash dot dotted" value="[4 2 1 2 1 2] 0"/>
 <textsize name="large" value="\large"/>
+<textsize name="small" value="\small"/>
+<textsize name="tiny" value="\tiny"/>
 <textsize name="Large" value="\Large"/>
 <textsize name="LARGE" value="\LARGE"/>
 <textsize name="huge" value="\huge"/>
 <textsize name="Huge" value="\Huge"/>
-<textsize name="small" value="\small"/>
 <textsize name="footnote" value="\footnotesize"/>
-<textsize name="tiny" value="\tiny"/>
 <textstyle name="center" begin="\begin{center}" end="\end{center}"/>
 <textstyle name="itemize" begin="\begin{itemize}" end="\end{itemize}"/>
 <textstyle name="item" begin="\begin{itemize}\item{}" end="\end{itemize}"/>
@@ -281,5 +281,13 @@ h
 130.088 609.219
 127.073 670.931 u
 </path>
+<use matrix="1 0 0 1 0 16" name="mark/cross(sx)" pos="160 656" size="normal" stroke="black"/>
+<use matrix="1 0 0 1 -32 32" name="mark/cross(sx)" pos="192 672" size="normal" stroke="black"/>
+<path stroke="black" dash="dotted">
+160 672 m
+160 704 l
+</path>
+<text matrix="1 0 0 1 11.01 18.1169" transformations="translations" pos="152 648" stroke="black" type="label" width="8.489" height="7.49" depth="0" valign="baseline" style="math">x&apos;</text>
+<text matrix="1 0 0 1 -28.4609 33.6411" transformations="translations" pos="192 664" stroke="black" type="label" width="8.037" height="7.497" depth="1.93" valign="baseline" style="math">y&apos;</text>
 </page>
 </ipe>
