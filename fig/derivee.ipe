@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20200213151605" modified="D:20220217135955"/>
+<info created="D:20200213151605" modified="D:20220217180611"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
