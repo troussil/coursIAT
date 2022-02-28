@@ -1,0 +1,177 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\usepackage[english,linesnumbered,ruled,vlined]{algorithm2e}
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+%\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+
+\title{Optimisation sans contrainte}
+\author{Tristan Roussillon}
+
+\begin{document}
+
+\maketitle
+
+Dans ce TD est traité le cas particulier de la minimisation, sans contrainte,
+d'une fonction objectif égale à une somme de fonctions. Cette situation est
+très courante dans le contexte de l'apprentissage. L'objectif est de s'entraîner
+à modéliser des problèmes d'optimisation et de connaître le lien entre apprentissage
+et optimisation. 
+
+\section{Exemple pédagogique : la moyenne comme le minimum d'une fonction de coût}
+\label{sec:moyenne}
+
+\begin{exercice}
+  \'Etant donné un ensemble de valeurs $\{x_i\}_{i = 1,\dots,m}$,
+  nous considérons la minimisation de la fonction $f : \R \rightarrow \R$ telle que :
+  \[ f(x) = \sum_{i=0}^m (x-x_i)^2. \] 
+  
+  \begin{enumerate}
+  \item Développez la somme et montrez que nous avons un polynôme du second degré en $x$.
+    A votre avis, est-ce que $f$ est convexe ?
+  \item Calculez les dérivées premières et secondes de $f$.
+  \item \`A partir de quelles parties du cours peut-on en déduire que $f$ est convexe,
+    qu'il y a un minimum global, et qu'il vérifie $f'(x) = 0$ ?
+  \item Montrer que le minimum global est la moyenne de l'ensemble de valeurs.
+  \end{enumerate}
+\end{exercice}
+
+\begin{exercice}  
+  Sur la même fonction, nous considérons maintenant la méthode de la descente de gradient,
+  dont l'équation d'évolution est :
+  \[ x^{(k+1)} = x^{(k)} - \lambda f'(x^{(k)}), \]
+  avec $x^{(0)}$ fixé à $0$ et $\lambda$ un paramètre libre, à choisir. 
+  \begin{enumerate}
+  \item Que se passe-t-il si $\lambda$ est fixé à
+    \begin{enumerate}
+    \item $\frac{1}{m}$ ?
+    \item $\frac{1}{2m}$ ?
+    \item $\frac{1}{4m}$ ?
+    \end{enumerate}
+  \item \`A quelle méthode vue en cours correspond le choix $\frac{1}{2m}$ ?
+  \end{enumerate}
+\end{exercice}
+
+\section{Exemple du perceptron}
+\label{sec:perceptron}
+
+\let\vec\mathbf
+
+Dans cette section, nous adoptons les notations utilisées habituellement
+dans le contexte des réseaux de neurones.
+
+Nous observons des grandeurs réelles représentées par un vecteur $\vec{x} \in \R^d$
+(par ex. l'âge et la pression sanguine), ainsi qu'un état binaire $y \in \R$
+(par ex. être atteint d'une maladie ou non), sur un certain nombre d'unités
+statistiques : $\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$ est l'\emph{ensemble d'apprentissage}.
+Or, on suppose l'existence d'une règle de décision permettant de prédire $y$
+en fonction de $\vec{x}$ de la forme suivante :
+\[
+\hat{y} :=
+\left\{
+\begin{array}{ll}
+  +1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x} + b \geq 0 \\
+  -1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x} + b < 0 \\
+\end{array}
+\right.
+\]
+Le vecteur $\vec{w} \in \R^d$ (de même dimension que $\vec{x}$)
+est appelé \emph{poids} et le scalaire $b$, \emph{biais}.
+
+Le perceptron, qui est l'ancêtre des réseaux de neurones, modélise ce type
+de problème de classification linéaire et est associé à un algorithme qui
+permet de trouver, à partir de l'ensemble d'apprentissage, les paramètres
+$\vec{w},b$ inconnus. 
+
+\begin{exercice}
+  Expliquez pourquoi et comment on peut considérer de manière équivalente
+  les variables $\vec{x}', \vec{w}' \in \R^{d+1}$ avec la règle de décision
+  suivante :
+  \[
+  \hat{y} :=
+  \left\{
+  \begin{array}{ll}
+    +1 & \quad \mathrm{si}\quad \vec{w}'\cdot\vec{x}' \geq 0 \\
+    -1 & \quad \mathrm{si}\quad \vec{w}'\cdot\vec{x}' < 0 \\
+  \end{array}
+  \right.
+  \]
+\end{exercice}
+
+Par la suite, nous allons continuer à travailler dans $\R^{d+1}$ mais en
+omettant les primes pour plus de clarté. 
+
+\begin{exercice}
+  Expliquez pourquoi on considère que le perceptron se trompe pour le cas $i$
+  de l'ensemble d'apprentissage quand $y_i (\vec{w}\cdot\vec{x}_i) < 0$.
+\end{exercice}
+
+\begin{exercice}
+  Soit $E_{\vec{w}'} := \{i \ | \ y_i (\vec{w}\cdot\vec{x}_i) < 0\}$,
+  l'ensemble des erreurs, c-à-d. l'ensemble des cas mal classés par le perceptron, 
+  et la fonction objectif suivante :
+  \[
+  Q(\vec{w}) :=
+  \quad
+  \left\{
+  \begin{array}{ll}
+    - \sum_{i \in E_{\vec{w}}} y_i (\vec{w}\cdot\vec{x}_i) & \text{si}\quad E_{\vec{w},b} \neq \emptyset \\
+    0 & \text{sinon} \\
+  \end{array}
+  \right.
+  \]
+
+  \begin{enumerate}
+  \item Expliquez pourquoi la ou les valeurs minimales de $Q$
+    sont plus grandes ou égales à 0. 
+  \item Calculez le gradient de $Q$.
+  \item En utilisant le schéma général de la descente de gradient,
+    proposez une règle de mise à jour afin de trouver la valeur
+    de $\vec{w}$ qui minimise $Q$.
+  \item Comme $Q$ est une somme de fonctions, une alternative à la descente de gradient classique
+  consiste à mettre à jour la valeur de $\vec{w}$ après chaque paire $(\vec{x}_i, y_i)$
+  considérée, c'est ce qu'on appelle la descente de gradient \emph{stochastique}.
+  Cette pratique est souvent choisie quand l'ensemble d'apprentissage est grand.
+  \'Ecrivez l'algorithme d'apprentissage complet mettant en oeuvre cette stratégie. 
+  \end{enumerate}
+\end{exercice}
+
+\begin{exercice}
+  Expliquez pourquoi, quand $d = 2$, $\vec{w}\cdot\vec{x} = 0$
+  est une équation de droite et le problème consistant à trouver la
+  valeur de $\vec{w}$ qui minimise $Q$, revient à trouver une droite
+  séparant deux ensembles de points du plan.
+\end{exercice}
+
+
+\end{document}
+
+
