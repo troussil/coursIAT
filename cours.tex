@@ -449,7 +449,7 @@
 \begin{frame}
   \frametitle{Différentiabilité et convexité}
 
-  \begin{block}{Théorème}
+  \begin{block}{Théorème de convexité}
     Si $f$ est continûment différentiable (deux fois), les conditions 1, 2 et 3 sont équivalentes:
     \begin{enumerate}
     \item $f$ est convexe,
@@ -526,7 +526,9 @@
       $f'(x) = 2x - 6$\\
       $f''(x) = 2$ \\ 
       ~\\
-      $\forall x, \ f''(x) > 0 \Rightarrow f$ convexe $\Rightarrow$ $\exists$ un minimum global $x^\star$ tel que:
+      $\forall x, \ f''(x) > 0 \Rightarrow f$ convexe $\Rightarrow$
+      si $\exists$ $x^\star$ tel que $f'(x^\star) = 0$,
+      alors $x^\star$ est un minimum global : 
       $f'(x^\star) = 0 \Leftrightarrow x^\star = 3$.
     }
     \only<2>{
@@ -558,7 +560,8 @@
   \end{array}
   \right)
   $ $\Rightarrow$ $f$ est convexe $\Rightarrow$ \\
-  $\exists$ un minimum global $x^\star$ tel que ${\nabla f}^T(x^\star) = 0$, c-à-d.
+  si $\exists$ $x^\star$ tel que ${\nabla f}^T(x^\star) = 0$,
+  alors $x^\star$ est un minimum global : 
   \[
   \left\{
   \begin{array}{ll}
