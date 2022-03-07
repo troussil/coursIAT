@@ -33,7 +33,7 @@ def getAndCheckSolution(c, A_ub, b_ub, A_eq, b_eq, bds):
 #-------------------------------------------------------------
 def getSolFromTwoDataSets(s1, s2, norm):
     if norm == "L1":
-        return getSolFromTwoDataSetsL1(s1, s2)
+        return getSolFromTwoDataSetsL1(s1,s2)
     elif norm == "Linf":
         return getSolFromTwoDataSetsLinf(s1,s2)
     else:
@@ -44,7 +44,8 @@ def getSolFromTwoDataSetsL1(s1, s2):
     """ TODO
     you must write the code that calls
     'getAndCheckSolution' to get an 
-    optimal solution. 
+    optimal solution described as a 
+    tuple of 4 values (x_1, x_2, z^+, z^-). 
     The input parameters of the function 
     'getAndCheckSolution' must be deduced
     from s1 and s2, two numpy arrays for 
@@ -109,7 +110,7 @@ def main():
     and one set of negative observations (if the two sets are linearly \
     separable)")
     parser.add_argument("datafile",
-                        help="path to a data file containing 3 fields per line: x, y {-1,1}")
+                        help="path to a data file containing 3 fields per line: u1, u2 {-1,1}")
     parser.add_argument("-d", "--delimiter",
                         help="delimiter used in the data file",
                         default=" ")
