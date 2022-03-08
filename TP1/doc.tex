@@ -33,7 +33,8 @@
 
 \title{Optimisation sous contraintes linéaires}
 \author{Tristan Roussillon}
-
+\date{7 mars 2022}
+  
 \begin{document}
 
 \maketitle
@@ -159,16 +160,17 @@ comme :
   \item Est-ce que l'hypothèse de qualification des contraintes est vérifiée
     pour tout $x$ ? Quelle partie du cours permet de répondre à cette question ?
   \item On suppose maintenant que l'ensemble des solutions candidates vérifiant
-    les contraintes, noté $X$, a un intérieur non vide. Montrez qu'il n'existe
-    aucun $x \in X \setminus \partial X$\footnote{$\partial X$ désigne le bord
-      de $X$ tandis que $X \setminus \partial X$ désigne son intérieur.}
-    tel que les conditions de Kuhn et Tucker soient vérifiées. 
+    les contraintes, noté $X$, a un intérieur non vide. Montrez par contradiction et en utilisant les conditions de Kuhn et Tucker qu'une solution optimale de (PL) ne peut appartenir à l'intérieur de $X$.
+    %% qu'il n'existe
+    %% aucun $x \in X \setminus \partial X$\footnote{$\partial X$ désigne le bord
+    %%   de $X$ tandis que $X \setminus \partial X$ désigne son intérieur.}
+    %% tel que les conditions de Kuhn et Tucker soient vérifiées.
   \end{enumerate}
 \end{exercice}
 
 \begin{solution}
   \begin{enumerate}
-  \item Oui car la fonctions et les contraintes sont linéaires.
+  \item Oui car la fonction et les contraintes sont linéaires.
   \item Si $x \in X \setminus \partial X$, par définition aucune contrainte n'est saturée,
   ce qui implique que tous les coefficients $\lambda_i$ sont nuls. La condition
   devient ${\nabla f}(x) = 0$, ce qui est faux pour des fonctions linéaires (et non
@@ -240,63 +242,23 @@ d'optimisation linéaire bornés.
   \right.
   \]
 
-  Montrez que toute solution optimale de (P$\infty$)
-  est telle que sa norme $L_\infty$ vaut $1$.   
+  Expliquez pourquoi (P$\infty$) est borné. 
 \end{exercice}
 
 \begin{solution}
   S'il existe des valeurs pour $\vec{x}, z^+, z^-$ telles que
   les contraintes sont vérifiées et, sans perte de généralité,
   $(z^+ - z^-) \geq 0$, alors on peut les multiplier par une
-  constante $k \geq 1$ de façon à ce que $|kx_1|=1$ ou $|kx_2|=1$
+  constante $\lambda \geq 1$ de façon à ce que $|\lambda x_1|=1$
+  ou $|\lambda x_2|=1$
   (la norme $L_\infty$ de $\lambda\vec{x}$ vaut alors $1$).
   En faisant cela, les autres contraintes restent vérifiées
   et on a une valeur $\lambda(z^+ - z^-) \geq (z^+ - z^-)$.
 \end{solution}
 
-\begin{exercice}
-  \`A la différence du problème précédent, nous réexprimons
-  maintenant chaque variable $x_k$ comme la différence de deux
-  variables non-négatives, notées $x_k'$ et $x_k''$. 
-
-  En ajoutant la contrainte $\sum_k x_k' + x_k'' \leq 1$, nous
-  obtenons le problème suivant : 
-  \[
-  \text{(P1)}
-  \left\{
-  \begin{array}{ll}
-    \max_{x_1',x_1'',x_2',x_2'',z^+,z^-} \  (z^+ - z^-) \ \text{tel que} & \\
-    \sum_k (x_k' - x_k'') u_k^j \geq z^+ & \forall j \in J^+ \\ 
-    \sum_k (x_k' - x_k'') u_k^j \leq z^- & \forall j \in J^- \\
-    \sum_k x_k' + x_k'' \leq 1 \\
-    x_k' \geq 0, x_k'' \geq 0 & \forall k \in \{1, 2\} \\
-    x_1',x_1'',x_2',x_2'',z^+,z^- \in \R \\
-  \end{array}
-  \right.
-  \]
-
-  Montrez que toute solution optimale de (P1)
-  est telle que sa norme $L_1$ est inférieure ou égale à $1$.   
-\end{exercice}
-
-\begin{solution}
-  S'il existe des valeurs telles que
-  les contraintes sont vérifiées et, sans perte de généralité,
-  $(z^+ - z^-) \geq 0$, alors on peut les multiplier par une
-  constante $\lambda \geq 1$ de façon à ce que $\sum_k x_k' + x_k'' = 1$.
-  En faisant cela, les autres contraintes restent vérifiées
-  et on a une valeur $\lambda(z^+ - z^-) \geq (z^+ - z^-)$.
-  
-  Pour conclure, il suffit alors de vérifier que :
-  \[ \sum_k |x_k| \leq \sum_k x_k' + x_k''. \]
-  En effet, comme $x_k'$ et $x_k''$ sont non-négatives, $\forall k \in \{1, 2\}$,
-  si $x_k \leq 0$, alors $x_k \leq 0 \leq x_k' + x_k''$
-  et si $x_k > 0$, alors $x_k \leq x_k + 2x_k \Leftrightarrow x_k' - x_k'' \leq x_k' + x_k''$,
-  d'où $|x_k| \leq x_k' + x_k''$.
-\end{solution}
 
 \begin{exercice}
-  Réexprimez les problèmes (P$\infty$) et (P1)
+  Réexprimez le problème (P$\infty$)
   sous la forme matricielle suivante :
   \[
   \left\{
@@ -314,15 +276,15 @@ d'optimisation linéaire bornés.
   $A$ est une matrice $m \times n$ et le signe $\leq$ s'applique composante par composante et pour
   toutes les composantes des vecteurs.
 \end{itemize}
-Enfin, ignorez les contraintes impliquant des bornes inférieures ou supérieures sur les variables,
-car elles sont souvent traitées de manière séparée par les solveurs. 
+%% Enfin, ignorez les contraintes impliquant des bornes inférieures ou supérieures sur les variables,
+%% car elles sont souvent traitées de manière séparée par les solveurs. 
 \end{exercice}
 
 \begin{exercice}
   En reprenant le code Python disponible sur Moodle\footnote{
     le code utilise la version 1.3.3 de SciPy qui est la version
     disponible dans les dépôts sur Ubuntu 20.04.},
-  programmez la résolution des problèmes (P$\infty$) et (P1). 
+  programmez la résolution du problème (P$\infty$). %% et (P1).
   Que vous utilisiez 
   \href{https://docs.scipy.org/doc/scipy-1.3.3/reference/generated/scipy.optimize.linprog.html#scipy.optimize.linprog}{\texttt{linprog}} ou
   \href{https://docs.scipy.org/doc/scipy-1.3.3/reference/generated/scipy.optimize.minimize.html}{\texttt{minimize}},
@@ -348,37 +310,74 @@ car elles sont souvent traitées de manière séparée par les solveurs.
   %% \end{figure}
 \end{solution}
 
-\section{Pour aller plus loin : séparateurs à vaste marge}
-\label{sec:svm}
-
-Les problèmes précédents sont très proches de celui considéré dans les
-méthodes d'apprentissage connues sous le nom de \emph{Support Vector Machines}
-\href{https://en.wikipedia.org/wiki/Support-vector_machine}{(SVM)} ou
-\emph{Séparateurs à Vaste Marge} en français. Ce sont des classifieurs
-linéaires\footnote{Ils peuvent aussi être adaptés au cas où les données
-  ne sont pas parfaitement séparables ou au cas où les données sont
-  non-linéairement séparables.} 
-qui ont de meilleurs capacités de généralisation que le perceptron 
-parce qu'ils maximisent la marge de séparation.
-
-Il s'agit d'un problème d'optimisation quadratique sous contraintes
-linéaires : 
-\[
-\left\{
-\begin{array}{ll}
-  \min_{\vec{x},z} \|\vec{x}\|_2^2 \ \text{tel que} & \\
-  \vec{x} \cdot \vec{u}^j \geq z + 1 & \forall j \in J^+ \\ 
-  \vec{x} \cdot \vec{u}^j \leq z - 1 & \forall j \in J^- \\
-  \vec{x} \in \R^2
-\end{array}
-\right.
-\]
-
 \begin{exercice}
-  Complétez le code de la section précédente pour ajouter la résolution du problème
-  ci-dessus par l'algorithme de
-  \href{https://en.wikipedia.org/wiki/Frank%E2%80%93Wolfe_algorithm}{Franck et Wolfe}. 
+  Nous réexprimons maintenant chaque variable $x_k$
+  comme la différence de deux variables non-négatives,
+  notées $x_k'$ et $x_k''$. 
+
+  Codez aussi la résolution du problème suivant: 
+  \[
+  \text{(P1)}
+  \left\{
+  \begin{array}{ll}
+    \max_{x_1',x_1'',x_2',x_2'',z^+,z^-} \  (z^+ - z^-) \ \text{tel que} & \\
+    \sum_k (x_k' - x_k'') u_k^j \geq z^+ & \forall j \in J^+ \\ 
+    \sum_k (x_k' - x_k'') u_k^j \leq z^- & \forall j \in J^- \\
+    \sum_k (x_k' + x_k'') \leq 1 \\
+    x_k' \geq 0, x_k'' \geq 0 & \forall k \in \{1, 2\} \\
+    x_1',x_1'',x_2',x_2'',z^+,z^- \in \R \\
+  \end{array}
+  \right.
+  \]
 \end{exercice}
+
+\begin{solution}
+  S'il existe des valeurs telles que
+  les contraintes sont vérifiées et, sans perte de généralité,
+  $(z^+ - z^-) \geq 0$, alors on peut les multiplier par une
+  constante $\lambda \geq 1$ de façon à ce que $\sum_k (x_k' + x_k'') = 1$.
+  En faisant cela, les autres contraintes restent vérifiées
+  et on a une valeur $\lambda(z^+ - z^-) \geq (z^+ - z^-)$.
+  
+  Pour conclure, il suffit alors de vérifier que :
+  \[ \sum_k |x_k| \leq \sum_k (x_k' + x_k''). \]
+  En effet, comme $x_k'$ et $x_k''$ sont non-négatives, $\forall k \in \{1, 2\}$,
+  si $x_k \leq 0$, alors $x_k \leq 0 \leq x_k' + x_k''$
+  et si $x_k > 0$, alors $x_k \leq x_k + 2x_k'' \Leftrightarrow x_k' - x_k'' \leq x_k' + x_k''$,
+  d'où $|x_k| \leq x_k' + x_k''$.
+\end{solution}
+
+%% \section{Pour aller plus loin : séparateurs à vaste marge}
+%% \label{sec:svm}
+
+%% Les problèmes précédents sont très proches de celui considéré dans les
+%% méthodes d'apprentissage connues sous le nom de \emph{Support Vector Machines}
+%% \href{https://en.wikipedia.org/wiki/Support-vector_machine}{(SVM)} ou
+%% \emph{Séparateurs à Vaste Marge} en français. Ce sont des classifieurs
+%% linéaires\footnote{Ils peuvent aussi être adaptés au cas où les données
+%%   ne sont pas parfaitement séparables ou au cas où les données sont
+%%   non-linéairement séparables.} 
+%% qui ont de meilleurs capacités de généralisation que le perceptron 
+%% parce qu'ils maximisent la marge de séparation.
+
+%% Il s'agit d'un problème d'optimisation quadratique sous contraintes
+%% linéaires : 
+%% \[
+%% \left\{
+%% \begin{array}{ll}
+%%   \min_{\vec{x},z} \|\vec{x}\|_2^2 \ \text{tel que} & \\
+%%   \vec{x} \cdot \vec{u}^j \geq z + 1 & \forall j \in J^+ \\ 
+%%   \vec{x} \cdot \vec{u}^j \leq z - 1 & \forall j \in J^- \\
+%%   \vec{x} \in \R^2
+%% \end{array}
+%% \right.
+%% \]
+
+%% \begin{exercice}
+%%   Complétez le code de la section précédente pour ajouter la résolution du problème
+%%   ci-dessus par l'algorithme de
+%%   \href{https://en.wikipedia.org/wiki/Frank%E2%80%93Wolfe_algorithm}{Franck et Wolfe}. 
+%% \end{exercice}
 
 \end{document}
 
