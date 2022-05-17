@@ -54,7 +54,7 @@
 \author[T. Roussillon]
  {Tristan Roussillon}
 
-\date{2020}
+\date{2022}
 
 \institute{INSA Lyon, TC}
 
@@ -428,7 +428,7 @@
     \only<3-4>{
       gradient, hessien : 
       \begin{itemize}
-      \item ${\nabla f}^T(x_1,x_2) =$\only<3>{?}
+      \item ${\nabla f}(x_1,x_2) =$\only<3>{?}
         \only<4>{$\left(\begin{array}{l}
             2x_1 - 4\\
             2x_2 + 8
@@ -494,7 +494,7 @@
     Soit $f$ continue et deux fois continûment différentiable en tout $x \in \R^n$.
     $x^\star$ est un optimum local ssi
     \begin{itemize}
-    \item ${\nabla f}^T(x^\star) = 0$ (\alert{stationnarité}) et
+    \item ${\nabla f}(x^\star) = 0$ (\alert{stationnarité}) et
     \item $\nabla^2f(x^\star)$ est une matrice \emph{définie positive},
       c-à-d. ses valeurs propres sont \emph{strictement positives}.
       %le strictement permet d'éviter les points d'inflexion ou
@@ -505,7 +505,7 @@
   \only<1>{
   \begin{block}{Théorème d'optimalité globale (avec différentiabilité)}
     Soit $f$ convexe et continûment différentiable en tout $x \in \R^n$.
-    $x^\star$ est un optimum global ssi ${\nabla f}^T(x^\star) = 0$.
+    $x^\star$ est un optimum global ssi ${\nabla f}(x^\star) = 0$.
   \end{block}
   }
   \only<2>{
@@ -526,7 +526,7 @@
       $f'(x) = 2x - 6$\\
       $f''(x) = 2$ \\ 
       ~\\
-      $\forall x, \ f''(x) > 0 \Rightarrow f$ convexe $\Rightarrow$
+      $\forall x, \ f''(x) \geq 0 \Rightarrow f$ convexe $\Rightarrow$
       si $\exists$ $x^\star$ tel que $f'(x^\star) = 0$,
       alors $x^\star$ est un minimum global : 
       $f'(x^\star) = 0 \Leftrightarrow x^\star = 3$.
@@ -560,7 +560,7 @@
   \end{array}
   \right)
   $ $\Rightarrow$ $f$ est convexe $\Rightarrow$ \\
-  si $\exists$ $x^\star$ tel que ${\nabla f}^T(x^\star) = 0$,
+  si $\exists$ $x^\star$ tel que ${\nabla f}(x^\star) = 0$,
   alors $x^\star$ est un minimum global : 
   \[
   \left\{
@@ -569,7 +569,11 @@
     2x^\star_2 + 8 & = 0
   \end{array}
   \right.
-  \Leftrightarrow x^\star = (2,-4).
+  \Leftrightarrow x^\star = 
+  \begin{pmatrix}
+   2 \\
+   -4 
+  \end{pmatrix}.
   \]
   
 \end{frame}
@@ -624,14 +628,14 @@
   ~
 
   Questions : 
-  terminaison ?
   solution initiale ?
   longueur du pas ?
+  terminaison ?
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{La terminaison dépend de $f$ et de la solution initiale}
+  \frametitle{La convergence dépend de $f$ et de la solution initiale}
 
   \begin{itemize}
     \item $f(x) = 2x\exp{(-x^2)}$
@@ -655,7 +659,7 @@
 
   \begin{block}{De nombreuses méthodes pour déterminer $\lambda^{(k)}$}
   \begin{itemize}
-  \item fixé par l'utilisateur (mais normalisé par la norme du gradient)
+  \item fixé par l'utilisateur (normalisé par la norme du gradient)
   \item $1 / k \|{\nabla f}(x^{(k)})\|$ (le pas diminue au fur et à mesure des itérations)
   \item \emph{Newton}: $\Big( {\nabla^2 f}(x^{(k)}) \Big)^{-1}$
     \begin{itemize}
@@ -1109,7 +1113,7 @@
   \only<2>{
     \begin{block}{Cela change complètement le problème !}
       \begin{itemize}
-      \item (PL) est un problème poynomial,
+      \item (PL) est un problème polynomial,
         l'algorithme du simplexe est même plutôt efficace en pratique, 
       \item (PNE) est un problème NP-difficile
       \end{itemize}
