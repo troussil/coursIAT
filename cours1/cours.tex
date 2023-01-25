@@ -54,7 +54,7 @@
 \author[T. Roussillon]
  {Tristan Roussillon}
 
-\date{2022}
+\date{2023}
 
 \institute{INSA Lyon, TC}
 
@@ -1054,7 +1054,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Problème d'optimisation en nombre entiers}
+  \frametitle{Problème d'optimisation linéaire en nombre entiers}
   
   \[
   \text{(PNE)} \left\{
@@ -1066,10 +1066,10 @@
   \right.
   \]
 
-  \begin{block}{Hypothèses}
+  \begin{block}{Hypothèses habituelles}
     \begin{itemize}
     \item L'ensemble des solutions candidates
-      $X := \{ x \in \R^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$ \\
+      $X := \{ x \in \Z^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$ \\
       est borné et non vide
     \item $f, \{g_i\}_{i \in I}$ sont \emph{linéaires} \\
       (il existe beaucoup d'astuces pour
