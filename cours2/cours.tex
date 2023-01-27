@@ -356,7 +356,7 @@
   ~
   
   \begin{itemize}
-  \item $c_{1,4} = 1$, $c_{2,4} = 6$, $c_{3,2} = 8$, $c_{4,1} = 11$.
+  \item $c_{1,3} = 1$, $c_{2,4} = 6$, $c_{3,2} = 8$, $c_{4,1} = 11$.
   \item coût total : $1 + 6 + 8 + 11 = 26$. Optimal ?
   \end{itemize}
   
@@ -408,6 +408,78 @@
   \item \dots
   \end{itemize}
   
+\end{frame}
+
+% ----------------------------------------------------------------------
+\section{Backtracking}
+% ----------------------------------------------------------------------
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Backtracking}
+
+  Méthode constructive pour résoudre un problème de décision :
+  \begin{itemize}
+  \item on traite les variables du problème dans un certain ordre ;
+  \item pour une affectation possible d'une variable, on teste récursivement si une solution valide peut être construite à partir de cette affectation partielle. Si ce n'est pas possible, on abandonne et on revient sur les affectations qui auraient été faites précédemment (backtracking).
+  \item on répond non si on a tout tenté sans succès, oui si on a trouvé une solution valide. 
+  \end{itemize}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Avertissement}
+
+  On ne résoud pas un problème d'optimisation, mais le problème de \emph{décision}
+  ou de \emph{recherche} associé.
+
+  ~
+
+  Dans le cas d'une fonction objectif discrète, le backtracking peut être
+  utilisé pour voir si on peut faire mieux qu'une première approximation.
+
+  ~
+  
+  Par ex. sur le problème de coloration précédent on a trouvé une solution
+  à 4 couleurs avec l'algorithme glouton. Existe-t-il une coloration à 3 couleurs ?
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Construction d'une 3-coloration par backtracking}
+
+
+  \begin{figure}[htbp]
+    \includegraphics<1>[page=1,width=0.7\textwidth]{ex-graphe-backtracking}%
+    \includegraphics<2>[page=2,width=0.7\textwidth]{ex-graphe-backtracking}%
+    \includegraphics<3>[page=3,width=0.7\textwidth]{ex-graphe-backtracking}%
+    \includegraphics<4>[page=4,width=0.7\textwidth]{ex-graphe-backtracking}%
+    \includegraphics<5>[page=5,width=0.7\textwidth]{ex-graphe-backtracking}%
+    \includegraphics<6>[page=6,width=0.7\textwidth]{ex-graphe-backtracking}%
+    \includegraphics<7>[page=7,width=0.7\textwidth]{ex-graphe-backtracking}%
+    \includegraphics<8>[page=8,width=0.7\textwidth]{ex-graphe-backtracking}%
+    \includegraphics<9>[page=9,width=0.7\textwidth]{ex-graphe-backtracking}%
+    \includegraphics<10>[page=10,width=0.7\textwidth]{ex-graphe-backtracking}%
+  \end{figure}
+  
+  \begin{itemize}
+  \item on traite les noeuds dans un certain ordre ; 
+  \item pour chaque noeud, on teste les couleurs 1, 2 puis 3 ;
+  \item on revient en arrière quand les contraintes sont violées.  
+  \end{itemize}
+
+  ~
+  
+  \alert<3,6,8,9>{backtracking !} \only<10>{ensuite ?}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Algorithme et complexité}
+
 \end{frame}
 
 % ----------------------------------------------------------------------
