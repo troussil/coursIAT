@@ -26,7 +26,7 @@
 \usepackage{tikz}
 
 %alg
-\usepackage[english,linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage[slide,linesnumbered,ruled,vlined]{algorithm2e}
 
 %math
 \usepackage{amssymb}
@@ -238,7 +238,7 @@
 
   ~
   
-  Il est très difficile d'énumérer l'ensemble des colorations. 
+  Il est difficile d'énumérer l'ensemble des colorations. 
   
 \end{frame}
 
@@ -415,18 +415,17 @@
 \begin{frame}
   \frametitle{Algorithme, complexité linéaire}
 
-%% \begin{algorithm}[htbp]
-%%   \caption{Glouton}
-%%   \label{alg:glouton}
-  %% \KwIn{probleme, description du probleme}
-  %% \KwOut{affectation, tableau de valeurs}
-  %% affectation $\leftarrow (0,\dots,0)$ \;
-  %% \tcp{pour toutes les variables, affecter}
-  %% \For{variable $i$}{
-  %%   affectation$[i]$ = valeurPossibleDeMoindreCout(probleme, affectation, i) \;
-  %% }
-  %% \Return affectation
-%% \end{algorithm}
+ \begin{algorithm}[H]
+  \caption{Glouton}
+  \label{alg:glouton}
+  \KwIn{probleme, description du probleme}
+  \KwOut{affectation, tableau de valeurs}
+  \tcp{pour toutes les variables, affecter}
+  \ForEach{variable $i$}{
+    affectation$[i]$ = valeurPossibleMin(probleme, affectation, i) \;
+  }
+  \Return affectation
+ \end{algorithm}
   
 \end{frame}
 
@@ -500,8 +499,68 @@
 \begin{frame}
   \frametitle{Algorithme, complexité exponentielle}
 
-TODO
-  
+  \only<1>{
+    \begin{algorithm}[H]
+      \caption{backtracking(pb, sol, var, val, seuil)}
+      \label{alg:backtracking}
+      \If{estPossible(pb, sol, var, val, seuil)}{
+        sol[var] $\leftarrow$ val \tcp*[l]{affectation}
+        \lIf{estComplet(pb, sol)}{
+          \Return (Vrai, sol)
+        }
+        \Else{
+          varS $\leftarrow$ varSuivante(pb, var) \; 
+          (flag, res) $\leftarrow$ backtracking(pb, sol, varS, val, seuil) \;
+          \lIf{flag}{
+            \Return (flag, res)
+          }
+          \lElse(\tcp*[f]{annuler l'affectation}){
+            sol[var] $\leftarrow \infty$ 
+          }
+        }
+      }
+      \tcp{poursuivre avec les valeurs suivantes \dots}
+    \end{algorithm}
+  }
+  \only<2>{
+    \setcounter{algocf}{1}
+    \begin{algorithm}[H]
+      \caption{backtracking(pb, sol, var, val, seuil)}
+      \label{alg:backtracking}
+      \setcounter{AlgoLine}{8}
+      \tcp{\dots poursuivre avec les valeurs suivantes}
+      valS $\leftarrow$ valSuivante(pb, val) \;
+      \While{estValide(pb, valS)}{
+        (flag, res) $\leftarrow$ backtracking(pb, sol, varS, val, seuil) \;
+        \lIf{flag}{
+          \Return (flag, res)
+        }
+        \lElse(\tcp*[f]{continuer}){
+          valS $\leftarrow$ valSuivante(pb, val)
+        }
+      }
+      \Return (Faux, Rien)
+    \end{algorithm}
+  }
+ 
+ %%  \only<2>{
+ %% \begin{algorithm}[H]
+ %%  \caption{backtracking(pb, sol, var, val, seuil)}
+ %%  \label{alg:backtracking}
+ %%  \KwOut{paire (booleen, affectation)}
+ %%  \tcp{poursuivre avec les valeurs suivantes \dots}
+ %%  valS $\leftarrow$ valSuivante(pb, val) \;
+ %%  \While{estValide(pb, valS)}{
+ %%    (flag, res) $\leftarrow$ backtracking(pb, sol, varS, val, seuil) \;
+ %%    \lIf{flag}{
+ %%      \Return (flag, res)
+ %%    }
+ %%    \lElse(\tcp*[f]{continuer}){
+ %%      valS $\leftarrow$ valSuivante(pb, val) \;
+ %%    }
+ %%  }
+ %%  \Return (Faux, Rien)
+ %% }
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -549,7 +608,7 @@ TODO
 
   ~
   
-  Cette approche est théorisée et nommée ``programmation dynamique'' (pour faire bien)
+  Cette approche a été théorisée et nommée ``programmation dynamique'' (pour faire bien)
   par Richard Bellman dans les années cinquantes. Elle repose sur la simple observation
   qu'un chemin optimal est formé de sous-chemins optimaux.
   %(ce qui est appelé maintenant principe d'optimalité de Bellman). 
