@@ -80,7 +80,7 @@
   \]
 
   \begin{itemize}
-  \item $S$ est un ensemble discret fini de solutions,
+  \item $S$ est un ensemble discret \emph{fini} de solutions,
   \item $f : S \mapsto \R$ est la fonction objectif,
   \item $A : S \mapsto \{\text{vrai},\text{faux}\}$ est le critère d'acceptation d'une solution. 
   \end{itemize}
@@ -259,7 +259,7 @@
 
   ~
   
-  Pour $k > 2$,
+  Pour $k \geq 3$,
   \begin{itemize}
   \item il n'y a pas d'algorithmes connus pour
     résoudre ces problèmes en temps polynomial.
@@ -289,19 +289,19 @@
   $S$ est généralement décrit par \emph{l'affectation} de \emph{valeurs}, parmi un ensemble de valeurs possibles, à chacune des \emph{variables} du problème. $A(S)$ ajoute des \emph{contraintes}.
   \end{block}
   
-  \begin{exampleblock}{Ex. }
+  \begin{block}{Ex. }
     \begin{itemize}
     \item (Aff): variables = individus, valeurs = tâches
     \item (Col): variables = noeuds, valeurs = couleurs
     \end{itemize}
-  \end{exampleblock}
+  \end{block}
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}<beamer>
-  \frametitle{Sommaire}
-  \tableofcontents[sections={2-5}]
+  \frametitle{Sommaire : 4 méthodes de résolution}
+  \tableofcontents[sections={2,3,5,6}]
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -400,7 +400,7 @@
   \begin{itemize}
   \item random: noeuds triés aléatoirement. 
   \item largest first: noeuds triés par ordre de degré non croissant.
-  \item smallest last: L'ordre $v_1,v_2,\dots,v_n$ est tel
+  \item smallest last: l'ordre $v_1,v_2,\dots,v_n$ est tel
     que $v_i$ a le plus petit degré dans le graphe
     ne contenant plus que les sommets $v_1,v_2,\dots,v_i$.
   \item DSATUR: l'ordre est construit en choisissant à chaque étape
@@ -440,8 +440,8 @@
   Méthode constructive pour résoudre un problème de décision :
   \begin{itemize}
   \item on traite les variables du problème dans un certain ordre ;
-  \item pour une l'affectation possible d'une valeur à une variable, on teste récursivement si une solution valide peut être construite à partir de cette affectation. Si ce n'est pas possible, on abandonne et on revient sur les affectations qui auraient été faites pour des variables précédentes (backtracking).
-  \item on répond non si on a tout tenté sans succès, oui si on a trouvé une solution valide. 
+  \item pour l'affectation d'une valeur à une variable, on teste récursivement si une solution acceptable peut être construite à partir de cette affectation. Si ce n'est pas possible, on abandonne et on revient sur les affectations qui auraient été faites pour des variables précédentes (backtracking).
+  \item on répond non si on a tout tenté sans succès, oui si on a trouvé une solution acceptable. 
   \end{itemize}
   
 \end{frame}
@@ -501,16 +501,16 @@
 
   \only<1>{
     \begin{algorithm}[H]
-      \caption{backtracking(pb, sol, var, val, seuil)}
+      \caption{backtracking(pb, sol, var, val)}
       \label{alg:backtracking}
-      \If{estPossible(pb, sol, var, val, seuil)}{
+      \If{estPossible(pb, sol, var, val)}{
         sol[var] $\leftarrow$ val \tcp*[l]{affectation}
         \lIf{estComplet(pb, sol)}{
           \Return (Vrai, sol)
         }
         \Else{
           varS $\leftarrow$ varSuivante(pb, var) \; 
-          (flag, res) $\leftarrow$ backtracking(pb, sol, varS, val, seuil) \;
+          (flag, res) $\leftarrow$ backtracking(pb, sol, varS, val) \;
           \lIf{flag}{
             \Return (flag, res)
           }
@@ -525,13 +525,13 @@
   \only<2>{
     \setcounter{algocf}{1}
     \begin{algorithm}[H]
-      \caption{backtracking(pb, sol, var, val, seuil)}
+      \caption{backtracking(pb, sol, var, val)}
       \label{alg:backtracking}
       \setcounter{AlgoLine}{8}
       \tcp{\dots poursuivre avec les valeurs suivantes}
       valS $\leftarrow$ valSuivante(pb, val) \;
-      \While{estValide(pb, valS)}{
-        (flag, res) $\leftarrow$ backtracking(pb, sol, varS, val, seuil) \;
+      \While{estAcceptable(pb, valS)}{
+        (flag, res) $\leftarrow$ backtracking(pb, sol, var, valS) \;
         \lIf{flag}{
           \Return (flag, res)
         }
@@ -543,24 +543,20 @@
     \end{algorithm}
   }
  
- %%  \only<2>{
- %% \begin{algorithm}[H]
- %%  \caption{backtracking(pb, sol, var, val, seuil)}
- %%  \label{alg:backtracking}
- %%  \KwOut{paire (booleen, affectation)}
- %%  \tcp{poursuivre avec les valeurs suivantes \dots}
- %%  valS $\leftarrow$ valSuivante(pb, val) \;
- %%  \While{estValide(pb, valS)}{
- %%    (flag, res) $\leftarrow$ backtracking(pb, sol, varS, val, seuil) \;
- %%    \lIf{flag}{
- %%      \Return (flag, res)
- %%    }
- %%    \lElse(\tcp*[f]{continuer}){
- %%      valS $\leftarrow$ valSuivante(pb, val) \;
- %%    }
- %%  }
- %%  \Return (Faux, Rien)
- %% }
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Note sur l'implémentation}
+
+  La compléxité en temps exponentielle est une limite intrinsèque de l'algorithme.
+
+  ~
+  
+  Une autre limite est l'empilement des appels récursifs en mémoire.
+  Elle va très vite être atteinte même pour des problèmes de taille raisonnable. 
+  On peut la contourner en réécrivant l'algorithme sous forme itérative. 
+  
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -603,7 +599,7 @@
 \begin{frame}
   \frametitle{Programmation dynamique}
 
-  Il s'agit de décomposer le problème en sous-problèmes, puis résoudre les sous-problèmes,
+  Il s'agit de décomposer le problème en sous-problèmes, puis de résoudre les sous-problèmes,
   des plus petits aux plus grands en stockant les résultats intermédiaires.
 
   ~
@@ -621,21 +617,27 @@
 \begin{frame}
   \frametitle{Retour sur le problème d'affectation}
 
-  Il y a $4$ individus et tâches. Pour $k \leq 4$, 
+  Il y a $4$ individus et $4$ tâches numérotés de $1$ à $4$.
+  
+  On note $l$ la liste des tâches déjà affectées aux $k$
+  premiers individus, c-à-d. $k \in \{0,\dots,4\}$ est
+  la longueur de $l$, et on définit :  
 
   \[
-  (Aff_k) \left\{
+  (Aff_l) \left\{
   \begin{array}{c}
-    \min \ f_k(s) \ \text{tel que :} \\
-    s \in S_k \\
+    \min \ f_l(s) \ \text{tel que :} \\
+    s \in S_l \\
   \end{array}
   \right.
   \]
 
   \begin{itemize}
-  \item $S_k$ est l'ensemble des arrangements de $k$ tâches parmi $4$.  
-  \item $f_k : S_k \mapsto \R$ est le coût de l'affectation
-    de $k$ tâches aux $k$ premiers individus.   
+  \item $S_l$ est l'ensemble des arrangements des $4-k$ tâches
+    non présentes dans $l$ parmi $4$.  
+  \item si $l$ est complète ($k = 4$), on pose $\min_{s \in S_l} f_l(s) := 0$,
+  \item sinon, $f_l : S_l \mapsto \R$ est le coût de l'affectation
+      des $4-k$ tâches non présentes dans $l$ aux $k$ derniers individus.
   \end{itemize}
 
 \end{frame}
@@ -644,34 +646,172 @@
 \begin{frame}
   \frametitle{Formule de récurrence}
 
-  \[ \min_{s \in S_k} f_k(s) = c_k + \min_{s' \in S_{k-1}} f_{k-1}(s'), \]
-
-  où on note $c_k$ le coût minimal d'affectation à l'individu $k$ de
-  l'une des tâches non présentes dans la solution $s$. 
+  Pour $l$ et $|l| = k \in \{0,\dots,3\}$,  
   
+  \[ \min_{s \in S_l} f_l(s) =
+  \min_{t \in \{1,\dots,4\} \setminus l}
+  \big( c_{(k+1),t} + \min_{s' \in S_{l \cup t}} f_{l \cup t}(s') \big), \]
+
+  où $c_{(k+1),t}$ est le coût de l'affectation de la tâche $t$
+  à l'individu $k+1$. 
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Premier niveau de récurrence}
+
+  \only<1>{
+    \begin{center}
+    individu 1 $\leftarrow$ tâche 1
+    \end{center}
+    \[
+    \left(
+    \begin{array}{cccc}
+      \cancel{8}         & \cancel{3}  & \cancel{1}  & \cancel{5} \\
+      \cancel{11}        & 7         & \alert{1} & 6 \\
+      \cancel{7}         & 8         & 6         & \alert{8} \\
+      \cancel{11}        & \alert{6} & 4         & 9 
+    \end{array}
+    \right)
+    \]
+  }
+  \only<2>{
+    \begin{center}
+    \alert<6>{individu 1 $\leftarrow$ tâche 2}
+    \end{center}
+    \[
+    \left(
+    \begin{array}{cccc}
+      \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
+      11             & \cancel{7} & \alert{1}        & 6 \\
+      \alert{7}      & \cancel{8} & 6                & 8 \\
+      11             & \cancel{6} & 4                & \alert{9} 
+    \end{array}
+    \right)
+    \]
+  }
+  \only<3>{
+    \begin{center}
+    individu 1 $\leftarrow$ tâche 3
+    \end{center}
+    \[
+    \left(
+    \begin{array}{cccc}
+      \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
+      11             & 7               & \cancel{1}  & \alert{6} \\
+      \alert{7}      & 8               & \cancel{6}  & 8 \\
+      11             & \alert{6}       & \cancel{4}  & 9 
+    \end{array}
+    \right)
+    \]
+  }
+  \only<4>{
+    \begin{center}
+    individu 1 $\leftarrow$ tâche 4
+    \end{center}
+    \[
+    \left(
+    \begin{array}{cccc}
+      \cancel{8}& \cancel{3} & \cancel{1}  & \cancel{5} \\
+      11             & 7               & \alert{1}        & \cancel{6} \\
+      \alert{7}      & 8               & 6                & \cancel{8} \\
+      11             & \alert{6}       & 4                & \cancel{9} 
+    \end{array}
+    \right)
+    \]
+  }
+  \begin{itemize}
+    \item<1-> $8 + (1 + 8 + 6) = 23$. 
+    \item<2-> $3 + (1 + 7 + 9) = 20$. 
+    \item<3-> $1 + (6 + 7 + 6) = 20$. 
+    \item<4-> $5 + (1 + 7 + 6) = 19$. 
+  \end{itemize}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Algorithme, complexité exponentielle}
+
+  \begin{algorithm}[H]
+    \caption{minProgDyn(pb, sol)}
+    \label{alg:minProgDyn}
+    \If{estReduit(pb, sol)}{
+      \Return (sol, coutSolution(pb, sol))
+    }
+    \Else{
+      sols $\leftarrow$ liste vide\;
+      \ForEach(\tcp*[f]{valeurs pour la 1ère variable}){val}{
+        pb', sol' $\leftarrow$ reductionProbleme(pb, sol) \;
+        solPart, coutPart $\leftarrow$ minProgDyn(pb', sol') \;
+        solTot, coutTot $\leftarrow$ complete(pb, val, solPart, coutPart) \;
+        ajouter (solTot, coutTot) à sols \; 
+      }
+      \Return minCout(sols)
+    }
+  \end{algorithm}
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Complexité de la programmation dynamique}
+
+  En toute généralité, la complexité est exponentielle.
+  Elle l'est par exemple pour le problème d'affectation.
+
+  ~
+  
+  La complexité peut cependant être polynomiale quand le problème
+  implique un ordre ou une hiérarchie naturelle:
+  \begin{itemize}
+  \item problème d'alignement de séquences,
+  \item problème des pyramides de nombres, 
+  \item problème de plus court chemin,
+  \item problème du sac à dos,
+  \item \dots
+  \end{itemize}
+  
+
 \end{frame}
 
 % ----------------------------------------------------------------------
 \section{Branch and bound}
 % ----------------------------------------------------------------------
 
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Branch and Bound}
 
+  Méthode de résolution de problèmes d'optimisation combinatoire
+  introduite par Land et Doig en 1960 et nommée par Little en 1963.
+%  pour le problème du voyageur de commerce. 
+
+  ~
+  
+  Elle consiste
+  \begin{itemize}
+  \item à représenter l'ensemble des solutions acceptables par
+    un arbre et à explorer certaines branches (\emph{branch}/\emph{separation})
+  \item à borner inférieurement la fonction objectif
+    pour toutes les solutions d'une branche (\emph{bound}/\emph{évaluation})
+  \end{itemize}
+
+  $\Rightarrow$ pas besoin d'explorer les branches dont la borne
+  est supérieure à la meilleure solution courante !
+  
+\end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
   \frametitle{Représentation arborescente et principe de séparation}
   
-  \begin{itemize}
-  \item $S \supseteq X$ est un ensemble de vecteurs possibles
-    %$x^T = (x_1,\dots,x_n)$% et la racine d'un arbre. 
-  \item On partitionne $S$ en sous-ensembles $S_{(v)} := \{ (x_1,\dots,x_n) \in S \ | \ x_1 = v \}$ \\
-    %$\{ S_{(v)} \}_{v \in D(x_1)}$ 
-    selon les valeurs prises par $x_1$ 
-    %Ces sous-ensembles sont les fils de $S$ par relation d'inclusion.
-  \item Pareil selon $x_2$ et ainsi de suite.
-    %Chacun d'eux peut être partionné de la même façon selon $x_2$ et ainsi de suite.
-  \end{itemize}
+  Pour une liste $l$ de $k$ valeurs, on note $S_l$ l'ensemble des
+  solutions telles que les $k$ premières variables prennent les $k$
+  premières valeurs de $l$ (et on pose $S := S_{\emptyset}$). 
 
+  ~
+  
   {
     \centering
     \includegraphics<+>[width=0.9\textwidth,page=1]{arbre}
@@ -688,11 +828,11 @@
 
   \begin{itemize}
   \item fonction d'évaluation $e$ : pour tout ensemble $T$ descendant de $S$,
-    on choisit $e$ telle que $e(T) \leq \min_{x \in T} f(x)$
-  \item si on connait une solution $\bar{x} \in S$ et qu'au noeud $T$ on a
-    \[f(\bar{x}) < e(T) \leq \min_{x \in T} f(x) \]
-  \item alors $T$ ne contient aucune solution optimale et ses descendants
-    ne seront pas énumérés
+    on choisit $e$ telle que $e(T) \leq \min_{t \in T} f(t)$
+  \item si on connait une solution $s \in S$ et qu'au noeud $T$ on a
+    \[f(s) \leq e(T) \]
+  \item alors $T$ ne contient aucune solution (strictement) meilleure que $s$
+    et n'est donc pas exploré. 
   \end{itemize}
   
 \end{frame}
@@ -701,14 +841,19 @@
 \begin{frame}
   \frametitle{Séparation-évaluation}
 
-  On résoud (exactement) de nombreux problèmes en combinant ces deux principes
-  (\emph{Branch and Bound}).
+  On résoud de manière exacte de nombreux problèmes en combinant
+  ces deux principes. C'est la méthode la plus courante pour
+  résoudre un problème NP-complet. 
 
-  Il y a d'innombrables variantes selon :
+  ~
+  
+  La mise en oeuvre varie selon :
   \begin{itemize}
-  \item la fonction d'évaluation
-  \item le choix du noeud à explorer (et donc de la valeur à fixer)
-  \item le choix de la variable à partir de laquelle on partitionne le noeud choisi
+  \item la fonction d'évaluation. En l'absence de fonction d'évaluation
+    ou de borne suffisamment haute, la méthode dégénère en recherche exhaustive.
+    % $\rightsquigarrow$
+  \item l'ordre des valeurs à affecter à une variable et l'ordre des variables.
+    Il n'y a pas de bon choix a priori, cela dépend du problème.  
   \end{itemize}
 
   %% Note : on combine souvent ce principe avec la méthode des \emph{coupes intégrales}
@@ -718,57 +863,12 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Exemple d'un problème d'affectation}
-
-  \only<1>{
-  \begin{itemize}
-  \item 4 individus $\{1,2,3,4\}$ et 4 tâches $\{1,2,3,4\}$
-  \item 1 matrice de coût
-    $C := \left(
-    \begin{array}{cccc}
-      8 & 3 & 1 & 5 \\
-      11 & 7 & 1 & 6 \\
-      7 & 8 & 6 & 8 \\
-      11 & 6 & 4 & 9 
-    \end{array}
-    \right)$ \\
-    par ex. affecter l'individu 4 à la tâche 3 coûte $c_{4,3} = 4$ 
-  \item Trouver l'affectation de coût minimal
-  \end{itemize}
-  }
-
-  \only<2>{
-    \begin{itemize}
-    \item On peut noter les inconnues et contraintes $x^T = (x_1,x_2,x_3,x_4)$,
-      telles que $\forall i \in \{ 1,2,3,4\}, \ x_i \in \{ 1,2,3,4\}$ \\
-      ($x_i$ contient le numéro de tâche affectée à l'individu $i$).
-      
-    \item Pour exprimer la fonction objectif, on peut écrire pour tout $i$
-      $x_i := \sum_{j=1}^4 j d_{i,j} = d_{i,1} + 2d_{i,2} + 3d_{i,3} + 4d_{i,4} $ \\
-      ($d_{i,j} = 1$ si la tâche $j$ est affectée à l'individu $i$, $d_{i,j} = 0$ sinon).
-      
-    \item Le problème s'exprime donc comme un (PNE)
-      \[
-      \left\{
-      \begin{array}{c}
-        \text{min} \ \sum_{i,j} c_{i,j}d_{i,j} \ \text{tel que :} \\
-        \forall i \in \{ 1,2,3,4\}, \ x_i \in \{ 1,2,3,4\} \ \text{et} \ x_i = \sum_{j=1}^4 j d_{i,j} 
-      \end{array}
-      \right.
-      \]
-    \end{itemize}
-  }
- 
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Résolution par séparation-évaluation}
+  \frametitle{Résolution du problème d'affectation}
 
   \begin{itemize}
-    \item ensemble des affectations possibles : $S$ ($|S| = 4! = 24$) 
+    \item ensemble des affectations possibles : $S$ 
     \item fonction d'évaluation $e$ : on somme les coûts minimaux des tâches non affectées, aux coûts des tâches déjà affectées
-    \item choix de l'individu selon lequel on sépare : arbitraire %(variable) 
+    \item ordre des individus : arbitraire (dans l'ordre du problème) %(variable) 
     \item choix de la tâche à fixer en priorité : celle qui minimise $e$ %(valeur)
   \end{itemize}
 \end{frame}
@@ -878,34 +978,56 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Résultat}
+  \frametitle{Algorithme, complexité exponentielle}
 
-
-  \[
-  e(S_{(4,3,1,2)}) = 5 + 1 + 7 + 6 = 19
-  \]
+  {\footnotesize%\small
+    
+  \begin{algorithm}[H]
+    \caption{branchAndBound(pb)}
+    \label{alg:brancheAndBound}
+    minSol, minVal $\leftarrow$ glouton(pb) \tcp*[r]{meilleure solution courante}
+    noeudsActifs $\leftarrow$ file vide \;
+    r $\leftarrow$ racine(pb)~;~enfiler (r, evaluation(r)) à noeudsActifs \; 
+    \While{noeudsActifs n'est pas vide}{
+      (noeud, val) $\leftarrow$ extraire élément de noeudsActifs \;
+      \If{estFeuille(noeud)}{
+        \If{val < minVal}{
+          minSol, minVal $\leftarrow$ solutionDecritePar(noeud), val \;
+        }
+      }
+      \Else{
+        enfants = separation(noeud) \tcp*[r]{branch}
+        \ForEach{elem de enfants}{
+          valElem $\leftarrow$ evaluation(elem) \tcp*[r]{bound} 
+          \If{ valElem < minVal }{
+            enfiler (elem, valElem) à noeudsActifs \;
+          }
+        }
+      }
+    }
+    \Return minSol
+  \end{algorithm}
+  }
   
-  \[
-  \left(
-  \begin{array}{cccc}
-    8 & 3 & 1 & \alert{5} \\
-    11 & 7 & \alert{1} & 6 \\
-    \alert{7} & 8 & 6 & 8 \\
-    11 & \alert{6} & 4 & 9 
-  \end{array}
-  \right)
-  \]
-
-  \begin{block}{Minimum global}
-  \begin{itemize}
-    \item individu 1 $\leftarrow$ tâche 4
-    \item individu 2 $\leftarrow$ tâche 3
-    \item individu 3 $\leftarrow$ tâche 1
-    \item individu 4 $\leftarrow$ tâche 2
-  \end{itemize}
-  \end{block}
 \end{frame}
 
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Note sur l'implémentation}
+
+  \begin{itemize}
+  \item structure de données utilisée pour décrire un noeud : \\
+    attention à ne pas recopier les mêmes données du problème.
+  \item structure de données utilisée pour stocker les noeuds actifs :
+    \begin{itemize}
+    \item file (FIFO) : parcours en largeur de l'arbre
+    \item pile (LIFO) : parcours en profondeur de l'arbre \\
+      (recommandé quand on ne sait pas initialiser, ligne 1)
+    \item file à priorité : explorer la branche la plus prometteuse \\
+      (on peut s'arrêter à la première feuille trouvée, ligne 8) 
+    \end{itemize}
+  \end{itemize}
+\end{frame}
 
 % ----------------------------------------------------------------------
 \section{Conclusion}
@@ -913,22 +1035,66 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Méthodes de résolution}
+  \frametitle{Conclusion}
+
+  Problème d'optimisation combinatoire
+  
+  ~
+  
+  \[
+  \text{(P)} \left\{
+  \begin{array}{c}
+    \min \ f(s) \ \text{tel que :} \\
+    s \in S \, \text{et} \, A(s)
+  \end{array}
+  \right.
+  \]
+
+  ~
+  
+  Le nombre de solutions acceptables est fini \dots
+
+  mais peut être gigantesque !
+
+  ~
+  
+  Certains problèmes sont dans P (problème d'affectation),
+  
+  d'autres sont NP-complets (problème de coloration).
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Méthodes de résolution (dans le cas NP-complet)}
 
   \begin{itemize}
-  \item recherche exhaustive (très-très petits problèmes)
-  \item \alert{\emph{Branch and Bound}} (séparation-évaluation)
+  \item recherche exhaustive pour de très-très petits problèmes
+  \item glouton : rapide mais ne donne en général pas le minimum
+  \item (backtraking : test l'existence de solution pour un coût donné)
+  \item programmation dynamique : retrouve le minimum mais peut dégénèrer en
+    une recherche exhaustive selon le problème
+  \item \alert{branch and bound} : retrouve le minimum mais peut dégénérer en
+    une recherche exhaustive si l'évaluation est mauvaise
+  \end{itemize}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Autres méthodes de résolution}
+
+  \begin{itemize}
   \item relaxation continue dans certains cas particuliers
   \item méthode des coupes (intégrales, mixtes)
   \item \emph{Branch and Bound} + coupes $=$ \emph{Branch and cut}
   \item programmation par contraintes
   \item méta-heuristiques : \\
-      glouton, meilleur voisin, tabou, recuit-simulé, algorithme génétique, colonie de fourmis, \dots
+    glouton, tabou, recuit-simulé, algorithme génétique, colonie de fourmis, \dots
+  \item \dots
   \end{itemize}
   
 \end{frame}
-
-
 
 \end{document}
 
