@@ -1,0 +1,283 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\usepackage[english,linesnumbered,ruled,vlined]{algorithm2e}
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+
+\title{Optimisation sans contrainte}
+\author{Tristan Roussillon}
+\date{fév. 2023}
+
+\begin{document}
+
+\maketitle
+
+Dans ce TD est traité le cas particulier de la minimisation, sans contrainte,
+d'une fonction objectif égale à une somme de fonctions. Cette situation est
+très courante dans le contexte de l'apprentissage. L'objectif est de s'entraîner
+à traiter des problèmes d'optimisation et de connaître le lien entre apprentissage
+et optimisation. 
+
+\section{Exemple pédagogique : la moyenne comme le minimum d'une fonction de coût}
+\label{sec:moyenne}
+
+\begin{exercice}
+  \'Etant donné un ensemble de valeurs $\{x_i\}_{i = 1,\dots,m}$ ($m \geq 1$),
+  nous considérons la minimisation de la fonction $f : \R \rightarrow \R$ telle que :
+  \[ f(x) = \sum_{i=1}^m (x-x_i)^2. \] 
+  
+  \begin{enumerate}
+  \item Développez la somme et montrez que nous avons un polynôme du second degré en $x$.
+    A votre avis, est-ce que $f$ est convexe ?
+  \item Calculez les dérivées premières et secondes de $f$.
+  \item \`A partir de quelles parties du cours peut-on en déduire que $f$ est convexe,
+    que la valeur de $x$ telle que $f'(x) = 0$ est un minimum global ?
+  \item Montrer que le minimum global est la moyenne de l'ensemble de valeurs.
+  \end{enumerate}
+\end{exercice}
+
+\begin{solution}
+  \begin{enumerate}
+  \item $f(x) = m x^2 - 2(\sum_ix_i)x + (\sum_ix_i^2)$.
+    Le graphe de $f$ est une parabole, $f$ est donc convexe.  
+  \item $f'(x) = 2m x - 2(\sum_ix_i)$. $f''(x) = 2m \geq 2$. 
+  \item
+    \begin{enumerate}
+    \item Le Théorème de convexité dit que si $f$ est continûment différentiable (deux fois), 
+      la proposition ``$f$ est convexe'' est équivalente à ``$\forall x$, le hessien $\nabla^2f(x)$
+      est une matrice \emph{semi-définie positive}''. Dans notre cas, le hessien $\nabla^2f(x)$
+      est une matrice \emph{semi-définie positive} revient à $f''(x) \geq 0$, ce qui est vrai.
+    \item Le théorème d'optimalité globale dit que si $f$ est convexe et continûment différentiable
+      $\forall x$, $x^\star$ est un minimum global ssi ${\nabla f}^T(x^\star) = 0$.
+      Dans notre cas, la condition est $f'(x^\star) = 0$. 
+    \end{enumerate}
+  \item On résoud $f'(x^\star) = 0 \Leftrightarrow x^\star = \frac{1}{m}\sum_ix_i$.
+  \end{enumerate}  
+\end{solution}
+
+\begin{exercice}  
+  Sur la même fonction, nous considérons maintenant la méthode de la descente de gradient,
+  dont l'équation d'évolution est :
+  \[ x^{(k+1)} = x^{(k)} - \lambda f'(x^{(k)}), \]
+  avec $x^{(0)}$ fixé à $0$ et $\lambda$ un paramètre libre, à choisir. 
+  \begin{enumerate}
+  \item Que se passe-t-il si $\lambda$ est fixé à
+    \begin{enumerate}
+    \item $\frac{1}{m}$ ?
+    \item $\frac{1}{2m}$ ?
+    \item $\frac{1}{4m}$ ?
+    \end{enumerate}
+  \item \`A quelle méthode vue en cours correspond le choix $\frac{1}{2m}$ ?
+  \end{enumerate}
+\end{exercice}
+
+\begin{solution}
+  Pour simplifier, on note : $\frac{1}{m}\sum_ix_i =: \bar{x}$.
+  On réécrit l'équation d'évolution avec le lambda choisi. 
+  \begin{enumerate}
+  \item Avec $\lambda = \frac{1}{m}$,
+    on a $x^{(k+1)} = - x^{(k)} + 2\bar{x}$. Et donc
+    $x^0 = 0, x^1 = 2\bar{x}, x^2 = 0, x^3 = 2\bar{x}, \dots$.
+    Non convergence. 
+  \item Avec $\lambda = \frac{1}{2m}$,
+    on a $x^{(k+1)} = \bar{x}$. Et donc
+    $x^0 = 0, x^1 = \bar{x}$. Arrêt après une itération
+    quelle que soit la valeur précédente $x^{(k)}$.
+    On remarque que $\frac{1}{2m} = \frac{1}{f''(x)}$ :
+    faire un tel choix revient à appliquer la méthode de Newton. 
+  \item Avec $\lambda = \frac{1}{4m}$,
+    on a $x^{(k+1)} = \frac{(x^{(k)} + \bar{x})}{2}$. Et donc
+    $x^0 = 0, x^1 = \frac{1}{2}\bar{x}, x^2 = \frac{3}{4}\bar{x},
+    x^3 = \frac{7}{8}\bar{x}, \dots$.
+    Convergence vers $\bar{x}$. 
+  \end{enumerate}
+\end{solution}
+
+\section{Exemple du perceptron}
+\label{sec:perceptron}
+
+\let\vec\mathbf
+
+Dans cette section, nous adoptons les notations utilisées habituellement
+dans le contexte des réseaux de neurones.
+
+Nous observons des grandeurs réelles représentées par un vecteur $\vec{x} \in \R^d$
+(par ex. l'âge et la pression sanguine), ainsi qu'un état binaire $y \in \R$
+(par ex. être atteint d'une maladie ou non), sur un certain nombre d'unités
+statistiques : $\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$ est l'\emph{ensemble d'apprentissage}.
+Or, on suppose l'existence d'une règle de décision permettant de prédire $y$
+en fonction de $\vec{x}$ de la forme suivante :
+\[
+\hat{y} :=
+\left\{
+\begin{array}{ll}
+  +1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x} + b \geq 0 \\
+  -1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x} + b < 0 \\
+\end{array}
+\right.
+\]
+Le vecteur $\vec{w} \in \R^d$ (de même dimension que $\vec{x}$)
+est appelé \emph{poids} et le scalaire $b$, \emph{biais}.
+
+Le perceptron, qui est l'ancêtre des réseaux de neurones, modélise ce type
+de problème de classification linéaire et est associé à un algorithme qui
+permet de trouver, à partir de l'ensemble d'apprentissage, les paramètres
+$\vec{w},b$ inconnus. 
+
+\begin{exercice}
+  Expliquez comment on peut considérer de manière équivalente
+  les variables $\vec{x}', \vec{w}' \in \R^{d+1}$ avec la règle de décision
+  suivante :
+  \[
+  \hat{y} :=
+  \left\{
+  \begin{array}{ll}
+    +1 & \quad \mathrm{si}\quad \vec{w}'\cdot\vec{x}' \geq 0 \\
+    -1 & \quad \mathrm{si}\quad \vec{w}'\cdot\vec{x}' < 0 \\
+  \end{array}
+  \right.
+  \]
+\end{exercice}
+
+\begin{solution}
+  On définit $\vec{x}' = (x^1, \dots, x^d, 1)$ et
+  $\vec{w}' = (w^1, \dots, w^d, b)$. On a bien
+  $\vec{w}'\cdot\vec{x}' = \vec{w}\cdot\vec{x} + b$,
+  d'où des règles de décision équivalentes. 
+\end{solution}
+
+Par la suite, nous allons continuer à travailler dans $\R^{d+1}$,
+mais en omettant les primes pour plus de clarté. 
+
+\begin{exercice}
+  Expliquez pourquoi on considère que le perceptron se trompe pour le cas $i$
+  de l'ensemble d'apprentissage quand $y_i (\vec{w}\cdot\vec{x}_i) < 0$.
+\end{exercice}
+
+\begin{solution}
+  Si $y_i = 1$, alors la seule possibitilité pour que
+  $y_i (\vec{w}\cdot\vec{x}_i) < 0$, c'est que
+  $\vec{w}\cdot\vec{x}_i < 0$. Dans ce cas, le perceptron prédit
+  $\hat{y}_i = -1$, ce qui est différent de $y_i = 1$ : il s'est trompé.
+
+  Similairement, si $y_i = -1$, alors $\vec{w}\cdot\vec{x}_i > 0$
+  et $\hat{y}_i = 1$, une erreur. 
+\end{solution}
+
+%% \begin{exercice}
+%%   Expliquez pourquoi, quand $d = 2$, $\vec{w}\cdot\vec{x} = 0$
+%%   est une équation de droite dont les coefficients sont donnés
+%%   par $\vec{w}$ et dont les points sont représentés par $\vec{x}$.
+%%   Expliquez pourquoi la règle de décision du perceptron
+%%   sert à classer des points de part et d'autre d'une droite. 
+%% \end{exercice}
+
+%% \begin{solution}
+%%   $\vec{w}\cdot\vec{x} = 0 \Leftrightarrow w^1x^1 + w^2x^2 + w^3 = 0$.
+%%   On reconnait une équation de droite : tous les points $(x^1, x^2)$
+%%   qui vérifient cette équation appartiennent à la droite de coefficients
+%%   $w^1, w^2, w^3$, c-à-d. de pente $-\frac{w^1}{w^2}$ et ordonnée à l'origine
+%%   $-\frac{w^3}{w^2}$.
+
+%%   Les points $\vec{x}$ tels que $\vec{w}\cdot\vec{x} > 0$ et tels que
+%%   $\vec{w}\cdot\vec{x} < 0$ sont de part et d'autre de la droite. 
+%%   La règle de décision prend un point $\vec{x}$ et considère le signe
+%%   de la quantité $\vec{w}\cdot\vec{x}$, c-à-d. localise le point par
+%%   rapport à la droite, pour choisir la valeur de $\hat{y}$: +1 d'un côté,
+%%   -1 de l'autre. 
+%% \end{solution}
+
+\begin{exercice}
+  Soit $E_{\vec{w}} := \{i \ | \ y_i (\vec{w}\cdot\vec{x}_i) < 0\}$,
+  l'ensemble des cas mal classés par le perceptron, 
+  et la fonction objectif suivante :
+  \[
+  Q(\vec{w}) :=
+  \quad
+  \left\{
+  \begin{array}{ll}
+    - \sum_{i \in E_{\vec{w}}} y_i (\vec{w}\cdot\vec{x}_i) & \text{si}\quad E_{\vec{w}} \neq \emptyset \\
+    0 & \text{sinon} \\
+  \end{array}
+  \right.
+  \]
+
+  \begin{enumerate}
+  \item Expliquez pourquoi la ou les valeurs minimales de $Q$
+    sont plus grandes ou égales à 0. 
+  \item Calculez le gradient de $Q$.
+  \item En utilisant le schéma général de la descente de gradient,
+    proposez une règle de mise à jour dans le cas où $E_{\vec{w}} \neq \emptyset$. 
+  \item Comme $Q$ est une somme de fonctions, une alternative à la descente de gradient classique
+  consiste à mettre à jour la valeur de $\vec{w}$ après chaque paire $(\vec{x}_i, y_i)$
+  considérée, c'est ce qu'on appelle la descente de gradient \emph{stochastique}.
+  Cette pratique est souvent choisie quand l'ensemble d'apprentissage est grand.
+  \'Ecrivez l'algorithme d'apprentissage complet mettant en oeuvre cette stratégie. 
+  \end{enumerate}
+\end{exercice}
+
+\begin{solution}
+  \begin{enumerate}
+  \item Si $E_{\vec{w}} = \emptyset$, $Q(\vec{w}) = 0$.
+    Sinon $Q(\vec{w}) = \sum_{i \in E_{\vec{w}}} - \big( y_i (\vec{w}\cdot\vec{x}_i) \big)$,
+    ce qui est par définition de $E_{\vec{w}}$ une somme de termes $> 0$ et donc
+    $Q(\vec{w}) > 0$ dans ce cas. 
+  \item Si $E_{\vec{w}} = \emptyset$, ${\nabla Q}^T(\vec{w}) = \vec{0}$. Sinon,
+    ${\nabla Q}^T(\vec{w}) = -y_i \vec{x}_i$.
+  \item Pour une constante positive $\lambda > 0$, qu'on appelle dans ce
+    contexte \emph{taux d'apprentissage}, la descente de gradient s'exprime
+    comme :
+    \[ \vec{w}^{(k+1)} = \vec{w}^{(k)} + \lambda y_i \vec{x}_i. \]
+  \item Voir l'algorithme ci-après. 
+  \end{enumerate}
+    \begin{algorithm}[htbp]
+    \caption{Algorithme d'apprentissage du perceptron}
+    \KwIn{l'ensemble d'apprentissage $\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$,\\
+      le taux d'apprentissage $\lambda$}
+    \KwOut{poids $\vec{w}$ du perceptron}
+    $\vec{w} \leftarrow \vec{0}$ \;
+    \Repeat{$\forall i, \ y_i(\vec{w}\cdot\vec{x}_i) \geq 0$}{
+      \ForEach{$i = 1,\dots, n$}{
+        \If{$y_i(\vec{w}\cdot\vec{x}_i) < 0$}{
+          $\vec{w} \leftarrow \vec{w} + \lambda y_i\vec{x}_i$ \;
+        }
+      }
+    }(\tcp*[h]{plus d'erreurs})
+    \Return{$\vec{w}$} \;
+  \end{algorithm}
+\end{solution}
+
+
+
+\end{document}
+
+
