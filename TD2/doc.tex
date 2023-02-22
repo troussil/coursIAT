@@ -1,0 +1,265 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+
+\title{Optimisation sous contraintes linéaires}
+\author{Tristan Roussillon}
+\date{6 mars 2023}
+  
+\begin{document}
+
+\maketitle
+
+Ce TD aborde le problème de l'optimisation linéaire, défini,
+pour des fonctions $f$ et $\{g_i\}_{\{1, \dots, m\}}$ linéaires
+\footnote{le terme exact serait \emph{affine}, mais \emph{linéaire}
+  est le terme consacré pour mimer l'anglais, parce que le graphe
+  d'une fonction affine est une ligne droite et parce qu'il
+  existe une transformation simple permettant de passer d'une
+  fonction affine en une fonction linéaire.}
+comme :
+\[
+\text{(PL)} \left\{
+\begin{array}{c}
+  \min_{x} \ f(x) \ \text{tel que :} \\
+  g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
+  x \in  \R^n \\
+\end{array}
+\right.
+\]
+
+(PL) peut
+\begin{itemize}
+\item être \emph{infaisable} s'il n'y aucune solution,
+  c'est-à-dire aucun $x$ ne satisfaisant les contraintes,
+\item \emph{ne pas être borné} si, d'une solution donnée, on peut
+  toujours se déplacer vers une solution qui fait décroitre $f$,
+\item avoir une ou plusieurs solutions optimales, situées
+  sur le bord du polytope convexe décrit par les contraintes,
+\item être résolu par la méthode du \emph{simplexe}
+  (en temps exponentiel au pire cas, mais souvent linéaire en
+  pratique) ou celle \emph{des points intérieurs} (en temps
+  polynomial et dont les implémentations récentes sont encore
+  plus performantes). Il existe une multitude de solveurs ;
+  citons par exemple la bibliothèque python
+  \href{https://docs.scipy.org/doc/}{\texttt{SciPy}}.
+\end{itemize} 
+
+\section{Existence et multiplicité des solutions}
+\label{sec:sol}
+
+\begin{exercice}
+  \label{ex:ex}
+  Considérons les 4 propositions suivantes :
+  \begin{itemize}
+  \item[(a)] Le problème est infaisable,
+  \item[(b)] Le problème est non borné,
+  \end{itemize}
+  et, en notant $X$ l'ensemble des
+  solutions candidates vérifiant les contraintes,
+  \begin{itemize}
+  \item[(c)] La solution optimale se trouve sur un sommet du bord de $X$,
+  \item[(d)] Les solutions optimales se trouvent sur une arête du bord de $X$.
+  \end{itemize}
+  
+  Considérons également les 4 problèmes suivants :
+  %(b) non borné
+  \[
+  \text{(P1)}
+  \left\{
+  \begin{array}{c}
+    \min_{x_1,x_2} \ -x_1 - x_2 - 1 \ \text{tel que :} \\
+    \begin{array}{ll}
+      -x_1 \leq 0 \\
+      -x_2 \leq 0 \\
+    \end{array} 
+  \end{array}
+  \right.
+  \]
+  %(a) infaisable
+  \[
+  \text{(P2)}
+  \left\{
+  \begin{array}{c}
+    \min_{x_1,x_2} \ x_1 \ \text{tel que :} \\
+    \begin{array}{ll}
+      -x_1 \leq 0 \\
+      -x_2 \leq 0 \\
+      x_1 + x_2 + 1 \leq 0 \\
+    \end{array} 
+  \end{array}
+  \right.
+  \]
+  %arete
+  \[
+  \text{(P3)}
+  \left\{
+  \begin{array}{c}
+    \min_{x_1,x_2} \ x_1 \ \text{tel que :} \\
+    \begin{array}{ll}
+      -x_1 \leq 0 \\
+      -x_2 \leq 0 \\
+      x_1 + x_2 - 1 \leq 0 \\
+    \end{array} 
+  \end{array}
+  \right.
+  \]
+  %sommet
+  \[
+  \text{(P4)}
+  \left\{
+  \begin{array}{c}
+    \min_{x_1,x_2} \ -x_1+x_2 \ \text{tel que :} \\
+    \begin{array}{ll}
+      -x_1 \leq 0 \\
+      -x_2 \leq 0 \\
+      x_1 + x_2 - 1 \leq 0 \\
+    \end{array} 
+  \end{array}
+  \right.
+  \]
+
+  Donnez la correspondance entre les 4 propositions et les 4 problèmes
+  à l'aide de représentations graphiques.
+\end{exercice}
+
+\begin{exercice}
+  Nous considérons maintenant plus généralement le problème (PL) défini
+  en introduction. 
+  \begin{enumerate}
+  \item Est-ce que l'hypothèse de qualification des contraintes est vérifiée
+    pour tout $x$ ? Quelle partie du cours permet de répondre à cette question ?
+  \item On suppose maintenant que l'ensemble des solutions candidates vérifiant
+    les contraintes, noté $X$, a un intérieur non vide. Montrez par contradiction et en utilisant les conditions de Kuhn et Tucker qu'une solution optimale de (PL) ne peut appartenir à l'intérieur de $X$.
+    %% qu'il n'existe
+    %% aucun $x \in X \setminus \partial X$\footnote{$\partial X$ désigne le bord
+    %%   de $X$ tandis que $X \setminus \partial X$ désigne son intérieur.}
+    %% tel que les conditions de Kuhn et Tucker soient vérifiées.
+  \end{enumerate}
+\end{exercice}
+
+\begin{solution}
+  \begin{enumerate}
+  \item Oui car la fonction et les contraintes sont linéaires.
+  \item Si $x \in X \setminus \partial X$, par définition aucune contrainte n'est saturée,
+  ce qui implique que tous les coefficients $\lambda_i$ sont nuls. La condition
+  devient ${\nabla f}(x) = 0$, ce qui est faux pour des fonctions linéaires (et non
+  constantes).
+  \end{enumerate}
+\end{solution}
+
+\section{Classification linéaire}
+\label{sec:classif}
+
+\let\vec\mathbf
+
+On suppose donnés des points de $\R^2$, $\{\vec{u}^j \ | \ {j \in J^+ \cup J^-} \}$
+partitionnés en deux sous-ensembles :
+\begin{itemize}
+\item $S^+ := \{ \vec{u}^j, j \in J^+ \}$,
+\item $S^- := \{ \vec{u}^j, j \in J^- \}$.
+\end{itemize}
+On veut déterminer une règle de décision linéaire, dépendant d'un vecteur $\vec{x} \in \R^2$
+et d'un scalaire $z \in \R$, permettant de discriminer au mieux $S^+$ et $S^-$ :
+\begin{equation}
+  \label{eq:regle}
+\forall j \in J^+, \ \vec{x} \cdot \vec{u}^j \geq z
+\quad \text{et} \quad
+\forall j \in J^-, \ \vec{x} \cdot \vec{u}^j \leq z.
+\end{equation}
+
+Pour cela, on considère le problème suivant :
+\[
+\text{(P)}
+\left\{
+\begin{array}{ll}
+  \max_{\vec{x},z^+,z^-} \ (z^+ - z^-) \ \text{tel que} & \\
+  \vec{x} \cdot \vec{u}^j \geq z^+ & \forall j \in J^+ \\ 
+  \vec{x} \cdot \vec{u}^j \leq z^- & \forall j \in J^- \\
+  -1 \leq x_k \leq 1 & \forall k \in \{1, 2\} \\
+  \vec{x} \in \R^2, z^+, z^- \in \R \\
+\end{array}
+\right.
+\]
+
+\begin{exercice}
+
+  \begin{enumerate}
+  \item Vérifiez que (P) est un problème d'optimisation linéaire.
+  \item Expliquez pourquoi, quand on a les solutions $\vec{x}, z^+, z^-$
+    de (P), on obtient la règle de décision linéaire (\ref{eq:regle})
+    en posant $z = \frac{z^+ + z^-}{2}$.  
+  \end{enumerate}
+
+\end{exercice}
+
+Les solveurs ont généralement besoin d'une description du problème
+sous forme matricielle. Il est donc important de savoir construire
+une telle description.
+
+\begin{exercice}
+  Réexprimez le problème (P)
+  sous la forme matricielle suivante :
+  \[
+  \left\{
+  \begin{array}{c}
+    \min_x \ c^T x \ \text{tel que :} \\
+    Ax \leq b \\
+  \end{array}
+  \right. 
+  \]
+  où 
+\begin{itemize}
+\item $x$ est un vecteur réprésentant une solution. S'il y a $n$ inconnues, c'est un vecteur $n \times 1$.
+\item $c$ est un vecteur de même dimension que $x$ et sert à définir la fonction objectif.
+\item $A$ et $b$ servent à décrire $m$ inégalités linéaires : $b$ est un vecteur $m \times 1$,
+  $A$ est une matrice $m \times n$ et le signe $\leq$ s'applique composante par composante et pour
+  toutes les composantes des vecteurs.
+\end{itemize}
+\end{exercice}
+
+Notez que le problème précédent ressemble à celui considéré dans les
+méthodes d'apprentissage connues sous le nom de \emph{Support Vector Machines}
+ou \emph{Séparateurs à Vaste Marge} en français
+\href{https://en.wikipedia.org/wiki/Support-vector_machine}{(SVM)}.
+Ce sont des classifieurs linéaires\footnote{Ils peuvent aussi être adaptés
+au cas où les données ne sont pas parfaitement séparables ou au cas où les données
+sont non-linéairement séparables.} 
+qui ont de meilleurs capacités de généralisation que le perceptron 
+parce qu'ils maximisent la marge de séparation. Tandis que nous avons
+considéré une distance $l_\infty$ pour maximiser la marge de séparation
+dans (P), les SVMs considèrent en général la distance euclidienne $l_2$,
+ce qui aboutit un problème d'optimisation quadratique. 
+
+\end{document}
+
+
