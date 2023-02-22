@@ -1,0 +1,168 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{enumitem}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+\newtheorem{Exemple}{Exemple}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+
+\title{Méthodes d'optimisation combinatoire appliquées au Channel Assignment Problem}
+\author{Tristan Roussillon}
+\date{6 mars 2023}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Définition du problème}
+\label{sec:CAP}
+
+Le problème d'allocation (ou assignation ou attribution) de fréquences consiste
+à répartir un ensemble de fréquences sur les stations de base d'un réseau
+tout en minimisant le nombre de fréquences utilisées. Il est habituellement
+appelé \emph{Channel assignment problem} (CAP) ou encore \emph{minimum span frequency
+  assignment problem} (MSFAP) en anglais, mais possède plusieurs variantes.
+Le but de cette section est de poser une version de ce problème de manière rigoureuse
+\footnote{Vous avez dans ce \href{http://www-sop.inria.fr/members/Frederic.Havet/Cours/channel.pdf}{document}
+  dont nous reprenons plusieurs éléments, une description un peu plus approfondie
+  des aspects de télécommunication mis en jeu.}.
+
+Nous considérons un ensemble de noeuds $V$. Ils représentent des émetteurs.
+Nous avons une fonction $p : V \rightarrow \N$ qui associe à chaque noeud, un nombre
+entier appelé \emph{demande}. C'est le nombre de fréquences distinctes souhaité pour
+un émetteur. Il y a un ordre total sur les fréquences de sorte qu'elles peuvent être
+représentées par un ensemble d'entiers consécutifs $\{1, \dots, t\}$.
+Nous avons de plus une fonction $l : V \times V \rightarrow \N$
+qui associe à chaque paire de noeuds, un nombre entier qu'on peut appelé \emph{poids}
+ou \emph{longueur}. 
+Cette fonction décrit les contraintes d'interférence entre les émetteurs :
+les fréquences utilisées par deux émetteurs $v_1$ et $v_2$ sont contraintes
+d'être distantes de $l(v_1,v_2)$ ou plus afin d'éviter toute interférence.
+Remarquons enfin que $V$ et $l$ définissent implicitement un graphe $G(V,E)$, 
+où $E$ est défini comme l'ensemble des paires de poids non nul
+$\{ (v_1,v_2) \in V \times V \ | \ l(v_1,v_2) > 0 \}$.  
+ 
+Une \emph{solution} est une fonction $\phi : V \rightarrow \mathcal{P}(\{1,\dots,t\})$ telle que
+le nombre d'éléments de $\phi(v)$ est égal à $p(v)$ pour chaque $v \in V$\footnote{La
+  notation $\mathcal{P}$ désigne l'ensemble des parties d'un ensemble. Pour
+  chaque $v \in V$, $\phi(v)$ est donc un sous-ensemble des fréquences $\{1,\dots,t\}$}.
+Une solution est \emph{faisable} si pour toute paire $(v_1,v_2) \in V \times V$,
+tout $f_1 \in \phi(v_1)$ et tout $f_2 \in \phi(v_2)$, on a $|f_1 - f_2| \geq l(v_1,v_2)$.
+L'intervalle (\emph{span}) du problème, noté $\text{span}(V, p, l)$, est le plus petit $t$
+tel qu'il existe une solution faisable.
+\'Etant donnés $V, p, l$, le problème (CAP) consiste à déterminer $\text{span}(V, p, l)$
+ainsi qu'une solution faisable $\phi$.
+
+\begin{Exemple}
+  \label{ex:triangle}
+  $G$ est un cycle de 3 noeuds, qui ont chacun une demande de $1$.
+  Les 3 arêtes sont de poids $3$. Le span est $7$.
+\end{Exemple}
+
+\begin{Exemple}
+  \label{ex:carre}
+  $G$ est un cycle de 4 noeuds, qui ont chacun une demande de $1$.
+  Les 4 arêtes sont de poids $3$. Le span est $4$.
+\end{Exemple}
+
+\begin{Exemple}
+  \label{ex:demande2}
+  $G$ est un cycle de 5 noeuds avec en plus une boucle sur chaque noeud.
+  Chaque noeud a une demande de $2$. Les boucles ont un poids de $2$,
+  tandis que toutes les autres arêtes ont un poids de $1$. Le span est $5$. 
+\end{Exemple}
+
+\begin{exercice}
+  Donnez une solution faisable $\phi$ réalisant le span donné
+  dans les trois exemples précédents. 
+\end{exercice}
+
+\begin{exercice}
+  Expliquez comment on peut transformer tout (CAP) faisant intervenir
+  des demandes supérieures à $1$ en un (CAP) dont la demande est $1$
+  pour chaque noeud. Illustrez avec l'exemple~\ref{ex:demande2}.
+\end{exercice}
+
+Grâce à cette transformation, nous pouvons maintenant considérer sans
+perdre en généralité que la demande est $1$ pour chaque noeud.
+
+\begin{exercice}
+  La coloration de graphe consiste à trouver le plus petit nombre de
+  couleurs permettant d'attribuer une couleur à chacun des noeuds
+  d'un graphe, tout en garantissant que deux noeuds reliés par une
+  arête sont de couleur différente.
+  Expliquez sous quelles conditions (CAP) correspond à un problème
+  de coloration de graphe. 
+\end{exercice}
+
+La coloration de graphe est un problème NP-complet. Or, (CAP) étant
+au moins aussi difficile que la coloration de graphe d'après la
+question précédente, on conclut que (CAP) est aussi un problème
+NP-complet. 
+
+\section{Résolution du problème}
+\label{sec:resolution}
+
+Même si (CAP) est NP-comlet, on peut résoudre certaines instances
+de ce problème. Vous avez par exemple pu résoudre des instances de (CAP)
+proposées dans les exemples \ref{ex:triangle}, \ref{ex:carre} et
+\ref{ex:demande2}. 
+
+\begin{exercice}
+  Regardez et testez l'implémentation de l'algorithme glouton qui
+  vous est fourni sur Moodle. Que pourrait-on améliorer sans changer
+  l'implémentation de la fonction \verb!glouton! ? %ordre
+  Pourquoi nous trouvons un span de 7 pour le problème correspondant
+  à l'exemple~\ref{ex:demande2}, alors que nous savons qu'il est
+  possible d'obtenir 5 ?
+\end{exercice}
+
+\begin{exercice}
+  Complétez l'implémentation de la méthode \emph{Branch and Bound}
+  à partir de l'algorithme donné en cours et en tenant compte des
+  indications suivantes :
+  \begin{itemize}
+  \item ordre des stations : de $0$ à $n-1$, où $n$ est le nombre de stations. 
+  \item séparation : pour une nouvelle station, on teste $m$ fréquences
+    de $1$ à $m$, où $m$ est une borne supérieure sur le span (donné
+    par l'algorithme glouton).
+  \item évaluation : on se contente de la plus grande fréquence de
+    la solution partielle.
+  \item file : à priorité (voir la classe \verb!PriorityQueue! et
+    ses méthodes \verb!enqueue! et \verb!dequeue!). 
+  \end{itemize}
+\end{exercice}
+
+
+
+\end{document}
+
+
