@@ -413,7 +413,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Algorithme, complexité linéaire}
+  \frametitle{Algorithme, complexité polynomiale}
 
  \begin{algorithm}[H]
   \caption{Glouton}
@@ -509,8 +509,9 @@
           \Return (Vrai, sol)
         }
         \Else{
-          varS $\leftarrow$ varSuivante(pb, var) \; 
-          (flag, res) $\leftarrow$ backtracking(pb, sol, varS, val) \;
+          varS $\leftarrow$ varSuivante(pb, var) \;
+          val1 $\leftarrow$ premiereVal(pb, varS) \; 
+          (flag, res) $\leftarrow$ backtracking(pb, sol, varS, val1) \;
           \lIf{flag}{
             \Return (flag, res)
           }
