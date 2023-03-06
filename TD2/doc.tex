@@ -28,7 +28,7 @@
 \newtheorem*{solution}{Solution}
 
 \usepackage{comment}
-\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+%\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
 
 
 \title{Optimisation sous contraintes linéaires}
@@ -159,17 +159,15 @@ comme :
   \item Est-ce que l'hypothèse de qualification des contraintes est vérifiée
     pour tout $x$ ? Quelle partie du cours permet de répondre à cette question ?
   \item On suppose maintenant que l'ensemble des solutions candidates vérifiant
-    les contraintes, noté $X$, a un intérieur non vide. Montrez par contradiction et en utilisant les conditions de Kuhn et Tucker qu'une solution optimale de (PL) ne peut appartenir à l'intérieur de $X$.
-    %% qu'il n'existe
-    %% aucun $x \in X \setminus \partial X$\footnote{$\partial X$ désigne le bord
-    %%   de $X$ tandis que $X \setminus \partial X$ désigne son intérieur.}
-    %% tel que les conditions de Kuhn et Tucker soient vérifiées.
+    les contraintes, noté $X$, a un intérieur non vide. Montrez par contradiction et
+    en utilisant les conditions de Kuhn et Tucker qu'une solution optimale de (PL)
+    ne peut appartenir à l'intérieur de $X$.
   \end{enumerate}
 \end{exercice}
 
 \begin{solution}
   \begin{enumerate}
-  \item Oui car la fonction et les contraintes sont linéaires.
+  \item Oui car la fonction et les contraintes sont linéaires. slide 36, théorème global. 
   \item Si $x \in X \setminus \partial X$, par définition aucune contrainte n'est saturée,
   ce qui implique que tous les coefficients $\lambda_i$ sont nuls. La condition
   devient ${\nabla f}(x) = 0$, ce qui est faux pour des fonctions linéaires (et non
