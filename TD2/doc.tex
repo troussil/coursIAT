@@ -182,11 +182,10 @@ comme :
 
 \let\vec\mathbf
 
-On suppose donnés des points de $\R^2$, $\{\vec{u}^j \ | \ {j \in J^+ \cup J^-} \}$
-partitionnés en deux sous-ensembles :
+On suppose donnés des points du plan partitionnés en deux sous-ensembles :
 \begin{itemize}
-\item $S^+ := \{ \vec{u}^j, j \in J^+ \}$,
-\item $S^- := \{ \vec{u}^j, j \in J^- \}$.
+\item $S^+ := \{ \vec{u}^j \in \R^2, j \in J^+ \}$,
+\item $S^- := \{ \vec{u}^j \in \R^2, j \in J^- \}$.
 \end{itemize}
 On veut déterminer une règle de décision linéaire, dépendant d'un vecteur $\vec{x} \in \R^2$
 et d'un scalaire $z \in \R$, permettant de discriminer au mieux $S^+$ et $S^-$ :
@@ -215,9 +214,9 @@ Pour cela, on considère le problème suivant :
 
   \begin{enumerate}
   \item Vérifiez que (P) est un problème d'optimisation linéaire.
-  \item Expliquez pourquoi, quand on a les solutions $\vec{x}, z^+, z^-$
-    de (P), on obtient la règle de décision linéaire (\ref{eq:regle})
-    en posant $z = \frac{z^+ + z^-}{2}$.  
+  \item Expliquez pourquoi, quand on a des solutions $\vec{x}, z^+, z^-$
+    de (P) telles que $z^+ \geq z^-$, on obtient la règle de décision
+    linéaire (\ref{eq:regle}) en posant $z = \frac{z^+ + z^-}{2}$.  
   \end{enumerate}
 
 \end{exercice}
