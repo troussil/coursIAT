@@ -156,7 +156,7 @@
   \begin{itemize}
   \item $S$ est l'ensemble des permutations de $(1,2,3,4)$. 
   \item $f : S \mapsto \R$ est définie telle que, $\forall s \in S$, \\
-    $f(s) = \sum_{i=1}^4 c_{k,t_k}$, où $s = (t_1,t_2,t_3,t_4)$.  
+    $f(s) = \sum_{k=1}^4 c_{k,t_k}$, où $s = (t_1,t_2,t_3,t_4)$.  
   \end{itemize}
 
   ~
@@ -530,14 +530,14 @@
       \label{alg:backtracking}
       \setcounter{AlgoLine}{8}
       \tcp{\dots poursuivre avec les valeurs suivantes}
-      valS $\leftarrow$ valSuivante(pb, val) \;
+      valS $\leftarrow$ valSuivante(pb, var, val) \;
       \While{estAcceptable(pb, valS)}{
         (flag, res) $\leftarrow$ backtracking(pb, sol, var, valS) \;
         \lIf{flag}{
           \Return (flag, res)
         }
         \lElse(\tcp*[f]{continuer}){
-          valS $\leftarrow$ valSuivante(pb, val)
+          valS $\leftarrow$ valSuivante(pb, var, val)
         }
       }
       \Return (Faux, Rien)
@@ -590,6 +590,13 @@
   
   }
   
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}<beamer>
+  \frametitle{Sommaire : 4 méthodes de résolution}
+  \tableofcontents[sections={2,3},sectionstyle=shaded/shaded]
+  \tableofcontents[sections={5,6}]
 \end{frame}
 
 % ----------------------------------------------------------------------
