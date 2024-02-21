@@ -81,8 +81,9 @@
 
   \begin{itemize}
   \item $S$ est un ensemble discret \emph{fini} de solutions,
+  \item une solution $s$ est \emph{l'affectation} d'une \emph{valeur}, appartenant à un domaine de définition, à chacune des \emph{variables} du problème. 
   \item $f : S \mapsto \R$ est la fonction objectif,
-  \item $A : S \mapsto \{\text{vrai},\text{faux}\}$ est le critère d'acceptation d'une solution. 
+  \item $A : S \mapsto \{\text{vrai},\text{faux}\}$ est le critère d'acceptation d'une solution ; il résume des \emph{contraintes}. 
   \end{itemize}
 \end{frame}
 
@@ -90,7 +91,8 @@
 \begin{frame}
   \frametitle{Ensemble des solutions acceptables}
 
-  L'ensemble des solutions acceptables n'est généralement pas décrit par une liste exhaustive, car
+  L'ensemble des solutions acceptables $\{ s \in S \mid A(s) \}$
+  n'est généralement pas décrit par une liste exhaustive, car
 
   \begin{itemize}
   \item il peut être difficile ou long de décider si une solution est acceptable ou non,
@@ -120,7 +122,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Ex. 1: problème d'affectation}
+  \frametitle{Ex. 1: un problème d'affectation}
 
   \begin{itemize}
   \item 4 individus $\{1,2,3,4\}$ et 4 tâches $\{1,2,3,4\}$
@@ -142,7 +144,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Ex. 1: problème d'affectation}
+  \frametitle{Ex. 1: un problème d'affectation}
 
   \[
   (Aff) \left\{
@@ -154,14 +156,15 @@
   \]
 
   \begin{itemize}
+  \item variables = individus, valeurs = tâches
   \item $S$ est l'ensemble des permutations de $(1,2,3,4)$. 
   \item $f : S \mapsto \R$ est définie telle que, $\forall s \in S$, \\
-    $f(s) = \sum_{k=1}^4 c_{k,t_k}$, où $s = (t_1,t_2,t_3,t_4)$.  
+    $f(s) = \sum_{k=1}^4 c_{k,s(k)}$.  
   \end{itemize}
 
   ~
   
-  C'est un problème facile car
+  Ici, c'est un problème facile car
   \begin{itemize}
   \item toutes les solutions sont acceptables,
   \item il n'y a que $4! = 24$ solutions possibles. 
@@ -171,7 +174,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Ex. 1: problème d'affectation}
+  \frametitle{Complexité des problèmes d'affectation}
 
   S'il y a $n$ individus et $n$ tâches,
   il y a $n!$ solutions possibles. 
@@ -195,7 +198,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Ex. 2: coloration de graphe}
+  \frametitle{Ex. 2: un problème de coloration de graphe}
 
   \begin{figure}[htbp]
     \includegraphics<1>[page=1,width=0.7\textwidth]{ex-graphe}%
@@ -204,7 +207,7 @@
 
   
   \begin{itemize}
-  \item Soit le graphe ci-dessus (graphe de Moser). 
+  \item Soit le graphe ci-dessus. 
   \item Trouver sa coloration avec le plus petit nombre de couleurs. 
   \end{itemize}
   
@@ -212,7 +215,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Ex. 2: coloration de graphe}
+  \frametitle{Ex. 2: un problème de coloration de graphe}
   
   \[
   (Col) \left\{
@@ -224,21 +227,23 @@
   \]
 
   \begin{itemize}
-  \item $S$ est l'ensemble des associations noeuds/couleurs, 
-  \item $\forall s \in S$, $A(s)$ si pour toute arête,
-    les couleurs, selon $s$, des noeuds reliés par l'arête sont différentes, 
+  \item graphe $G = (V, E)$, 
+  \item variables = $V$ (noeuds), valeurs = couleurs dans $\mathbb{N}$,
+  \item $S$ est l'ensemble des fonctions $s : V \mapsto \mathbb{N}$, 
+  \item $\forall s \in S$, $A(s)$ si, $\forall (v_1,v_2) \in E$,
+    $s(v_1) \neq s(v_2)$,  
   \item $f : S \mapsto \R$ est définie telle que, $\forall s \in S$, \\
-    $f(s)$ est le nombre de couleurs présentes dans $s$.  
+    $f(s) = \max{( \{ s(v) \mid v \in V \} )}$.   
   \end{itemize}
 
   ~
 
-  Une \emph{coloration} $s$ est une association noeuds/couleurs telle que $A(s)$.
+  Note 1: on appelle \emph{coloration}, une solution $s$ telle que $A(s)$.
   %(elle est acceptable).
 
   ~
   
-  Il est difficile d'énumérer l'ensemble des colorations. 
+  Note 2: Il est difficile d'énumérer l'ensemble des colorations. 
   
 \end{frame}
 
@@ -248,14 +253,14 @@
 
 
   Il y a trois problèmes associés :
-  \begin{itemize}
+  \begin{enumerate}
     \item décision:
       existe-t-il une coloration en $k$ couleurs ?
     \item recherche:
       exhiber une telle coloration.
     \item optimisation:
       trouver la coloration avec le plus petit $k$. %qui minimise le nombre de couleurs.
-  \end{itemize}
+  \end{enumerate}
 
   ~
   
@@ -272,31 +277,6 @@
   \end{itemize}
 \end{frame}
 
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Description des solutions}
-
-  \[
-  \text{(P)} \left\{
-  \begin{array}{c}
-    \min \ f(s) \ \text{tel que :} \\
-    s \in S \, \text{et} \, A(s)
-  \end{array}
-  \right.
-  \]
-
-  \begin{block}{~}
-  $S$ est généralement décrit par \emph{l'affectation} de \emph{valeurs}, parmi un ensemble de valeurs possibles, à chacune des \emph{variables} du problème. $A(S)$ ajoute des \emph{contraintes}.
-  \end{block}
-  
-  \begin{block}{Ex. }
-    \begin{itemize}
-    \item (Aff): variables = individus, valeurs = tâches
-    \item (Col): variables = noeuds, valeurs = couleurs
-    \end{itemize}
-  \end{block}
-  
-\end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}<beamer>
