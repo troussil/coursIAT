@@ -251,12 +251,12 @@ mais en omettant les primes pour plus de clarté.
     Sinon $Q(\vec{w}) = \sum_{i \in E_{\vec{w}}} - \big( y_i (\vec{w}\cdot\vec{x}_i) \big)$,
     ce qui est par définition de $E_{\vec{w}}$ une somme de termes $> 0$ et donc
     $Q(\vec{w}) > 0$ dans ce cas. 
-  \item Si $E_{\vec{w}} = \emptyset$, ${\nabla Q}^T(\vec{w}) = \vec{0}$. Sinon,
-    ${\nabla Q}^T(\vec{w}) = -y_i \vec{x}_i$.
+  \item Si $E_{\vec{w}} = \emptyset$, ${\nabla Q}(\vec{w}) = \vec{0}$. Sinon,
+    ${\nabla Q}(\vec{w}) = -y_i \vec{x}_i$.
   \item Pour une constante positive $\lambda > 0$, qu'on appelle dans ce
     contexte \emph{taux d'apprentissage}, la descente de gradient s'exprime
     comme :
-    \[ \vec{w}^{(k+1)} = \vec{w}^{(k)} + \lambda y_i \vec{x}_i. \]
+    \[ \vec{w}^{(k+1)} = \vec{w}^{(k)} + \lambda \big( \sum_{i \in E_{\vec{w}}} y_i \vec{x}_i \big). \]
   \item Voir l'algorithme ci-après. 
   \end{enumerate}
     \begin{algorithm}[htbp]
