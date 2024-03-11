@@ -86,22 +86,22 @@ mais l'algorithme principal est précisé ici.
     \caption{branchAndBound(C)}
     \label{alg:bb}
     minNoeud, minVal $\leftarrow$ meilleure solution courante et son évaluation \;
-    r $\leftarrow$ racine() \;
-    noeudsActifs $\leftarrow$ file vide \;
+    r $\leftarrow$ racine de l'arbre \;
+    noeudsActifs $\leftarrow$ pile vide \;
     ajouter (r, evaluation(r)) à noeudsActifs \; 
     \While{noeudsActifs n'est pas vide}{
       (noeud, val) $\leftarrow$ extraire élément de noeudsActifs \;
-      \If{estFeuille(noeud)}{
-        \If{val < minVal}{
+      \If{val < minVal}{
+        \If{estFeuille(noeud)}{
           minNoeud, minVal $\leftarrow$ noeud, val \;
         }
-      }
-      \Else{
-        enfants = separation(noeud) \tcp*[r]{branch}
-        \ForEach{elem de enfants}{
-          valElem $\leftarrow$ evaluation(elem, C) \tcp*[r]{bound} 
-          \If{ valElem < minVal }{
-            ajouter (elem, valElem) à noeudsActifs \;
+        \Else{
+          enfants = separation(noeud) \tcp*[r]{branch}
+          \ForEach{elem de enfants}{
+            valElem $\leftarrow$ evaluation(elem, C) \tcp*[r]{bound} 
+            \If{ valElem < minVal }{
+              ajouter (elem, valElem) à noeudsActifs \;
+            }
           }
         }
       }
@@ -121,16 +121,16 @@ besoin d'autres champs comme le nombre total d'individus (et de tâches) $n$.
 
 \subsection{Les fonctions auxiliaires (45 minutes max)}
 
-L'algorithme appelle plusieurs fonctions\footnote{Je les écris sous la forme de fonctions, mais cela peut être des méthodes de l'objet représentant un noeud de l'arbre.} auxiliaires. Compte-tenu de ce qui a été dit plus haut, \verb+racine+, \verb+estFeuille+ sont assez évidentes. Les deux suivantes méritent des précisions :
+L'algorithme appelle plusieurs fonctions\footnote{Je les écris sous la forme de fonctions, mais cela peut être des méthodes de l'objet représentant un noeud de l'arbre.} auxiliaires. Compte-tenu de ce qui a été dit plus haut, il est assez facile de créer la racine de l'arbre et de tester si un noeud donné est une feuille ou non. Les deux fonctions suivantes méritent des précisions :
 \begin{itemize}
 \item \verb+separation(noeud)+ retourne la liste des enfants du noeud donné. Ces enfants précisent la solution en ajoutant, à la solution partielle décrite par \verb+noeud+, l'affectation d'une tâche à un individu supplémentaire. Il faut donc être capable de parcourir toutes les tâches non encore affectées, pour, dans chaque enfant, en affecter une à un individu supplémentaire. 
-\item \verb+evaluation(noeud, matrice)+ retourne une valeur qui est plus petite que le coût total de toutes les solutions qu'on peut obtenir à partir de la solution partielle décrite par \verb+noeud+. C'est la somme de deux termes. D'une part, la somme des coûts de toutes les tâches déjà affectées à un individu. D'autre part, la somme, pour toutes les tâches $j$ non encore affectées, des minima obtenus en trouvant l'individu $i$ qui minimise \verb+C[i][j]+. Notez que dans le cas d'une feuille, c'est le coût total des affectations qui est retourné.   
+\item \verb+evaluation(noeud, matrice)+ retourne une valeur qui est plus petite que le coût total de toutes les solutions qu'on peut obtenir à partir de la solution partielle décrite par \verb+noeud+. C'est la somme de deux termes. D'une part, la somme des coûts de toutes les tâches déjà affectées à un individu. D'autre part, la somme, pour toutes les tâches $j$ non encore affectées, des minima obtenus en trouvant l'individu $i$, parmi les individus qui n'ont pas encore de tâches, qui minimise \verb+C[i][j]+. Notez que dans le cas d'une feuille, c'est le coût total des affectations qui est retourné. Enfin, si vous n'avez pas compris comment calculer le deuxième terme, vous pouvez le mettre à zéro -- vous allez parcourir beaucoup de noeuds, parce que votre fonction d'évaluation ne sera pas précise, mais vous pourrez avancer.    
 \end{itemize}
 
 \subsection{La fonction principale (45 minutes max)}
 
 La fonction principale ne fait que traduire l'algorithme donné plus haut.
-La file des noeuds actifs peut être implémentée par une simple liste.
+La pile des noeuds actifs peut être implémentée par une simple liste.
 Pour l'initialisation de la meilleure solution courante en ligne 1,
 une possibilité est de prendre l'identité,
 c'est-à-dire affecter la tâche $i$ à l'individu $i$
@@ -150,7 +150,7 @@ Voyez comment se déroule l'exécution pour la matrice de coût donné dans le c
 ou d'autres matrices de votre choix.
 
 Si vous avez fini, vous pouvez aussi tester l'impact du choix de la structure de données utilisée
-pour stocker les noeuds actifs : file, pile, file à priorité.   
+pour stocker les noeuds actifs : pile, file, file à priorité.   
 
 \end{document}
 
