@@ -1,0 +1,157 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{enumitem}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+\newtheorem{Exemple}{Exemple}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+%alg
+\usepackage[slide,linesnumbered,ruled,vlined]{algorithm2e}
+
+
+\title{Méthode Branch and Bound appliquée au problème d'affectation}
+\author{Tristan Roussillon}
+\date{8 mars 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Le problème et sa modélisation}
+
+Le problème d'affectation a déjà été vu en cours. C'est un problème
+d'optimisation combinatoire qu'on sait résoudre en temps polynomial.
+Il a été choisi comme exemple pédagogique car il est facile à comprendre :
+étant donnés $n$ individus et $n$ tâches numérotés de $0$ à $n-1$,
+ainsi qu'une matrice de coût stockant pour chaque
+couple $(i,j)$ le coût de l'affectation de la tâche $j$ à l'individu $i$,
+il s'agit d'affecter chaque tâche à un individu distinct de façon à minimiser
+le coût total des affectations.
+
+Il est aussi facile de le modéliser. 
+La matrice de coût \verb+C+ peut être représentée par une matrice,
+un tableau à deux dimensions, une liste de liste selon le langage choisi,
+pourvu que vous puissiez accéder facilement au coût d'une affectation,
+par exemple en écrivant \verb+C[i][j]+. Une \emph{solution}, c'est-à-dire
+l'affectation de toutes les tâches, ou une \emph{solution partielle},
+c'est-à-dire l'affectation de certaines tâches, mais pas toutes, peut
+être représentée de différentes manières : 
+\begin{itemize}
+\item par un tableau \verb+T+ de taille $n$, où le numéro de la tâche
+  affectée au $i$-ème individu est donné par \verb+T[i]+ et avec la
+  convention que \verb+T[i]+ contient une valeur spéciale qui ne se trouve
+  pas entre $0$ et $n-1$ si le $i$-ème individu n'a pas encore de tâche.
+\item par une liste de taille $m$, $0 \leq m \leq n$, contenant les tâches
+  déjà affectées au $m$ premiers individus. 
+\end{itemize}
+
+\section{Implémentation de l'algorithme}
+
+L'objectif du TD est d'implémenter la méthode \emph{Branch and Bound}
+pour résoudre un problème d'affectation. 
+
+\subsection{Rappel de la méthode}
+
+La méthode \emph{Branch and Bound} a déjà été présentée en cours,
+mais l'algorithme principal est précisé ici. 
+
+  \begin{algorithm}[H]
+    \caption{branchAndBound(C)}
+    \label{alg:bb}
+    minNoeud, minVal $\leftarrow$ meilleure solution courante et son évaluation \;
+    r $\leftarrow$ racine() \;
+    noeudsActifs $\leftarrow$ file vide \;
+    ajouter (r, evaluation(r)) à noeudsActifs \; 
+    \While{noeudsActifs n'est pas vide}{
+      (noeud, val) $\leftarrow$ extraire élément de noeudsActifs \;
+      \If{estFeuille(noeud)}{
+        \If{val < minVal}{
+          minNoeud, minVal $\leftarrow$ noeud, val \;
+        }
+      }
+      \Else{
+        enfants = separation(noeud) \tcp*[r]{branch}
+        \ForEach{elem de enfants}{
+          valElem $\leftarrow$ evaluation(elem, C) \tcp*[r]{bound} 
+          \If{ valElem < minVal }{
+            ajouter (elem, valElem) à noeudsActifs \;
+          }
+        }
+      }
+    }
+    \Return minNoeud, minVal
+  \end{algorithm}
+
+\subsection{Structure de données}
+
+L'algorithme est basé sur un arbre des solutions partielles. La racine
+correspond à la solution partielle particulière dans laquelle aucune tâche
+n'a été encore affectée. Une feuille correspond à une solution complète
+dans laquelle toutes les tâches ont été affectées. 
+Vous pouvez représenter un noeud de l'arbre par un objet qui contient
+au moins un champs représentant une solution partielle. Vous aurez certainement
+besoin d'autres champs comme le nombre total d'individus (et de tâches) $n$. 
+
+\subsection{Les fonctions auxiliaires (45 minutes max)}
+
+L'algorithme appelle plusieurs fonctions\footnote{Je les écris sous la forme de fonctions, mais cela peut être des méthodes de l'objet représentant un noeud de l'arbre.} auxiliaires. Compte-tenu de ce qui a été dit plus haut, \verb+racine+, \verb+estFeuille+ sont assez évidentes. Les deux suivantes méritent des précisions :
+\begin{itemize}
+\item \verb+separation(noeud)+ retourne la liste des enfants du noeud donné. Ces enfants précisent la solution en ajoutant, à la solution partielle décrite par \verb+noeud+, l'affectation d'une tâche à un individu supplémentaire. Il faut donc être capable de parcourir toutes les tâches non encore affectées, pour, dans chaque enfant, en affecter une à un individu supplémentaire. 
+\item \verb+evaluation(noeud, matrice)+ retourne une valeur qui est plus petite que le coût total de toutes les solutions qu'on peut obtenir à partir de la solution partielle décrite par \verb+noeud+. C'est la somme de deux termes. D'une part, la somme des coûts de toutes les tâches déjà affectées à un individu. D'autre part, la somme, pour toutes les tâches $j$ non encore affectées, des minima obtenus en trouvant l'individu $i$ qui minimise \verb+C[i][j]+. Notez que dans le cas d'une feuille, c'est le coût total des affectations qui est retourné.   
+\end{itemize}
+
+\subsection{La fonction principale (45 minutes max)}
+
+La fonction principale ne fait que traduire l'algorithme donné plus haut.
+La file des noeuds actifs peut être implémentée par une simple liste.
+Pour l'initialisation de la meilleure solution courante en ligne 1,
+une possibilité est de prendre l'identité,
+c'est-à-dire affecter la tâche $i$ à l'individu $i$
+pour tout $i=0,\dots,n-1$. 
+
+\subsection{Exécution}
+
+Voyez comment se déroule l'exécution pour la matrice de coût donné dans le cours
+    \[ C := \left(
+    \begin{array}{cccc}
+      8 & 3 & 1 & 5 \\
+      11 & 7 & 1 & 6 \\
+      7 & 8 & 6 & 8 \\
+      11 & 6 & 4 & 9 
+    \end{array}
+    \right) \]
+ou d'autres matrices de votre choix.
+
+Si vous avez fini, vous pouvez aussi tester l'impact du choix de la structure de données utilisée
+pour stocker les noeuds actifs : file, pile, file à priorité.   
+
+\end{document}
+
+
