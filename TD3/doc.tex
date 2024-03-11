@@ -96,7 +96,7 @@ mais l'algorithme principal est précisé ici.
           minNoeud, minVal $\leftarrow$ noeud, val \;
         }
         \Else{
-          enfants = separation(noeud) \tcp*[r]{branch}
+          enfants $\leftarrow$ separation(noeud) \tcp*[r]{branch}
           \ForEach{elem de enfants}{
             valElem $\leftarrow$ evaluation(elem, C) \tcp*[r]{bound} 
             \If{ valElem < minVal }{
