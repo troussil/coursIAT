@@ -28,12 +28,12 @@
 \newtheorem*{solution}{Solution}
 
 \usepackage{comment}
-%\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
 
 
 \title{Optimisation sous contraintes linéaires}
 \author{Tristan Roussillon}
-\date{6 mars 2023}
+\date{4 mars 2024}
   
 \begin{document}
 
@@ -158,8 +158,8 @@ comme :
   \begin{enumerate}
   \item Est-ce que l'hypothèse de qualification des contraintes est vérifiée
     pour tout $x$ ? Quelle partie du cours permet de répondre à cette question ?
-  \item On suppose maintenant que l'ensemble des solutions candidates vérifiant
-    les contraintes, noté $X$, a un intérieur non vide. Montrez par contradiction et
+  \item On note $X$ l'ensemble des solutions candidates vérifiant
+    les contraintes et on suppose que $f$ n'est pas constante. Montrez par contradiction et
     en utilisant les conditions de Kuhn et Tucker qu'une solution optimale de (PL)
     ne peut appartenir à l'intérieur de $X$.
   \end{enumerate}
@@ -170,8 +170,7 @@ comme :
   \item Oui car la fonction et les contraintes sont linéaires. slide 36, théorème global. 
   \item Si $x \in X \setminus \partial X$, par définition aucune contrainte n'est saturée,
   ce qui implique que tous les coefficients $\lambda_i$ sont nuls. La condition
-  devient ${\nabla f}(x) = 0$, ce qui est faux pour des fonctions linéaires (et non
-  constantes).
+  devient ${\nabla f}(x) = 0$, ce qui est faux pour $f$ linéaire (et non constante).
   \end{enumerate}
 \end{solution}
 
@@ -180,18 +179,19 @@ comme :
 
 \let\vec\mathbf
 
-On suppose donnés des points du plan partitionnés en deux sous-ensembles :
+On suppose donnés des points du plan partitionnés en deux sous-ensembles de taille $m_1$ et $m_2$ :
 \begin{itemize}
-\item $S^+ := \{ \vec{u}^j \in \R^2, j \in J^+ \}$,
-\item $S^- := \{ \vec{u}^j \in \R^2, j \in J^- \}$.
+\item $S := \{ \vec{s}_i \}_{i=1,\dots,m_1}$, où $\forall i \in \{1,\dots,m_1\}, \vec{s}_i \in \R^2$, 
+\item $T := \{ \vec{t}_j \}_{j=1,\dots,m_2}$, où $\forall j \in \{1,\dots,m_2\}, \vec{t}_j \in \R^2$.
 \end{itemize}
+
 On veut déterminer une règle de décision linéaire, dépendant d'un vecteur $\vec{x} \in \R^2$
-et d'un scalaire $z \in \R$, permettant de discriminer au mieux $S^+$ et $S^-$ :
+et d'un scalaire $z \in \R$, permettant de discriminer au mieux $S$ et $T$ :
 \begin{equation}
   \label{eq:regle}
-\forall j \in J^+, \ \vec{x} \cdot \vec{u}^j \geq z
+\forall i \in \{1,\dots,m_1\}, \ \vec{x} \cdot \vec{s}_i \geq z
 \quad \text{et} \quad
-\forall j \in J^-, \ \vec{x} \cdot \vec{u}^j \leq z.
+\forall j \in \{1, \dots, m_2\}, \ \vec{x} \cdot \vec{t}_j \leq z.
 \end{equation}
 
 Pour cela, on considère le problème suivant :
@@ -200,8 +200,8 @@ Pour cela, on considère le problème suivant :
 \left\{
 \begin{array}{ll}
   \max_{\vec{x},z^+,z^-} \ (z^+ - z^-) \ \text{tel que} & \\
-  \vec{x} \cdot \vec{u}^j \geq z^+ & \forall j \in J^+ \\ 
-  \vec{x} \cdot \vec{u}^j \leq z^- & \forall j \in J^- \\
+  \vec{x} \cdot \vec{s}_i \geq z^+ & \forall i \in \{1,\dots,m_1\} \\ 
+  \vec{x} \cdot \vec{t}_j \leq z^- & \forall j \in \{1,\dots,m_2\} \\
   -1 \leq x_k \leq 1 & \forall k \in \{1, 2\} \\
   \vec{x} \in \R^2, z^+, z^- \in \R \\
 \end{array}
@@ -244,6 +244,71 @@ une telle description.
 \end{itemize}
 \end{exercice}
 
+
+%% On suppose donnés des points du plan partitionnés en deux sous-ensembles :
+%% \begin{itemize}
+%% \item $S^+ := \{ \vec{u}_j \in \R^2, j \in J^+ \}$,
+%% \item $S^- := \{ \vec{u}_j \in \R^2, j \in J^- \}$.
+%% \end{itemize}
+%% On veut déterminer une règle de décision linéaire, dépendant d'un vecteur $\vec{x} \in \R^2$
+%% et d'un scalaire $z \in \R$, permettant de discriminer au mieux $S^+$ et $S^-$ :
+%% \begin{equation}
+%%   \label{eq:regle}
+%% \forall j \in J^+, \ \vec{x} \cdot \vec{u}_j \geq z
+%% \quad \text{et} \quad
+%% \forall j \in J^-, \ \vec{x} \cdot \vec{u}_j \leq z.
+%% \end{equation}
+
+%% Pour cela, on considère le problème suivant :
+%% \[
+%% \text{(P)}
+%% \left\{
+%% \begin{array}{ll}
+%%   \max_{\vec{x},z^+,z^-} \ (z^+ - z^-) \ \text{tel que} & \\
+%%   \vec{x} \cdot \vec{u}_j \geq z^+ & \forall j \in J^+ \\ 
+%%   \vec{x} \cdot \vec{u}_j \leq z^- & \forall j \in J^- \\
+%%   -1 \leq x_k \leq 1 & \forall k \in \{1, 2\} \\
+%%   \vec{x} \in \R^2, z^+, z^- \in \R \\
+%% \end{array}
+%% \right.
+%% \]
+
+%% \begin{exercice}
+
+%%   \begin{enumerate}
+%%   \item Vérifiez que (P) est un problème d'optimisation linéaire.
+%%   \item Expliquez pourquoi, quand on a des solutions $\vec{x}, z^+, z^-$
+%%     de (P) telles que $z^+ \geq z^-$, on obtient la règle de décision
+%%     linéaire (\ref{eq:regle}) en posant $z = \frac{z^+ + z^-}{2}$.  
+%%   \end{enumerate}
+
+%% \end{exercice}
+
+%% Les solveurs ont généralement besoin d'une description du problème
+%% sous forme matricielle. Il est donc important de savoir construire
+%% une telle description.
+
+%% \begin{exercice}
+%%   Réexprimez le problème (P)
+%%   sous la forme matricielle suivante :
+%%   \[
+%%   \left\{
+%%   \begin{array}{c}
+%%     \min_x \ c^T x \ \text{tel que :} \\
+%%     Ax \leq b \\
+%%   \end{array}
+%%   \right. 
+%%   \]
+%%   où 
+%% \begin{itemize}
+%% \item $x$ est un vecteur réprésentant une solution. S'il y a $n$ inconnues, c'est un vecteur $n \times 1$.
+%% \item $c$ est un vecteur de même dimension que $x$ et sert à définir la fonction objectif.
+%% \item $A$ et $b$ servent à décrire $m$ inégalités linéaires : $b$ est un vecteur $m \times 1$,
+%%   $A$ est une matrice $m \times n$ et le signe $\leq$ s'applique composante par composante et pour
+%%   toutes les composantes des vecteurs.
+%% \end{itemize}
+%% \end{exercice}
+
 Notez que le problème précédent ressemble à celui considéré dans les
 méthodes d'apprentissage connues sous le nom de \emph{Support Vector Machines}
 ou \emph{Séparateurs à Vaste Marge} en français
@@ -256,6 +321,29 @@ parce qu'ils maximisent la marge de séparation. Tandis que nous avons
 considéré une distance $l_\infty$ pour maximiser la marge de séparation
 dans (P), les SVMs considèrent en général la distance euclidienne $l_2$,
 ce qui aboutit un problème d'optimisation quadratique. 
+
+\section{Travail à rendre}
+\label{sec:travail}
+
+En binôme ou seul, vous devez, dans un document de 2 à 5 pages,
+comparer théoriquement et expérimentalement
+\begin{itemize}
+\item la méthode basée sur la résolution de (P) (vue en section~\ref{sec:classif}), 
+\item et la méthode dite du perceptron (vue au TD précédent). 
+\end{itemize}
+
+Rappelez quel problème ces méthodes résolvent et identifiez leurs différences
+selon plusieurs critères. Vous pouvez vous poser ce genre de questions :
+\begin{itemize}
+\item quelle est la qualité du résultat pour différents scénarios ? y a-t-il des cas où la méthode échoue ? 
+\item y a-t-il des paramètres en entrée ? quelle est leur influence sur le résultat ?
+\item quelle est la complexité ? le nombre d'itérations ? le temps de calcul ?
+\end{itemize}
+
+En ce qui concerne le volet expérimental, une implémentation python des deux méthodes
+est à télécharger sur Moodle. 
+
+Votre document est à rendre sur Moodle avant vendredi 15 mars, 12h.  
 
 \end{document}
 
