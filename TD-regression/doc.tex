@@ -1,0 +1,177 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\usepackage[english,linesnumbered,ruled,vlined]{algorithm2e}
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+
+\title{Optimisation sans contrainte}
+\author{Tristan Roussillon}
+\date{fév. 2025}
+
+\begin{document}
+
+\maketitle
+
+Dans un problème de régression, on cherche un modèle permettant de prédire une variable quantitative, dite \emph{à expliquer}
+à partir d'autres variables, dites \emph{explicatives}. Les paramètres du modèle sont déterminés à partir d'observations
+des variables en résolvant un problème d'optimisation sans contrainte, plus précisément en minimisant la somme des carrés
+des écarts entre l'observation réelle et la prédiction. Dans ce TD, on va commencer par un exemple pédagogique à une dimension,
+puis on verra comment résoudre un problème de régression linéaire et non-linéaire à l'aide d'un réseau de neurones.
+
+\section{Exemple pédagogique : la moyenne}
+\label{sec:moyenne}
+
+\begin{exercice}
+  \'Etant donné un ensemble de valeurs $\{x_i\}_{i = 1,\dots,n}$ ($n \geq 1$),
+  nous considérons la minimisation de la fonction $f : \R \rightarrow \R$ telle que :
+  \[ f(x) = \sum_{i=1}^n (x-x_i)^2. \] 
+  
+  \begin{enumerate}
+  \item Développez la somme et montrez que nous avons un polynôme du second degré en $x$.
+  \item Calculez les dérivées premières et secondes de $f$.
+  \item \`A partir de quelles parties du cours peut-on en déduire que $f$ est convexe,
+    que la valeur de $x$ telle que $f'(x) = 0$ est un minimum global ?
+  \item Montrer que le minimum global est la moyenne de l'ensemble de valeurs.
+  \end{enumerate}
+\end{exercice}
+
+\begin{solution}
+  \begin{enumerate}
+  \item $f(x) = n x^2 - 2(\sum_ix_i)x + (\sum_ix_i^2)$.
+    Le graphe de $f$ est une parabole, $f$ est donc convexe.  
+  \item $f'(x) = 2n x - 2(\sum_ix_i)$. $f''(x) = 2n \geq 2$. 
+  \item
+    \begin{enumerate}
+    \item Le Théorème de convexité dit que si $f$ est continûment différentiable (deux fois), 
+      la proposition ``$f$ est convexe'' est équivalente à ``$\forall x$, le hessien $\nabla^2f(x)$
+      est une matrice \emph{semi-définie positive}''. Dans notre cas, le hessien $\nabla^2f(x)$
+      est une matrice \emph{semi-définie positive} revient à $f''(x) \geq 0$, ce qui est vrai.
+    \item Le théorème d'optimalité globale dit que si $f$ est convexe et continûment différentiable
+      $\forall x$, $x^\star$ est un minimum global ssi ${\nabla f}^T(x^\star) = 0$.
+      Dans notre cas, la condition est $f'(x^\star) = 0$. 
+    \end{enumerate}
+  \item On résoud $f'(x^\star) = 0 \Leftrightarrow x^\star = \frac{1}{n}\sum_ix_i$.
+  \end{enumerate}  
+\end{solution}
+
+\begin{exercice}  
+  Sur la même fonction, nous considérons maintenant la méthode de la descente de gradient,
+  dont l'équation d'évolution est :
+  \[ x^{(k+1)} = x^{(k)} - \lambda f'(x^{(k)}), \]
+  avec $x^{(0)}$ fixé à $0$ et $\lambda$ un paramètre libre, à choisir. 
+  \begin{enumerate}
+  \item Que se passe-t-il si $\lambda$ est fixé à
+    \begin{enumerate}
+    \item $\frac{1}{n}$ ?
+    \item $\frac{1}{2n}$ ?
+    \item $\frac{1}{4n}$ ?
+    \end{enumerate}
+  \item \`A quelle méthode vue en cours correspond le choix $\frac{1}{2n}$ ?
+  \end{enumerate}
+\end{exercice}
+
+\begin{solution}
+  Pour simplifier, on note : $\frac{1}{n}\sum_ix_i =: \bar{x}$.
+  On réécrit l'équation d'évolution avec le lambda choisi. 
+  \begin{enumerate}
+  \item Avec $\lambda = \frac{1}{n}$,
+    on a $x^{(k+1)} = - x^{(k)} + 2\bar{x}$. Et donc
+    $x^0 = 0, x^1 = 2\bar{x}, x^2 = 0, x^3 = 2\bar{x}, \dots$.
+    Non convergence. 
+  \item Avec $\lambda = \frac{1}{2n}$,
+    on a $x^{(k+1)} = \bar{x}$. Et donc
+    $x^0 = 0, x^1 = \bar{x}$. Arrêt après une itération
+    quelle que soit la valeur précédente $x^{(k)}$.
+    On remarque que $\frac{1}{2n} = \frac{1}{f''(x)}$ :
+    faire un tel choix revient à appliquer la méthode de Newton. 
+  \item Avec $\lambda = \frac{1}{4n}$,
+    on a $x^{(k+1)} = \frac{(x^{(k)} + \bar{x})}{2}$. Et donc
+    $x^0 = 0, x^1 = \frac{1}{2}\bar{x}, x^2 = \frac{3}{4}\bar{x},
+    x^3 = \frac{7}{8}\bar{x}, \dots$.
+    Convergence vers $\bar{x}$. 
+  \end{enumerate}
+\end{solution}
+
+\section{Problème de régression linéaire}
+\label{sec:regression}
+
+\newcommand\mat[1]{\mathbf{#1}}
+
+%% Dans cette section, nous adoptons les notations utilisées habituellement
+%% dans le contexte des réseaux de neurones.
+
+Nous avons $d$ variables explicatives représentées par un vecteur $\vec{x} \in \R^d$
+et une variable à expliquer $y \in \R$.
+Nous avons un \emph{ensemble d'apprentissage} composé de $n$ observations :
+$\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$.
+Enfin, nous considérons un modèle \emph{linéaire}, de paramètres $\vec{w} \in \R^d$
+et $b \in \R$, tel que :
+
+\[ \forall i, \hat{y}_i = \vec{w} \cdot \vec{x}_i + b, \]
+
+ou, matriciellement,
+
+\[ \mat{\hat{y}} = \mat{w} \cdot \mat{x} + \mat{b}. \]
+
+Le vecteur $\vec{w} \in \R^d$% (de même dimension que $\vec{x}$)
+est appelé \emph{poids} et le scalaire $b$, \emph{biais}. 
+L'objectif est de déterminer, à partir de l'ensemble d'apprentissage,
+les paramètres $\vec{w},b$ inconnus en cherchant à minimiser le carré des
+écarts entre les $y_i$ observés réellement et les prédications $\hat{y}_i$.
+
+\begin{exercice}
+  Expliquez comment on peut considérer de manière équivalente
+  les variables $\vec{x}', \vec{w}' \in \R^{d+1}$ pour considérer
+  plus simplement
+  \[ \forall i, \hat{y}_i = \vec{w}' \cdot \vec{x}'_i. \]
+\end{exercice}
+
+\begin{solution}
+  On définit $\vec{x}' = (x^1, \dots, x^d, 1)$ et
+  $\vec{w}' = (w^1, \dots, w^d, b)$. On a bien
+  $\vec{w}'\cdot\vec{x}' = \vec{w}\cdot\vec{x} + b$,
+  d'où des règles de décision équivalentes. 
+\end{solution}
+
+Par la suite, nous allons continuer à travailler dans $\R^{d+1}$,
+mais en omettant les primes pour plus de clarté. 
+
+TODO donner equation d'evolution et gradient
+
+TODO question lire le code fourni
+
+TODO question faire les tests
+
+
+\end{document}
+
+
