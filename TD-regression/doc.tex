@@ -33,7 +33,7 @@
 \excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
 
 
-\title{Optimisation sans contrainte}
+\title{Régression et optimisation sans contrainte}
 \author{Tristan Roussillon}
 \date{fév. 2025}
 
@@ -41,10 +41,10 @@
 
 \maketitle
 
-Dans un problème de régression, on cherche un modèle permettant de prédire une variable quantitative, dite \emph{à expliquer}
+Dans un problème de \emph{régression}, on cherche un modèle permettant de prédire une variable quantitative, dite \emph{à expliquer}
 à partir d'autres variables, dites \emph{explicatives}. Les paramètres du modèle sont déterminés à partir d'observations
 des variables en résolvant un problème d'optimisation sans contrainte, plus précisément en minimisant la somme des carrés
-des écarts entre l'observation réelle et la prédiction. Dans ce TD, on va commencer par un exemple pédagogique à une dimension,
+des écarts entre les observations réelles et les prédictions. Dans ce TD, on va commencer par un exemple pédagogique à une dimension,
 puis on verra comment résoudre un problème de régression linéaire et non-linéaire à l'aide d'un réseau de neurones.
 
 \section{Exemple pédagogique : la moyenne}
@@ -58,7 +58,7 @@ puis on verra comment résoudre un problème de régression linéaire et non-lin
   \begin{enumerate}
   \item Développez la somme et montrez que nous avons un polynôme du second degré en $x$.
   \item Calculez les dérivées premières et secondes de $f$.
-  \item \`A partir de quelles parties du cours peut-on en déduire que $f$ est convexe,
+  \item Quelles parties du cours nous indique que $f$ est convexe,
     que la valeur de $x$ telle que $f'(x) = 0$ est un minimum global ?
   \item Montrer que le minimum global est la moyenne de l'ensemble de valeurs.
   \end{enumerate}
@@ -121,7 +121,7 @@ puis on verra comment résoudre un problème de régression linéaire et non-lin
   \end{enumerate}
 \end{solution}
 
-\section{Problème de régression linéaire}
+\section{Problème de régression linéaire et non-linéaire}
 \label{sec:regression}
 
 \newcommand\mat[1]{\mathbf{#1}}
@@ -136,28 +136,25 @@ $\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$.
 Enfin, nous considérons un modèle \emph{linéaire}, de paramètres $\vec{w} \in \R^d$
 et $b \in \R$, tel que :
 
-\[ \forall i, \hat{y}_i = \vec{w} \cdot \vec{x}_i + b, \]
+\[ \forall i, \hat{y}_i = \vec{w} \cdot \vec{x}_i + b, 
+\quad \text{ou matriciellement,} \quad
+\mat{\hat{y}} = \mat{w} \cdot \mat{x} + \mat{b}. \]
 
-ou, matriciellement,
-
-\[ \mat{\hat{y}} = \mat{w} \cdot \mat{x} + \mat{b}. \]
-
-Le vecteur $\vec{w} \in \R^d$% (de même dimension que $\vec{x}$)
-est appelé \emph{poids} et le scalaire $b$, \emph{biais}. 
+Le vecteur $\vec{w} \in \R^d$ est appelé \emph{poids}
+et le scalaire $b$, \emph{biais}. 
 L'objectif est de déterminer, à partir de l'ensemble d'apprentissage,
 les paramètres $\vec{w},b$ inconnus en cherchant à minimiser le carré des
-écarts entre les $y_i$ observés réellement et les prédications $\hat{y}_i$.
+écarts entre les $y_i$ observés réellement et les prédictions $\hat{y}_i$.
 
 \begin{exercice}
   Expliquez comment on peut considérer de manière équivalente
   les variables $\vec{x}', \vec{w}' \in \R^{d+1}$ pour considérer
-  plus simplement
-  \[ \forall i, \hat{y}_i = \vec{w}' \cdot \vec{x}'_i. \]
+  plus simplement $\forall i, \hat{y}_i = \vec{w}' \cdot \vec{x}'_i.$
 \end{exercice}
 
 \begin{solution}
-  On définit $\vec{x}' = (x^1, \dots, x^d, 1)$ et
-  $\vec{w}' = (w^1, \dots, w^d, b)$. On a bien
+  On définit $\vec{x}' = (x_1, \dots, x_d, 1)$ et
+  $\vec{w}' = (w_1, \dots, w_d, b)$. On a bien
   $\vec{w}'\cdot\vec{x}' = \vec{w}\cdot\vec{x} + b$,
   d'où des règles de décision équivalentes. 
 \end{solution}
@@ -165,12 +162,52 @@ les paramètres $\vec{w},b$ inconnus en cherchant à minimiser le carré des
 Par la suite, nous allons continuer à travailler dans $\R^{d+1}$,
 mais en omettant les primes pour plus de clarté. 
 
-TODO donner equation d'evolution et gradient
+\begin{exercice}
+  Calculez le gradient de la fonction de perte :
+  \[ L(\vec{w}) = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2, \]
+  et déduisez-en une manière de la minimiser par descente de gradient.
+\end{exercice}
 
-TODO question lire le code fourni
+\begin{solution}
+  En développant, on a
+  \[ L(\vec{w}) = \sum_{i=1}^{n} ( y_i^2 - 2\vec{w} \cdot \vec{x}_i + (\vec{w} \cdot \vec{x}_i)^2 ), \]
+  D'où
+  \[ \grad L(\vec{w}) = \sum_{i=1}^{n} ( 2\vec{x}_i + 2(\vec{w} \cdot \vec{x}_i)\vec{x}_i ). \]
+  Equation d'évolution :
+  \[ \vec{w} = \vec{w} - \lambda \grad L(\vec{w}). \]
+\end{solution}
 
-TODO question faire les tests
+Bien sûr, si la variable à expliquer n'est en réalité pas reliée
+linéairement aux variables explicatives, l'écart entre les observations
+et les prédictions restera important et pour faire mieux, il
+faudra opter pour un modèle plus complexe. Le \emph{Théorème
+d'approximation universelle} dit qu'il existe un modèle par lequel
+on peut approximer n'importe quelle fonction aussi bien qu'on veut !
+Le modèle est paramétré par un entier $k \in \N$ déterminant la taille
+de deux matrices de poids : $\mat{w}_1$ de taille $k \times (d+1)$ et
+$\mat{w}_2$ de taille $1 \times k$ :
+\[ \mat{\hat{y}} = \mat{w}_2 \cdot \sigma ( \mat{w}_1 \cdot \mat{x} ), \]
+où $\sigma$ est une fonction d'activation non polynomiale appliquée
+élément par élément (sigmoïde, ReLu, etc.). 
 
+\begin{exercice}
+  ~
+  
+  \begin{itemize}
+  \item Dessinez les matrices $\mat{y},\mat{\hat{y}},\mat{w}_2, \mat{w}_1, \mat{x}$. 
+  \item Ce modèle est un réseau de neurones. Dessinez son architecture.
+    Combien y a-t-il de couches ? de neurones ?
+  \item Savez-vous calculer le gradient de la fonction de perte correspondant à ce modèle ?
+  \end{itemize}
+\end{exercice}
+
+\begin{exercice}
+  Téléchargez le code fourni. Il utilise \verb!pytorch! pour calculer le
+  gradient de la fonction de perte par différentiation automatique. Assurez-vous
+  de comprendre les instructions de la boucle d'apprentissage. Testez en faisant
+  varier les données (linéairement ou non-linéairement dépendantes, bruitées ou non),
+  le taux d'apprentissage, le nombre d'époques et le paramètre $k$.  
+\end{exercice}
 
 \end{document}
 
