@@ -1,0 +1,208 @@
+\documentclass[a4paper,francais]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\usepackage{hyperref}
+
+\usepackage{cprotect} %verbatim in footnote
+
+\usepackage[english,linesnumbered,ruled,vlined]{algorithm2e}
+
+\newcommand{\cad}{c.-à-d.}
+\newcommand{\Z}{{\ensuremath\mathbb{Z}}}
+\newcommand{\N}{{\ensuremath\mathbb{N}}}
+\newcommand{\R}{{\ensuremath\mathbb{R}}}
+\newtheorem{Theorem}{Theorem}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+%-------- enable or disable correction -----------------------------
+\theoremstyle{definition}
+\newtheorem{exercice}{Exercice}[section]
+\newtheorem*{solution}{Solution}
+
+\usepackage{comment}
+\excludecomment{solution}% commenter/décommenter pour afficher/effacer l'impression des solutions
+
+
+\title{Classification et optimisation avec ou sans contrainte}
+\author{Tristan Roussillon}
+\date{fév. 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Perceptron}
+\label{sec:perceptron}
+
+Nous observons des variables représentées par un vecteur $\vec{x} \in \R^d$
+(par ex. l'âge et la pression sanguine), ainsi qu'un état binaire $y \in \{-1,1\}$
+(par ex. être atteint d'une maladie ou non), sur un certain nombre d'individus :
+$\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$ est l'\emph{ensemble d'apprentissage}.
+Or, on suppose l'existence d'une règle de décision permettant de prédire $y$
+en fonction de $\vec{x}$ de la forme suivante :
+\[
+\forall i, \hat{y}_i :=
+\left\{
+\begin{array}{ll}
+  +1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x}_i + b \geq 0 \\
+  -1 & \quad \mathrm{si}\quad \vec{w}\cdot\vec{x}_i + b < 0 \\
+\end{array}
+\right.
+\]
+Le vecteur $\vec{w} \in \R^d$ est appelé \emph{poids} et le scalaire $b$, \emph{biais}.
+Le perceptron, ancêtre des réseaux de neurones, est un classifieur binaire pour des
+données linéairement séparables. Il est associé à un algorithme qui permet de trouver,
+à partir de l'ensemble d'apprentissage, les paramètres $\vec{w},b$ inconnus. 
+
+Note : dans ce qui suit, on ajoute à $\vec{x}$ une coordonnée fixée à $1$ pour éliminer
+le biais et on a donc $\vec{x}, \vec{w} \in \R^{d+1}$. 
+
+\begin{exercice}
+  Expliquez pourquoi on considère que le perceptron se trompe pour le cas $i$
+  de l'ensemble d'apprentissage quand $y_i (\vec{w}\cdot\vec{x}_i) < 0$.
+\end{exercice}
+
+\begin{solution}
+  Si $y_i = 1$, alors la seule possibitilité pour que
+  $y_i (\vec{w}\cdot\vec{x}_i) < 0$, c'est que
+  $\vec{w}\cdot\vec{x}_i < 0$. Dans ce cas, le perceptron prédit
+  $\hat{y}_i = -1$, ce qui est différent de $y_i = 1$ : il s'est trompé.
+
+  Similairement, si $y_i = -1$, alors $\vec{w}\cdot\vec{x}_i > 0$
+  et $\hat{y}_i = 1$, une erreur. 
+\end{solution}
+
+\begin{exercice}
+  Soit $E_{\vec{w}} := \{i \ | \ y_i (\vec{w}\cdot\vec{x}_i) < 0\}$,
+  l'ensemble des cas mal classés par le perceptron, 
+  et la fonction objectif suivante :
+  \[
+  Q(\vec{w}) :=
+  \quad
+  \left\{
+  \begin{array}{ll}
+    - \sum_{i \in E_{\vec{w}}} y_i (\vec{w}\cdot\vec{x}_i) & \text{si}\quad E_{\vec{w}} \neq \emptyset \\
+    0 & \text{sinon} \\
+  \end{array}
+  \right.
+  \]
+
+  \begin{enumerate}
+  \item Expliquez pourquoi la ou les valeurs minimales de $Q$
+    sont plus grandes ou égales à 0. 
+  \item Calculez le gradient de $Q$.
+  \item En utilisant le schéma général de la descente de gradient,
+    proposez une règle de mise à jour dans le cas où $E_{\vec{w}} \neq \emptyset$. 
+  \item Comme $Q$ est une somme de fonctions, une alternative à la descente de gradient classique
+  consiste à mettre à jour la valeur de $\vec{w}$ après chaque paire $(\vec{x}_i, y_i)$
+  considérée, c'est ce qu'on appelle la descente de gradient \emph{stochastique}.
+  Cette pratique est souvent choisie quand l'ensemble d'apprentissage est grand.
+  \'Ecrivez l'algorithme d'apprentissage complet mettant en oeuvre cette stratégie. 
+  \end{enumerate}
+\end{exercice}
+
+\begin{solution}
+  \begin{enumerate}
+  \item Si $E_{\vec{w}} = \emptyset$, $Q(\vec{w}) = 0$.
+    Sinon $Q(\vec{w}) = \sum_{i \in E_{\vec{w}}} - \big( y_i (\vec{w}\cdot\vec{x}_i) \big)$,
+    ce qui est par définition de $E_{\vec{w}}$ une somme de termes $> 0$ et donc
+    $Q(\vec{w}) > 0$ dans ce cas. 
+  \item Si $E_{\vec{w}} = \emptyset$, ${\nabla Q}(\vec{w}) = \vec{0}$. Sinon,
+    ${\nabla Q}(\vec{w}) = -y_i \vec{x}_i$.
+  \item Pour une constante positive $\lambda > 0$, qu'on appelle dans ce
+    contexte \emph{taux d'apprentissage}, la descente de gradient s'exprime
+    comme :
+    \[ \vec{w}^{(k+1)} = \vec{w}^{(k)} + \lambda \big( \sum_{i \in E_{\vec{w}}} y_i \vec{x}_i \big). \]
+  \item Voir l'algorithme ci-après. 
+  \end{enumerate}
+    \begin{algorithm}[htbp]
+    \caption{Algorithme d'apprentissage du perceptron}
+    \KwIn{l'ensemble d'apprentissage $\{(\vec{x}_i,y_i)\}_{i = 1,\dots, n}$,\\
+      le taux d'apprentissage $\lambda$}
+    \KwOut{poids $\vec{w}$ du perceptron}
+    $\vec{w} \leftarrow \vec{0}$ \;
+    \Repeat{$\forall i, \ y_i(\vec{w}\cdot\vec{x}_i) \geq 0$}{
+      \ForEach{$i = 1,\dots, n$}{
+        \If{$y_i(\vec{w}\cdot\vec{x}_i) < 0$}{
+          $\vec{w} \leftarrow \vec{w} + \lambda y_i\vec{x}_i$ \;
+        }
+      }
+    }(\tcp*[h]{plus d'erreurs})
+    \Return{$\vec{w}$} \;
+  \end{algorithm}
+\end{solution}
+
+\section{Séparateurs à vaste marge}
+\label{sec:svm}
+
+Le problème de classification précédent est le même qui celui considéré dans les
+méthodes d'apprentissage connues sous le nom de \emph{Support Vector Machines}
+ou \emph{Séparateurs à Vaste Marge} en français (SVM).
+Ce sont des classifieurs binaires pour des données linéairement séparables\footnote{Ils
+peuvent aussi être adaptés au cas où les données ne sont pas parfaitement séparables
+ou au cas où les données sont non-linéairement séparables.} 
+qui ont de meilleurs capacités de généralisation que le perceptron 
+parce qu'ils maximisent la marge de séparation.
+
+%% Tandis que nous avons
+%% considéré une distance $l_\infty$ pour maximiser la marge de séparation
+%% dans (P), les SVMs considèrent en général la distance euclidienne $l_2$,
+%% ce qui aboutit un problème d'optimisation quadratique. 
+
+Si les données sont linéairement séparables,
+il existe un réel $\epsilon > 0$ telle que
+\[  \forall i, y_i(\vec{w} \cdot \vec{x}_i) \geq \epsilon. \] 
+
+La largeur de la marge de séparation est égale à $2 \epsilon / \|\vec{w}\|$.
+
+\begin{exercice}
+  Expliquez pourquoi on doit poser que $\epsilon = 1$ pour que la maximisation
+  de la marge de séparation soit un problème borné. 
+\end{exercice}
+
+On considère maintenant le problème :
+%
+\[
+\text{(P)}
+\left\{
+\begin{array}{ll}
+  \text{trouver} \ \vec{w} \in \R^{d+1} \ \text{qui minimise} \ \|\vec{w}\|^2 \ \text{tel que} & \\
+  \forall i \in \{1,\dots,n\}, \ y_i(\vec{w} \cdot \vec{x}_i) \geq 1. 
+\end{array}
+\right.
+\]
+
+\begin{exercice}
+  ~
+  
+  \begin{enumerate}
+  \item Donnez la dimension du problème, la fonction objectif,
+    le nombre de contraintes, qualifiez les contraintes.
+    Comment appelle-t-on se type de problème ?
+  \item Expliquez pourquoi, quand on a une solution $\vec{w}$
+    de (P) on obtient bien un classifieur sans erreur sur l'ensemble
+    d'apprentissage et qui maximise la marge de séparation.   
+  \end{enumerate}
+\end{exercice}
+
+\begin{exercice}
+  Téléchargez le code fourni. Il utilise \verb!CVXPY! pour résoudre le problème
+  d'optimisation. Assurez-vous de comprendre les instructions qui décrivent le problème.
+  Testez et comparez avec le perceptron en faisant varier données et hyper-paramètres.  
+\end{exercice}
+
+\end{document}
+
+
