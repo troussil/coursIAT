@@ -37,8 +37,8 @@
 \newcommand{\N}{{\ensuremath\mathbb{N}}}
 \newcommand{\R}{{\ensuremath\mathbb{R}}}
 
-\renewcommand{\vec}[1]{\mathbf{#1}}
-\newcommand{\ve}[1]{\ensuremath{\vec{e}_{#1}}}
+%%\renewcommand{\vec}[1]{\mathbf{#1}}
+%%\newcommand{\ve}[1]{\ensuremath{\vec{e}_{#1}}}
 
 \DeclareMathOperator*{\argmin}{arg\,min}
 
@@ -54,7 +54,7 @@
 \author[T. Roussillon]
  {Tristan Roussillon}
 
-\date{2023}
+\date{2025}
 
 \institute{INSA Lyon, TC}
 
@@ -66,45 +66,86 @@
 \end{frame}
 
 % ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Exemples (1/3)}
+\section{Introduction}
+% ----------------------------------------------------------------------
 
-\begin{block}{Moyenne des $\{v_i\}_{i=1,\dots,m}$ : }
-  \[ \frac{1}{m} \sum_{i=1}^{m} v_i = \min_x \sum_{i=1}^{m} (x - v_i)^2. \]
-\end{block}
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Exemples (1/3)}
 
-\begin{block}{Apprentissage supervisé : }
-  \begin{itemize}
-  \item fonction de prédiction $f$(\cat) = cat, 
-  \item \[ \min_f \sum_\text{ensemble d'apprentissage} (\text{erreur de prédiction de } f). \]
-  \end{itemize}
-\end{block}
+%% \begin{block}{Moyenne des $\{v_i\}_{i=1,\dots,m}$ : }
+%%   \[ \frac{1}{m} \sum_{i=1}^{m} v_i = \min_x \sum_{i=1}^{m} (x - v_i)^2. \]
+%% \end{block}
 
-\end{frame}
+%% \begin{block}{Apprentissage supervisé : }
+%%   \begin{itemize}
+%%   \item fonction de prédiction $f$(\cat) = cat, 
+%%   \item \[ \min_f \sum_\text{ensemble d'apprentissage} (\text{erreur de prédiction de } f). \]
+%%   \end{itemize}
+%% \end{block}
+
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Exemples (2/3)}
+
+%%   \begin{block}{Flot maximum : }
+%%     \centering
+%%     \includegraphics[width=3cm]{max-flow.png}
+%%   \end{block}
+  
+%%   \begin{block}{Plus courts chemins : }
+%%     \centering
+%%     \includegraphics[width=3cm]{shortest-path.png}
+%%   \end{block}
+
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Exemples (3/3)}
+  
+%%   \begin{block}{Séparation linéaire avec marge maximale : }
+%%     \centering
+%%     \includegraphics[width=2cm]{linear-separation.png}
+%%   \end{block}
+  
+%%   \begin{block}{Plus petit cercle englobant : }
+%%     \centering
+%%     \includegraphics[width=2cm]{seb.png}
+%%   \end{block}
+  
+%% \end{frame}
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Introduction}
+
+%%   \begin{block}{Les problèmes d'optimisation sont fréquents}
+%%   \begin{itemize}
+%%   \item à la question ``y a-t-il une solution ?'' (existence)\\
+%%     suit ``quelle est la meilleure solution ?'' (optimisation)
+%%   \item l'optimisation peut être sous-jacente : par ex., en apprentissage supervisé, on cherche
+%%     une fonction de prédiction qui minimise l'erreur de prédiction exprimée comme une fonction de coût.
+%%   \item certains problèmes sont difficiles et requièrent des méthodes inhabituelles pour découvrir
+%%     des solutions, mêmes approchées : c'est une partie de ce qu'on appelle l'IA.
+%%   \end{itemize}
+%%   \end{block}
+  
+%% \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Exemples (2/3)}
+  \frametitle{Problèmes d'optimisation que vous connaissez}
 
-  \begin{block}{Flot maximum : }
-    \centering
-    \includegraphics[width=3cm]{max-flow.png}
-  \end{block}
-  
-  \begin{block}{Plus courts chemins : }
+  \begin{block}{Plus court chemin : }
     \centering
     \includegraphics[width=3cm]{shortest-path.png}
   \end{block}
 
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Exemples (3/3)}
-  
-  \begin{block}{Séparation linéaire avec marge maximale : }
+  \begin{block}{Flot maximum : }
     \centering
-    \includegraphics[width=2cm]{linear-separation.png}
+    \includegraphics[width=3cm]{max-flow.png}
   \end{block}
   
   \begin{block}{Plus petit cercle englobant : }
@@ -113,26 +154,11 @@
   \end{block}
   
 \end{frame}
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Introduction}
 
-  \begin{block}{Les problèmes d'optimisation sont fréquents}
-  \begin{itemize}
-  \item à la question ``y a-t-il une solution ?'' (existence)\\
-    suit ``quelle est la meilleure solution ?'' (optimisation)
-  \item l'optimisation peut être sous-jacente : par ex., en apprentissage supervisé, on cherche
-    une fonction de prédiction qui minimise l'erreur de prédiction exprimée comme une fonction de coût.
-  \item certains problèmes sont difficiles et requièrent des méthodes inhabituelles pour découvrir
-    des solutions, mêmes approchées : c'est une partie de ce qu'on appelle l'IA.
-  \end{itemize}
-  \end{block}
-  
-\end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Optimisation en télécommunications}
+  \frametitle{Problèmes d'optimisation en télécommunications}
 
   \begin{itemize}
   \item Allocation de fréquences / channel assignment
@@ -156,16 +182,48 @@
 \end{frame}
 
 % ----------------------------------------------------------------------
-\section{\'Enoncé du problème}
-% ----------------------------------------------------------------------
-
 \begin{frame}
-  \frametitle{Problème d'optimisation}
+  \frametitle{Optimisation et IA}
+
+  \begin{block}{Problème \emph{complexe}}
+  \begin{itemize}
+  \item IA $\approx$ faire résoudre par une machine un problème \emph{complexe}
+  \item problème \emph{complexe} $\approx$ problème d'optimisation (y a-t-il une solution ?
+    quelle est la meilleure solution ?)
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Apprentissage automatique}
+    \begin{itemize}
+    \item apprentissage supervisé
+      \begin{itemize}
+      \item fonction de prédiction $f$(\cat) = chat, 
+      \item trouver $f$ qui minimise \[ \sum_\text{ensemble d'apprentissage} (\text{erreur de prédiction de } f). \]
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Intuition}
+
+  \begin{exampleblock}{Exemple dans $\R$}
+    \centering
+    \includegraphics[width=0.7\textwidth,page=1]{opt-loc}
+  \end{exampleblock}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Formulation mathématique}
 
   \[
   \text{(P)} \left\{
   \begin{array}{c}
-    \min \ f(x) \ \text{tel que :} \\
+    \text{trouver} \ x \ \text{qui minimise} \ f(x) \ \text{tel que :} \\
     g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
     x \in S \subseteq \R^n
   \end{array}
@@ -176,8 +234,8 @@
     \begin{block}{Vocabulaire}
     \begin{itemize}
     \item fonction objectif : $f : \R^n \rightarrow \R$
-    \item inconnues : composantes du vecteur $x^T := (x_1, \dots, x_n) \in \R^n$
-    \item contraintes : $(g_i)_{i \in I}$ et $x \in S$
+    \item inconnues : composantes du vecteur $x := (x_1, \dots, x_n) \in \R^n$
+    \item contraintes : $g_i(x) \leq 0$ et $x \in S$
     \item une solution (candidate) : $x$ satisfaisant les contraintes
     \item solution optimale/optimum global : une solution minimisant $f$
     \end{itemize}
@@ -192,7 +250,8 @@
     \item max $f'$ $\Leftrightarrow$ min $-f'$
     \item nombre d'inconnues $n \geq 1$ 
     \item nombre de contraintes $m \geq 0$
-    \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \leq 0$ et $-g'(x) \leq 0$
+    \item contraintes d'égalité $g'(x) = 0$ $\Leftrightarrow$ $g'(x) \leq 0$
+      et $-g'(x) \leq 0$
     \item généralement pas d'inégalités strictes
     \end{itemize}
     \end{block}
@@ -203,15 +262,28 @@
     %f(x) -> +inf qs x -> +inf
     %inégalités strictes => ensemble de solutions non ferme et borne, donc possiblement pas de solutions. 
   }
-  \only<3->{
+  \only<3>{
     \begin{block}{Résoudre (P) peut être difficile...}
     \begin{itemize}
-    \item $n, m$ peuvent être grands
-    \item l'ensemble des solutions peut être vide, très grand, voire infini
-    \item $f$ et les $g_i$ peuvent être quelconques %ni differentiable, ni convexe, ni lineaire
-    \item $f$ peut être (quasiment) plat autour du min
+    \item ensemble des solutions vide, très grand, voire infini
+    \item problème non borné 
+    \item $n, m$ grands
+    \item $f$ et $g_i$ quelconques, $f$ non analytiquement connu %ni differentiable, ni convexe, ni lineaire
+    %%\item $f$ peut être (quasiment) plat autour du min
       %si plat, plusieurs solutions optimales, si quasiment, instabilités numériques 
-    \item $f$ peut ne pas être analytiquement connu 
+    \item cas discret ($S = \Z^n$), NP-complet 
+    \end{itemize}
+    \end{block}
+  }
+
+  \only<4->{
+    \begin{block}{Résoudre (P) peut être facile...}
+    \begin{itemize}
+    \item cas continu
+    \item problème borné
+    \item une solution
+    \item $f$ connu < différentiable < convexe
+    \item aucune contrainte ou des contraintes linéaires
     \end{itemize}
     \end{block}
   }
@@ -284,7 +356,7 @@
     \begin{columns}
       \begin{column}{0.5\textwidth}
         \begin{align*}
-          f'(x) &:= \frac{\partial f}{\partial x} \\
+          f'(x) &:= \frac{\partial f}{\partial x}(x) \\
           &= \lim_{h \rightarrow 0} \frac{f(x+h) - f(x)}{h}.
         \end{align*}
       \end{column}
@@ -307,7 +379,7 @@
       \end{itemize}
     \item La valeur absolue donne la \emph{vitesse} du changement. 
       \begin{itemize}
-      \item \alert<3>{si $f'(x^0) = 0$, $f$ change peu autour de $x^0$}. 
+      \item \alert<3>{si $f'(x^0) = 0$, $f$ change \emph{peu} autour de $x^0$}. 
       \end{itemize}
     \end{itemize}
   \end{block}
@@ -319,21 +391,25 @@
   \frametitle{Différentiabilité pour $f: \R \rightarrow \R$ (2/2) }
 
   \begin{block}{Dérivée seconde = dérivée de la dérivée première}
-    $f''(x) := \frac{\partial f'}{\partial x} = \frac{\partial ^{2}f}{\partial x^{2}}$.
+    $f'' := \frac{\partial f'}{\partial x} = \frac{\partial ^{2}f}{\partial x^{2}}$.
   \end{block}
 
   \begin{block}{Interprétation en un point $x^0$}
     \begin{itemize}
-    \item Le signe de $f''(x^0)$ indique comment évolue $f'$ - et donc $f$ - autour de $x^0$. 
-    \item La valeur absolue donne \emph{l'accélération} du changement.
+    \item Le signe de $f''(x^0)$ indique comment évolue $f'$ autour de $x^0$. 
+      \begin{itemize}
+      \item si $f''(x^0) < 0$, $f'$ $\downarrow$ quand $x^0$ $\uparrow$,
+      \item si $f''(x^0) > 0$, $f'$ $\uparrow$ quand $x^0$ $\uparrow$,
+      \end{itemize}
     \end{itemize}
   \end{block}
 
-  \begin{block}{Interprétation pour tout $x$}
+  \begin{block}{En particulier, si $f'(x^0) = 0$ et $f''(x^0) > 0$, alors}
     \begin{itemize}
-    \item si $\forall x, \ f''(x) \geq 0$,
-      $f$ \emph{accélère} toujours et partout. 
+      \item $f'$ $\uparrow$ (donc $f'$ positive et $f$ $\uparrow$) quand $x^0$ $\uparrow$,
+      \item $f'$ $\downarrow$ (donc $f'$ négative et $f$ $\downarrow$) quand $x^0$ $\downarrow$. 
     \end{itemize}
+    \alert<2->{En quoi cela peut nous aider à trouver $x^\star$ qui minimise $f$ ?}
   \end{block}
   
 \end{frame}
@@ -363,7 +439,7 @@
   \frametitle{Différentiabilité pour $f: \R^n \rightarrow \R$ (1/2)}
   
   \begin{block}{Gradient (vecteur), extension de la dérivée première}
-    ${\nabla f}^T := (\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \dots, \frac{\partial f}{\partial x_n})$ \\
+    ${\nabla f} := (\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \dots, \frac{\partial f}{\partial x_n})$ \\
     \begin{itemize}
     \item Il donne la direction dans laquelle $f$ augmente
     \item (et est perpendiculaire à la courbe de niveau projetée),
@@ -450,11 +526,13 @@
   \frametitle{Différentiabilité et convexité}
 
   \begin{block}{Théorème de convexité}
-    Si $f$ est continûment différentiable (deux fois), les conditions 1, 2 et 3 sont équivalentes:
+    Si $f$ est continûment différentiable (deux fois), les conditions suivantes sont équivalentes:
     \begin{enumerate}
     \item $f$ est convexe,
-    \item $\forall x, y, \ f(y) > f(x) + {\nabla f} ^T(x) \cdot (y - x)$,
-    \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice \emph{semi-définie positive}.
+    %%\item $\forall x, y, \ f(y) > f(x) + {\nabla f} ^T(x) \cdot (y - x)$,
+    \item $\forall x$, le hessien $\nabla^2f(x)$ est une matrice \emph{semi-définie positive}
+
+      (ou $\forall x$, $f''(x) \geq 0$ en une dimension).
     \end{enumerate}
   \end{block}
 
@@ -471,9 +549,8 @@
   \[
   \left\{
   \begin{array}{c}
-    \min_x \ f(x) \ \text{tel que :} \\
-    g_i(x) \leq 0, \ i = 1, \dots, m \\
-    x \in S, \alert{x \in V(x^0)}
+    \text{trouver} \ x \ \text{qui minimise} \ f(x) \ \text{où} \\
+    \alert{x \in V(x^0)}
   \end{array}
   \right.
   \]
@@ -481,7 +558,7 @@
 
   \begin{exampleblock}{Exemple dans $\R$}
     \centering
-    \includegraphics[width=0.7\textwidth]{opt-loc}
+    \includegraphics[width=0.7\textwidth,page=2]{opt-loc}
   \end{exampleblock}
   
 \end{frame}
@@ -494,8 +571,8 @@
     Soit $f$ continue et deux fois continûment différentiable en tout $x \in \R^n$.
     $x^\star$ est un optimum local ssi
     \begin{itemize}
-    \item ${\nabla f}(x^\star) = 0$ (\alert{stationnarité}) et
-    \item $\nabla^2f(x^\star)$ est une matrice \emph{définie positive},
+    \item le gradient ${\nabla f}(x^\star)$ est nul (stationnarité) et
+    \item le hessien $\nabla^2f(x^\star)$ est une matrice \emph{définie positive},
       c-à-d. ses valeurs propres sont \emph{strictement positives}.
       %le strictement permet d'éviter les points d'inflexion ou
       %on a un point stationnaire et ou le hessien est seulement semi-definie positive
@@ -526,10 +603,11 @@
       $f'(x) = 2x - 6$\\
       $f''(x) = 2$ \\ 
       ~\\
-      $\forall x, \ f''(x) \geq 0 \Rightarrow f$ convexe $\Rightarrow$
-      si $\exists$ $x^\star$ tel que $f'(x^\star) = 0$,
-      alors $x^\star$ est un minimum global : 
-      $f'(x^\star) = 0 \Leftrightarrow x^\star = 3$.
+      $\forall x, \ f''(x) \geq 0 \Rightarrow f$ convexe
+
+      On applique le théorème : $x^\star$ est un minimum global ssi $f'(x^\star) = 0$ 
+
+      On résoud l'équation : $2x^\star - 6 = 0$, donc $x^\star = 3$.
     }
     \only<2>{
       $f(x) = 2x^3 - x^2 + 2x + 5$\\
@@ -564,9 +642,11 @@
     0 & 2 \\
   \end{array}
   \right)
-  $ $\Rightarrow$ $f$ est convexe $\Rightarrow$ \\
-  si $\exists$ $x^\star$ tel que ${\nabla f}(x^\star) = 0$,
-  alors $x^\star$ est un minimum global : 
+  $ $\Rightarrow$ $f$ est convexe
+  
+  On applique le théorème : $x^\star$ ssi ${\nabla f}(x^\star) = 0$
+
+  On résoud le système d'équations : 
   \[
   \left\{
   \begin{array}{ll}
@@ -574,12 +654,8 @@
     2x^\star_2 + 8 & = 0
   \end{array}
   \right.
-  \Leftrightarrow x^\star = 
-  \begin{pmatrix}
-   2 \\
-   -4 
-  \end{pmatrix}.
   \]
+  Donc $x^\star_1 = 2$, $x^\star_2 = -4$.
   
 \end{frame}
 
@@ -600,7 +676,7 @@
 
   \[
   (\text{P}^\circ) \quad
-    \text{min} \ f(x), \ x \in \R^n
+    \text{trouver} \ x \ \text{qui minimise} \ f(x), \ x \in \R^n
   \]
 
   \begin{itemize}
@@ -762,34 +838,115 @@
   \item méthode de Davidon-Fletcher-Powell (DFP)
   \item méthode de Broyden-Fletcher-Goldfarb-Shanno (BFGS)
   \item algorithme de Powell (sans dérivée !)
-  \item méthode du moment
-  \item RMSprop, etc.
+  \item \verb!PyTorch 2.6!: Adadelta, Adafactor, Adagrad,
+    Adam, AdamW, SparseAdam, Adamax, ASGD, LBFGS, NAdam,
+    RAdam, RMSprop, Rprop, SGD
   \end{itemize}
+  
+\end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Cas d'une somme de fonctions}
+
+%%   \[
+%%   (\text{P}^\circ) \quad
+%%     \text{min} \ f(x) := \sum_{i = 1}^{m} q_i(x), \ x \in \R^n
+%%   \]
+
+%%   \[ x^{(k+1)} := x^{(k)} - \lambda^{(k)} {\nabla f}(x^{(k)}), \ \lambda^{(k)} > 0, \]
+
+%%   \[ {\nabla f}(x) = \sum_{i = 1}^{m} {\nabla q_i}(x). \]
+
+%%   ~
+  
+%%   \begin{itemize}
+%%   \item méthode du gradient stochastique : on évalue le gradient
+%%     \begin{itemize}
+%%     \item sur 1 fonction $q_i$ au hasard : ${\nabla f}(x) := {\nabla q_i}(x)$
+%%     \item ou sur plusieurs (\emph{mini-batch}), mais pas sur tout $f$.
+%%     \end{itemize}
+%%   \end{itemize}
+  
+%% \end{frame}
+
+% ----------------------------------------------------------------------
+\section{Application : problème de régression}
+% ----------------------------------------------------------------------
+
+% ----------------------------------------------------------------------
+\begin{frame}<beamer>
+  \frametitle{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{IA et régression}
+
+  \begin{block}{Apprentissage automatique supervisé}
+
+    \begin{itemize}
+      \item données : $d+1$ variables $\vec{x} \in \R^d$ et $y \in \R$ observées sur $n$ individus. 
+      \item phase d'apprentissage : déterminer les paramètres $(w_1, \dots, w_m)$ d'un modèle $f$
+        qui calcule $y$ à partir de $\vec{x}$.
+      \item phase d'inférence : étant donné une nouvelle valeur $\vec{x}_0$,
+        calculer $f(w_1, \dots, w_m)(\vec{x}_0)$
+        (alors que la valeur $y_0$ correspondante est inconnue). 
+        \begin{itemize}
+        \item si $y$ variable \emph{catégorielle}, problème de \emph{classification}. 
+        \item si $y$ variable \emph{quantitative}, problème de \emph{régression}. 
+        \end{itemize}
+    \end{itemize}
+  \end{block}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Régression et optimisation}
+
+  \begin{block}{Apprentissage $=$ optimisation}
+
+    \begin{itemize}
+    \item on considère une fonction \emph{de perte} qui
+      est typiquement la somme des carrés des écarts entre ce que
+      donne le modèle et les observations :
+      \[ L(w_1, \dots, w_m) :=
+      \sum_{i=1}^n (f(w_1, \dots, w_m)(\vec{x}_i) - y_i)^2 \]
+    \item on la minimise par descente de gradient
+      \begin{itemize}
+      \item $f$ doit être différentiable (et on doit calculer son gradient)
+      \item il y a des \emph{hyper-paramètres} ($\lambda$, nombre d'itérations, etc.)
+      \end{itemize}
+    \end{itemize}
+
+  \end{block}
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Cas d'une somme de fonctions}
+  \frametitle{Un modèle universel}
 
-  \[
-  (\text{P}^\circ) \quad
-    \text{min} \ f(x) := \sum_{i = 1}^{m} q_i(x), \ x \in \R^n
-  \]
-
-  \[ x^{(k+1)} := x^{(k)} - \lambda^{(k)} {\nabla f}(x^{(k)}), \ \lambda^{(k)} > 0, \]
-
-  \[ {\nabla f}(x) = \sum_{i = 1}^{m} {\nabla q_i}(x). \]
-
-  ~
+TODO
   
-  \begin{itemize}
-  \item méthode du gradient stochastique : on évalue le gradient
-    \begin{itemize}
-    \item sur 1 fonction $q_i$ au hasard : ${\nabla f}(x) := {\nabla q_i}(x)$
-    \item ou sur plusieurs (\emph{mini-batch}), mais pas sur tout $f$.
-    \end{itemize}
-  \end{itemize}
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Gradient}
+
+  règle de la chaine
+TODO
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Exemples de gros modèles}
+
+TODO
   
 \end{frame}
 
