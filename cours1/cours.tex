@@ -538,30 +538,30 @@
 
 \end{frame}
 
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Optimum local}
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Optimum local}
 
-  \begin{block}{Définition}
-    La solution $x^0$ est un optimum local du problème (P) s'il existe un voisinage
-    $V(x^0)$ autour de $x^0$ tel que $x^0$ soit optimum global du problème restreint
-    à $V(x^0)$: 
-  \[
-  \left\{
-  \begin{array}{c}
-    \text{trouver} \ x \ \text{qui minimise} \ f(x) \ \text{où} \\
-    \alert{x \in V(x^0)}
-  \end{array}
-  \right.
-  \]
-  \end{block}
+%%   \begin{block}{Définition}
+%%     La solution $x^0$ est un optimum local du problème (P) s'il existe un voisinage
+%%     $V(x^0)$ autour de $x^0$ tel que $x^0$ soit optimum global du problème restreint
+%%     à $V(x^0)$: 
+%%   \[
+%%   \left\{
+%%   \begin{array}{c}
+%%     \text{trouver} \ x \ \text{qui minimise} \ f(x) \ \text{où} \\
+%%     \alert{x \in V(x^0)}
+%%   \end{array}
+%%   \right.
+%%   \]
+%%   \end{block}
 
-  \begin{exampleblock}{Exemple dans $\R$}
-    \centering
-    \includegraphics[width=0.7\textwidth,page=2]{opt-loc}
-  \end{exampleblock}
+%%   \begin{exampleblock}{Exemple dans $\R$}
+%%     \centering
+%%     \includegraphics[width=0.7\textwidth,page=2]{opt-loc}
+%%   \end{exampleblock}
   
-\end{frame}
+%% \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
@@ -661,7 +661,7 @@
 
 
 % ----------------------------------------------------------------------
-\section{Optimisation sans contrainte}
+\section{Optimisation continue sans contrainte}
 % ----------------------------------------------------------------------
 
 % ----------------------------------------------------------------------
@@ -893,13 +893,17 @@
       \item phase d'inférence : étant donné une nouvelle valeur $\vec{x}_0$,
         calculer $f(w_1, \dots, w_m)(\vec{x}_0)$
         (alors que la valeur $y_0$ correspondante est inconnue). 
-        \begin{itemize}
-        \item si $y$ variable \emph{catégorielle}, problème de \emph{classification}. 
-        \item si $y$ variable \emph{quantitative}, problème de \emph{régression}. 
-        \end{itemize}
     \end{itemize}
   \end{block}
 
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Intuition}
+
+  TODO
+  
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -951,7 +955,7 @@ TODO
 \end{frame}
 
 % ----------------------------------------------------------------------
-\section{Optimisation avec contraintes}
+\section{Optimisation continue avec contraintes}
 % ----------------------------------------------------------------------
 
 % ----------------------------------------------------------------------
@@ -962,7 +966,132 @@ TODO
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{\'Enoncé du problème}
+  \frametitle{Formulation mathématique}
+
+  \[
+  (\text{P}^\bullet) \left\{
+  \begin{array}{c}
+    \text{trouver} \ x \ \text{qui minimise} \ f(x) \ \text{tel que :} \\
+    g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
+    x \in \R^n
+  \end{array}
+  \right.
+  \]
+
+  \begin{block}{Le problème peut}
+    \begin{itemize}
+    \item être \emph{infaisable} :
+      $X = \{ x \in \R^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$,
+      l'ensemble des solutions candidates est vide.
+    \item être \emph{non borné} : $f(x)$ tend vers $-\infty$ quand $x$ tend vers $\infty$.
+    \item avoir une ou plusieurs solutions. 
+    \end{itemize}
+  \end{block}
+  
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Problème infaisable}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Problème non borné}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Plusieurs solutions}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{}
+
+  \begin{center}
+      \includegraphics[width=0.5\textwidth,page=3]{cone-tangent}    
+  \end{center}
+
+\end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Saturation et cône tangent en un point $x^0 \in X$}
+
+%%   \begin{itemize}
+%%     \item Une contrainte $g_i$ est \emph{saturée} en $x^0$ ssi $g_i(x^0) = 0$
+%%     \item L'ensemble des contraintes saturées en $x^0$ est
+%%       $\{g_i\}_{i \in I_0}, \ I_0 := \{i \ | \ g_i(x^0) = 0 \}$
+%%     \item Le cône tangent en $x^0$ est donné par le gradient des contraintes saturées en $x^0$ :
+%%       $G_0 := \{ y \in \R^n \ | \ {\nabla g_i}^T \cdot y \leq 0, \ \forall i \in I_0 \}$ 
+%%   \end{itemize}
+
+%%   \begin{center}
+%%       \includegraphics[width=0.45\textwidth,page=1]{cone-tangent} \hspace{0.01\textwidth}   
+%%       \includegraphics[width=0.45\textwidth,page=2]{cone-tangent}    
+%%   \end{center}
+  
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Hypothèse de qualification des contraintes (QC)}
+
+%%   $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi pour tout $\epsilon$
+%%   positif suffisamment petit, la boule $B(x^0,\epsilon)$ de centre $x^0$
+%%   et rayon $\epsilon$ est telle que $B(x^0,\epsilon) \cap G_0 \subset X$. 
+
+%%   \only<1>{
+%%   \begin{exampleblock}{Cas où (QC) est vérifiée en $x^0$ : }
+%%   \begin{center}
+%%       \includegraphics[width=0.5\textwidth,page=1]{cone-tangent}    
+%%   \end{center}
+%%   \end{exampleblock}
+%%   }
+%%   \only<2>{
+%%   \begin{exampleblock}{Cas où (QC) n'est pas vérifiée en $x^0$ : }
+%%   \begin{center}
+%%       \includegraphics[width=0.5\textwidth,page=2]{cone-tangent}    
+%%   \end{center}
+%%   \end{exampleblock}
+%%   }
+%%   \only<3>{
+%%     \begin{block}{Théorème local}
+%%       $(QC)$ est vérifiée \alert{en un point $x^0 \in X$}
+%%       \begin{itemize}
+%%       \item si les gradients $\{ {\nabla g_i}(x^0) \}_{i \in I_0}$ des contraintes saturées en $x^0$
+%%         sont linéairement indépendants
+%%       \end{itemize}
+%%     \end{block}
+    
+%%     \begin{block}{Théorème global}
+%%       $(QC)$ est vérifiée \alert{pour tout $x \in X$}
+%%       \begin{itemize}
+%%       \item si toutes les fonctions $g_i$ sont linéaires
+%%       \item ou si toutes les fonctions $g_i$ sont convexes, différentiables, et l'intérieur de $X$ n'est pas vide
+%%       \end{itemize}
+%%     \end{block}
+%%   }
+  
+%% \end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Intuition sur les conditions d'optimalité}
+
+  \begin{center}
+      \includegraphics[width=0.5\textwidth,page=3]{cone-tangent}    
+  \end{center}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Hypothèses techniques}
 
   \[
   (\text{P}^\bullet) \left\{
@@ -974,112 +1103,41 @@ TODO
   \right.
   \]
 
-  \begin{block}{Hypothèses}
-    \begin{itemize}
-    \item (H1) $f$ et $(g_i)_{i \in I}$ continues, différentiables
-    \item (H2) $X = \{ x \in \R^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$,
-      l'ensemble des solutions candidates de $(\text{P}^\bullet)$, est non vide
-      (mais peut avoir un intérieur vide)
-    \item (QC) \alert{hypothèse de qualification des contraintes}
-    \end{itemize}
-  \end{block}
-  
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Saturation et cône tangent en un point $x^0 \in X$}
-
   \begin{itemize}
-    \item Une contrainte $g_i$ est \emph{saturée} en $x^0$ ssi $g_i(x^0) = 0$
-    \item L'ensemble des contraintes saturées en $x^0$ est
-      $\{g_i\}_{i \in I_0}, \ I_0 := \{i \ | \ g_i(x^0) = 0 \}$
-    \item Le cône tangent en $x^0$ est donné par le gradient des contraintes saturées en $x^0$ :
-      $G_0 := \{ y \in \R^n \ | \ {\nabla g_i}^T \cdot y \leq 0, \ \forall i \in I_0 \}$ 
+  \item (H1) $f$ et $(g_i)_{i \in I}$ continues, différentiables
+  \item (H2) $X = \{ x \in \R^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$,
+    l'ensemble des solutions candidates de $(\text{P}^\bullet)$, est non vide
+    (mais peut avoir un intérieur vide)
+  \item (QC) hypothèse de qualification des contraintes
   \end{itemize}
-
-  \begin{center}
-      \includegraphics[width=0.45\textwidth,page=1]{cone-tangent} \hspace{0.01\textwidth}   
-      \includegraphics[width=0.45\textwidth,page=2]{cone-tangent}    
-  \end{center}
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Hypothèse de qualification des contraintes (QC)}
+  \frametitle{Conditions d'optimalité de Karush, Kuhn et Tucker}
 
-  $X$ satisfait en $x^0 \in X$ l'hypothèse (QC) ssi pour tout $\epsilon$
-  positif suffisamment petit, la boule $B(x^0,\epsilon)$ de centre $x^0$
-  et rayon $\epsilon$ est telle que $B(x^0,\epsilon) \cap G_0 \subset X$. 
+  \begin{block}{Conditions nécessaires}
+    En supposant (H1), (H2), (QC), si $x^0$ est un minimum local de $(\text{P}^\bullet)$,
+    alors il existe $\{\lambda_i \geq 0\}_{i \in I}$ tels que:
+    \[
+    (\text{KKT})
+    \left\{
+    \begin{array}{ll}
+      -{\nabla f}(x^0) = \sum_{i \in I} \lambda_i {\nabla g_i}(x^0)
+      & \text{(stationnarité)} \\
+      \lambda_i g_i(x^0) = 0, \ \forall i \in I
+      & \text{(complémentarité)} \\
+    \end{array}
+    \right.
+    \]
+  \end{block}
 
-  \only<1>{
-  \begin{exampleblock}{Cas où (QC) est vérifiée en $x^0$ : }
-  \begin{center}
-      \includegraphics[width=0.5\textwidth,page=1]{cone-tangent}    
-  \end{center}
-  \end{exampleblock}
-  }
-  \only<2>{
-  \begin{exampleblock}{Cas où (QC) n'est pas vérifiée en $x^0$ : }
-  \begin{center}
-      \includegraphics[width=0.5\textwidth,page=2]{cone-tangent}    
-  \end{center}
-  \end{exampleblock}
-  }
-  \only<3>{
-    \begin{block}{Théorème local}
-      $(QC)$ est vérifiée \alert{en un point $x^0 \in X$}
-      \begin{itemize}
-      \item si les gradients $\{ {\nabla g_i}(x^0) \}_{i \in I_0}$ des contraintes saturées en $x^0$
-        sont linéairement indépendants
-      \end{itemize}
-    \end{block}
-    
-    \begin{block}{Théorème global}
-      $(QC)$ est vérifiée \alert{pour tout $x \in X$}
-      \begin{itemize}
-      \item si toutes les fonctions $g_i$ sont linéaires
-      \item ou si toutes les fonctions $g_i$ sont convexes, différentiables, et l'intérieur de $X$ n'est pas vide
-      \end{itemize}
-    \end{block}
-  }
-  
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Conditions d'optimalité de Kuhn et Tucker}
-
-  \only<1>{
-  \begin{center}
-      \includegraphics[width=0.5\textwidth,page=3]{cone-tangent}    
-  \end{center}
-  }
-
-  \only<2>{
-    \begin{block}{Conditions nécessaires}
-      En supposant (H1), (H2), (QC), si $x^0$ est un minimum local de $(\text{P}^\bullet)$,
-      alors il existe $\{\lambda_i \geq 0\}_{i \in I}$ tels que:
-      \[
-      (\text{KT})
-      \left\{
-      \begin{array}{ll}
-        -{\nabla f}(x^0) = \sum_{i \in I} \lambda_i {\nabla g_i}(x^0)
-        & \text{(combinaison convexe)} \\
-        \lambda_i g_i(x^0) = 0, \ \forall i \in I
-        & (\Leftrightarrow \lambda_i = 0, \ \forall i \in I \setminus I_0) \\
-      \end{array}
-      \right.
-      \]
-    \end{block}
-
-    \begin{block}{Conditions suffisantes}
-      Dans le cas où, en plus, $f$ et $\{g_i\}_{i\in I}$ sont \emph{convexes},
-      si les conditions (KT) sont vérifiées pour $x^0$, alors $x^0$ est un minimum
-      (global) de $(\text{P}^\bullet)$.  
-    \end{block}
-  }
+  \begin{block}{Conditions suffisantes}
+    Dans le cas où, en plus, $f$ et $\{g_i\}_{i\in I}$ sont \emph{convexes},
+    si les conditions (KKT) sont vérifiées pour $x^0$, alors $x^0$ est un minimum
+    (global) de $(\text{P}^\bullet)$.  
+  \end{block}
   
 \end{frame}
 
@@ -1089,15 +1147,19 @@ TODO
 
   \begin{center}  
   \begin{tabular}{l}
-    min \textcolor{red}{$f(x_1,x_2) := (x_1 - 3)^2 + (x_2 - 4)^2$} tel que : \\
-    \textcolor{blue}{$\left\{
-    \begin{array}{l}
-      g_1(x_1,x_2) := x_1 + x_2 - 5 \leq 0 \\
-      g_2(x_1,x_2) := x_1 - x_2 - 2.5 \leq 0 \\
-      g_3(x_1,x_2) := -x_1 \leq 0 \\
-      g_4(x_1,x_2) := -x_2 \leq 0
-    \end{array}
-    \right.$}
+    trouver $(x_1,x_2)$ qui minimisent \\
+    \textcolor{red}{$f(x_1,x_2) := (x_1 - 3)^2 + (x_2 - 4)^2$} tels que : \\
+    pour tout $i = 1, \dots, 4$, \textcolor{blue}{$g_i(x_1,x_2) \leq 0$}, avec \\
+    $g_1(x_1,x_2) := x_1 + x_2 - 5$, $g_2(x_1,x_2) := x_1 - x_2 - 2.5$, \\
+    $g_3(x_1,x_2) := -x_1$, $g_4(x_1,x_2) := -x_2$ 
+    %% \textcolor{blue}{$\left\{
+    %% \begin{array}{l}
+    %%   g_1(x_1,x_2) \leq 0, \ g_1(x_1,x_2) := x_1 + x_2 - 5 \\
+    %%   g_2(x_1,x_2) \leq 0, \ g_2(x_1,x_2) := x_1 - x_2 - 2.5 \\
+    %%   g_3(x_1,x_2) \leq 0, \ g_3(x_1,x_2) := -x_1 \\
+    %%   g_4(x_1,x_2) \leq 0, \ g_4(x_1,x_2) := -x_2
+    %% \end{array}
+    %% \right.$}
   \end{tabular}
   \end{center}
   
@@ -1108,22 +1170,22 @@ TODO
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Résolution par les équations (KT)}
+  \frametitle{Résolution par les équations (KKT)}
 
   \only<1>{  
   \begin{itemize}
     \item Comme pour tout $x$, $\nabla^2f(x)$ est définie-positive, $f$ est convexe
     \item Les contraintes $\{g_i\}_{i \in I}$ sont linéaires donc convexes
-    \item $x^\star$ et $\lambda_1,\lambda_2,\lambda_3, \lambda_4$ qui vérifient (KT)
+    \item $x^\star$ et $\lambda_1,\lambda_2,\lambda_3,\lambda_4$ qui vérifient (KKT)
       sont tels que $x^\star$ est le minimum global
     \end{itemize}
   }
   \only<2>{
-  On joue aux devinette et suppose que seule $g_1$ est saturée :
+    On joue aux devinette et suppose que seule $g_1$ est saturée 
   \begin{itemize}
-  \item $\Rightarrow$ $g_1(x^\star) = x_1^\star + x_2^\star - 5 = 0$
-  \item $\Rightarrow$ $\lambda_2 = \lambda_3 = \lambda_4 = 0$
-  \item et il reste : $-{\nabla f}(x^\star) = \lambda_1 {\nabla g_1}(x^\star)$
+  \item c-à-d. telle que $g_1(x^\star) = x_1^\star + x_2^\star - 5 = 0$,
+  \item complémentarité : $\lambda_2 = \lambda_3 = \lambda_4 = 0$, 
+  \item stationnarité : $-{\nabla f}(x^\star) = \lambda_1 {\nabla g_1}(x^\star)$.
   \end{itemize}
 
   Le système à résoudre est donc: 
@@ -1135,15 +1197,8 @@ TODO
   \lambda_1 \left( \begin{array}{c} 1 \\ 1 \end{array} \right) \\
   \end{array}
   \right.
-  \Leftrightarrow
-  \left\{
-  \begin{array}{l}
-    x_1^\star = 2 \\
-    x_2^\star = 3 \\
-    \lambda_1 = 2 \\
-  \end{array}
-  \right.
   \]
+  D'où on déduit $x_1^\star = 2$, $x_2^\star = 3$, $\lambda_1 = 2$. 
   }
 
   \only<3>{
@@ -1158,7 +1213,8 @@ TODO
   \frametitle{Méthodes d'optimisation}
 
   \begin{itemize}
-  \item Résolution des équations (KT) par des méthodes d'optimisation sans contrainte
+  \item Recherche combinatoire et résolution des équations (KKT)
+    %par des méthodes d'optimisation sans contrainte
     %ex. resoudre ax = b revient a minimiser (ax - b)^2  
   \item Méthodes des pénalités
     %: on élimine les contraintes en ajoutant à la fonction objectif des pénalités qui assurent
@@ -1171,23 +1227,24 @@ TODO
   \item Méthodes de linéarisation
     %: à chaque étape, on cherche le minimum d'une approximation linéaire de $f$ pour trouver le déplacement 
     %méthode de Franck et Wolf, plans sécants de Kelley, génération de colonne de Dantzig...
+  \item \dots
   \end{itemize}
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Cas particulier de fonctions linéaires}
+  \frametitle{Note : cas particulier de fonctions linéaires}
 
   On appelle problème d'optimisation linéaire (ou \emph{programme linéaire}),
   le problème d'optimisation suivant : 
   \[
   \text{(PL)} \left\{
   \begin{array}{c}
-    \text{min} \ f(x) \ \text{tel que :} \\
+    \text{trouver} \ x \ \text{qui minimise} \ f(x) \ \text{tel que :} \\
     g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
     x \in \R^n \\
-    f, \{g_i\}_{i \in I} \ \alert{\text{sont linéaires}} \\
+    f, \{g_i\}_{i \in I} \ \text{sont linéaires} \\
   \end{array}
   \right.
   \]
@@ -1200,7 +1257,7 @@ TODO
 \end{frame}
 
 % ----------------------------------------------------------------------
-\section{Optimisation discrète}
+\section{Application : problème de classification}
 % ----------------------------------------------------------------------
 
 % ----------------------------------------------------------------------
@@ -1211,95 +1268,169 @@ TODO
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Problème d'optimisation linéaire en nombre entiers}
-  
-  \[
-  \text{(PNE)} \left\{
-  \begin{array}{c}
-    \text{min} \ f(x) \ \text{tel que :} \\
-    g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
-    x \in \alert{\Z^n}
-  \end{array}
-  \right.
-  \]
+  \frametitle{IA et classification binaire}
 
-  \begin{block}{Hypothèses habituelles}
+  \begin{block}{Apprentissage automatique supervisé}
+
     \begin{itemize}
-    \item L'ensemble des solutions candidates
-      $X := \{ x \in \Z^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$ \\
-      est borné et non vide
-    \item $f, \{g_i\}_{i \in I}$ sont \emph{linéaires} \\
-      (il existe beaucoup d'astuces pour
-      linéariser le problème en introduisant des variables supplémentaires)
+      \item données : $d+1$ variables $\vec{x} \in \R^d$ et $y \in \{-1,1\}$ observées sur $n$ individus. 
+      \item phase d'apprentissage : déterminer les paramètres $(w_1, \dots, w_m)$ d'un modèle $f$
+        qui détermine $y$ à partir de $\vec{x}$.
+      \item phase d'inférence : étant donné une nouvelle valeur $\vec{x}_0$,
+        le classifieur renvoie
+        \[
+        \left\{
+        \begin{array}{l} 1 \ \text{si} \ f(w_1, \dots, w_m)(\vec{x}_0) \geq 0 \\
+          -1 \ \text{sinon}.
+        \end{array}
+        \right.
+        \]
     \end{itemize}
+    
   \end{block}
+
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{De nombreux problèmes se ramènent à (PNE)}
+  \frametitle{Intuition dans $\R^2$}
 
-  \begin{itemize}
-    \item problème d'affectation (assignment problem)
-    \item problème des surveillants de musée (art gallery problem)
-    \item problème de coloration (graph coloring)
-    \item problème du sac à dos (knapsack problem)
-    \item problème du voyageur de commerce (travelling salesman problem)
-    \item problème de séquençage de tâches (job sequencing)
-    \item \dots
-  \end{itemize}
+  TODO
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Un problème différent de sa relaxation continue}
+  \frametitle{Classification et optimisation}
 
-  \only<1>{
-  \alert{L'optimum entier est aussi éloigné qu'on veut de l'optimum continu}
+  \begin{block}{Apprentissage $=$ optimisation sous contrainte}
 
-    \[
-    \left\{
-    \begin{array}{c}
-      \text{min} \ -10x_1 - 11x_2 \ \text{tel que :} \\
-      10x_1 + 12x_2 \leq 59, \ x_1 \geq 0, \ x_2 \geq 0 \\
-    \end{array}
-    \right.
-    \]
+    TODO
+    
+    %% \begin{itemize}
+    %% \item on considère une fonction \emph{de perte} qui
+    %%   est typiquement la somme des carrés des écarts entre ce que
+    %%   donne le modèle et les observations :
+    %%   \[ L(w_1, \dots, w_m) :=
+    %%   \sum_{i=1}^n (f(w_1, \dots, w_m)(\vec{x}_i) - y_i)^2 \]
+    %% \item on la minimise par descente de gradient
+    %%   \begin{itemize}
+    %%   \item $f$ doit être différentiable (et on doit calculer son gradient)
+    %%   \item il y a des \emph{hyper-paramètres} ($\lambda$, nombre d'itérations, etc.)
+    %%   \end{itemize}
+    %% \end{itemize}
 
-    \begin{center}
-      \includegraphics[width=0.5\textwidth]{ex-plne}
-    \end{center}
-  }
-
-  \only<2>{
-    \begin{block}{Cela change complètement le problème !}
-      \begin{itemize}
-      \item (PL) est un problème polynomial,
-        l'algorithme du simplexe (bien qu'exponentiel au pire cas)
-        est même plutôt efficace en pratique, 
-      \item (PNE) est un problème NP-complet
-      \end{itemize}
-    \end{block}
-  }
+  \end{block}
+  
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Méthodes de résolution}
-
-  \begin{itemize}
-  \item recherche exhaustive (très-très petits problèmes),
-  \item \emph{Branch and Bound} (séparation-évaluation)
-  \item relaxation continue dans certains cas particuliers
-  \item méthode des coupes (intégrales, mixtes)
-  \item \emph{Branch and Bound} + coupes $=$ \emph{Branch and cut}
-  \item programmation par contraintes
-  \item méta-heuristiques : \\
-      glouton, meilleur voisin, tabou, recuit-simulé, algorithme génétique, colonie de fourmis, \dots
-  \end{itemize}
+  \frametitle{Classification et optimisation}
   
 \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \section{Optimisation discrète}
+%% % ----------------------------------------------------------------------
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}<beamer>
+%%   \frametitle{Sommaire}
+%%   \tableofcontents[currentsection]
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Problème d'optimisation linéaire en nombre entiers}
+  
+%%   \[
+%%   \text{(PNE)} \left\{
+%%   \begin{array}{c}
+%%     \text{min} \ f(x) \ \text{tel que :} \\
+%%     g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
+%%     x \in \alert{\Z^n}
+%%   \end{array}
+%%   \right.
+%%   \]
+
+%%   \begin{block}{Hypothèses habituelles}
+%%     \begin{itemize}
+%%     \item L'ensemble des solutions candidates
+%%       $X := \{ x \in \Z^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$ \\
+%%       est borné et non vide
+%%     \item $f, \{g_i\}_{i \in I}$ sont \emph{linéaires} \\
+%%       (il existe beaucoup d'astuces pour
+%%       linéariser le problème en introduisant des variables supplémentaires)
+%%     \end{itemize}
+%%   \end{block}
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{De nombreux problèmes se ramènent à (PNE)}
+
+%%   \begin{itemize}
+%%     \item problème d'affectation (assignment problem)
+%%     \item problème des surveillants de musée (art gallery problem)
+%%     \item problème de coloration (graph coloring)
+%%     \item problème du sac à dos (knapsack problem)
+%%     \item problème du voyageur de commerce (travelling salesman problem)
+%%     \item problème de séquençage de tâches (job sequencing)
+%%     \item \dots
+%%   \end{itemize}
+  
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Un problème différent de sa relaxation continue}
+
+%%   \only<1>{
+%%   \alert{L'optimum entier est aussi éloigné qu'on veut de l'optimum continu}
+
+%%     \[
+%%     \left\{
+%%     \begin{array}{c}
+%%       \text{min} \ -10x_1 - 11x_2 \ \text{tel que :} \\
+%%       10x_1 + 12x_2 \leq 59, \ x_1 \geq 0, \ x_2 \geq 0 \\
+%%     \end{array}
+%%     \right.
+%%     \]
+
+%%     \begin{center}
+%%       \includegraphics[width=0.5\textwidth]{ex-plne}
+%%     \end{center}
+%%   }
+
+%%   \only<2>{
+%%     \begin{block}{Cela change complètement le problème !}
+%%       \begin{itemize}
+%%       \item (PL) est un problème polynomial,
+%%         l'algorithme du simplexe (bien qu'exponentiel au pire cas)
+%%         est même plutôt efficace en pratique, 
+%%       \item (PNE) est un problème NP-complet
+%%       \end{itemize}
+%%     \end{block}
+%%   }
+%% \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Méthodes de résolution}
+
+%%   \begin{itemize}
+%%   \item recherche exhaustive (très-très petits problèmes),
+%%   \item \emph{Branch and Bound} (séparation-évaluation)
+%%   \item relaxation continue dans certains cas particuliers
+%%   \item méthode des coupes (intégrales, mixtes)
+%%   \item \emph{Branch and Bound} + coupes $=$ \emph{Branch and cut}
+%%   \item programmation par contraintes
+%%   \item méta-heuristiques : \\
+%%       glouton, meilleur voisin, tabou, recuit-simulé, algorithme génétique, colonie de fourmis, \dots
+%%   \end{itemize}
+  
+%% \end{frame}
 
 
 % ----------------------------------------------------------------------
@@ -1319,7 +1450,7 @@ TODO
   \[
   \text{(P)} \left\{
   \begin{array}{c}
-    \text{min} \ f(x) \ \text{tel que :} \\
+    \text{trouver} \ x \ \text{qui minimise} \ f(x) \ \text{tel que :} \\
     g_i(x) \leq 0, \ i \in I = \{1, \dots, m\} \\
     x \in S \subseteq \R^n
   \end{array}
@@ -1338,7 +1469,7 @@ TODO
         \emph{simplexe, points intérieurs}
       \end{itemize}
     \end{itemize}
-  \item Optimisation discrète ($S = \Z^n$)\\
+  \item Optimisation combinatoire ($S = \Z^n$)\\
     \emph{branch and bound}, \emph{(meta)-heuristiques} 
   \end{itemize}
   
@@ -1346,23 +1477,44 @@ TODO
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Pour aller plus loin}
+  \frametitle{Lien avec l'IA}
 
-  \begin{itemize}
-  \item Théorie de la dualité de Lagrange
-  \end{itemize}
+  \begin{block}{Exemple de l'apprentissage automatique supervisé}
 
-
-  \begin{itemize}
-  \item Livre de référence sur les aspects théoriques de l'optimisation
-  \end{itemize}
-
-\begin{thebibliography}{alpha}
-\bibitem{MM}
-Michel Minoux, \emph{Programmation mathématique, Théorie et algorithmes}, Lavoisier, 2eme édition, 2008, 711 pp.
-\end{thebibliography}
+    \begin{itemize}
+      \item données : $d+1$ variables $\vec{x} \in \R^d$ et $y$ observées sur $n$ individus. 
+        \begin{itemize}
+        \item si $y \in C$ variable \emph{catégorielle}, problème de \emph{classification}. 
+        \item si $y \in \R$ variable \emph{quantitative}, problème de \emph{régression}. 
+        \end{itemize}
+      \item phase d'apprentissage : déterminer les paramètres $(w_1, \dots, w_m)$ d'un modèle $f$
+        qui calcule $y$ à partir de $\vec{x}$.
+      \item phase d'inférence : étant donné une nouvelle valeur $\vec{x}_0$,
+        déterminer une valeur $y_0$ à partir de $f(w_1, \dots, w_m)(\vec{x}_0)$. 
+    \end{itemize}
+  \end{block}
 
 \end{frame}
+
+%% % ----------------------------------------------------------------------
+%% \begin{frame}
+%%   \frametitle{Pour aller plus loin}
+
+%%   \begin{itemize}
+%%   \item Théorie de la dualité de Lagrange
+%%   \end{itemize}
+
+
+%%   \begin{itemize}
+%%   \item Livre de référence sur les aspects théoriques de l'optimisation
+%%   \end{itemize}
+
+%% \begin{thebibliography}{alpha}
+%% \bibitem{MM}
+%% Michel Minoux, \emph{Programmation mathématique, Théorie et algorithmes}, Lavoisier, 2eme édition, 2008, 711 pp.
+%% \end{thebibliography}
+
+%% \end{frame}
 
 \end{document}
 
