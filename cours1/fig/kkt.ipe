@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70218" creator="Ipe 7.2.24">
-<info created="D:20200218093205" modified="D:20250219100212"/>
+<info created="D:20200217115021" modified="D:20250219095054"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -255,64 +255,42 @@ h
 <layer name="alpha"/>
 <layer name="beta"/>
 <layer name="gamma"/>
-<layer name="delta"/>
-<layer name="epsilon"/>
-<view layers="alpha beta gamma delta" active="delta"/>
-<view layers="alpha beta gamma delta epsilon" active="epsilon"/>
-<path layer="alpha" stroke="black" arrow="normal/normal">
-128 576 m
-240 576 l
+<layer name="zeta"/>
+<view layers="alpha beta gamma zeta" active="gamma"/>
+<path layer="alpha" matrix="1 0 0 1 -0.695995 -0.231998" stroke="black" arrow="normal/normal">
+128 640 m
+240 640 l
 </path>
 <path stroke="black" arrow="normal/normal">
-128 576 m
-128 688 l
+128 640 m
+128 736 l
 </path>
-<text layer="beta" transformations="translations" pos="144 592" stroke="blue" type="label" width="7.472" height="6.808" depth="0" valign="baseline">X</text>
-<use name="mark/cross(sx)" pos="128 656" size="normal" stroke="black"/>
-<use name="mark/cross(sx)" pos="128 576" size="normal" stroke="black"/>
-<text layer="alpha" matrix="1 0 0 1 -4.22237 6.03196" transformations="translations" pos="224 560" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="baseline" style="math">x_1</text>
-<text transformations="translations" pos="112 680" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="baseline" style="math">x_2</text>
-<group layer="delta" matrix="1 0 0 1 16 0">
-<path stroke="red">
-8 0 0 8 160 640 e
+<path layer="beta" stroke="black">
+128 704 m
+192 640 l
 </path>
-<path stroke="red">
-11.3221 0 0 11.3221 160 640 e
+<text layer="alpha" transformations="translations" pos="144 656" stroke="blue" type="label" width="7.472" height="6.808" depth="0" valign="baseline">X</text>
+<text matrix="1 0 0 1 -24.3441 -24.8159" transformations="translations" pos="144 656" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">0</text>
+<text matrix="1 0 0 1 6.95995 -3.71197" transformations="translations" pos="112 704" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">1</text>
+<text matrix="1 0 0 1 72.6158 -74.0077" transformations="translations" pos="112 704" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">1</text>
+<text matrix="1 0 0 1 80.5195 -23.4236" transformations="translations" pos="144 656" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="baseline" style="math">x_1</text>
+<text matrix="1 0 0 1 -32.2321 73.088" transformations="translations" pos="144 656" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="baseline" style="math">x_2</text>
+<use name="mark/cross(sx)" pos="192 640" size="normal" stroke="black"/>
+<text matrix="1 0 0 1 53.1516 -28.0399" transformations="translations" pos="144 656" stroke="black" type="label" width="10.163" height="8.11" depth="0" valign="baseline" style="math">x^0</text>
+<path layer="gamma" matrix="0.689048 0 0 0.682448 59.7028 203.234" stroke="blue" arrow="normal/small">
+192 640 m
+208 656 l
 </path>
-<path stroke="red">
-14.2926 0 0 14.2926 160 640 e
+<path stroke="blue" arrow="normal/small">
+192 640 m
+192 624 l
 </path>
-<path stroke="red">
-17.8885 0 0 17.8885 160 640 e
+<text layer="alpha" matrix="1 0 0 1 39.5729 -16.561" transformations="translations" pos="176 736" stroke="blue" type="label" width="43.019" height="6.428" depth="1.93" valign="baseline" style="math">x_1, x_2 \geq 0</text>
+<text layer="beta" matrix="1 0 0 1 32 -32" transformations="translations" pos="176 736" stroke="blue" type="label" width="50.768" height="6.425" depth="1.49" valign="baseline" style="math">x_1 + x_2 \leq 1</text>
+<path layer="zeta" stroke="red" arrow="normal/small">
+192 640 m
+224 656 l
 </path>
-<path stroke="red">
-3.88022 0 0 3.88022 160 640 e
-</path>
-</group>
-<path stroke="red">
-21.1847 0 0 21.1847 176 640 e
-</path>
-<path stroke="red">
-24.6231 0 0 24.6231 176 640 e
-</path>
-<use layer="epsilon" name="mark/cross(sx)" pos="160 624" size="normal" stroke="black"/>
-<text matrix="1 0 0 1 -2.6769 -1.60614" transformations="translations" pos="152 616" stroke="black" type="label" width="10.274" height="6.86" depth="0" valign="baseline" style="math">x^\star</text>
-<path stroke="black" dash="dotted">
-128 624 m
-160 624 l
-</path>
-<path stroke="black" dash="dotted">
-160 576 m
-160 624 l
-</path>
-<text matrix="1 0 0 1 -2.14152 6.78149" transformations="translations" pos="160 560" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">2</text>
-<text matrix="1 0 0 1 8.03071 -3.74767" transformations="translations" pos="112 624" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline">3</text>
-<use layer="delta" matrix="1 0 0 1 80 -80" name="mark/cross(sx)" pos="128 656" size="normal" stroke="black"/>
-<path stroke="blue">
-128 656 m
-128 576 l
-208 576 l
-128 656 l
-</path>
+<text matrix="1 0 0 1 36.8872 -15.3116" transformations="translations" pos="192 672" stroke="red" type="label" width="39.913" height="8.11" depth="2.49" valign="baseline" style="math">-{\nabla f}(x^0)</text>
 </page>
 </ipe>

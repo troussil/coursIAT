@@ -207,7 +207,7 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Intuition}
+  \frametitle{Ce qu'est l'optimisation en une image}
 
   \begin{exampleblock}{Exemple dans $\R$}
     \centering
@@ -740,7 +740,7 @@
 
   \begin{block}{De nombreuses méthodes pour déterminer $\lambda^{(k)}$}
   \begin{itemize}
-  \item fixé par l'utilisateur (normalisé par la norme du gradient)
+  \item fixé par l'utilisateur %(normalisé par la norme du gradient)
   \item $1 / k \|{\nabla f}(x^{(k)})\|$ (le pas diminue au fur et à mesure des itérations)
   \item \emph{Newton}: $\Big( {\nabla^2 f}(x^{(k)}) \Big)^{-1}$
     \begin{itemize}
@@ -779,7 +779,7 @@
   \left( \begin{array}{c} 2a_1x_1^{(0)} + b_1 \\ 2a_2x_2^{(0)} + b_2 \end{array} \right ) =
   \left( \begin{array}{c} -\frac{b_1}{2a_1} \\ -\frac{b_2}{2a_2} \end{array} \right ) $, or
   ${\nabla f}(-\frac{b_1}{2a_1}, -\frac{b_2}{2a_2})$ est nul : on a le minimum
-  \item \alert{convergence en une itération car $f$ est quadratique et convexe}
+  \item convergence en une itération car $f$ est quadratique
   \end{itemize}
   
 \end{frame}
@@ -900,10 +900,19 @@
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Intuition}
+  \frametitle{Intuition dans $\R^1$ avec un modèle linéaire}
 
-  TODO
-  
+  \begin{center}
+      \includegraphics[width=0.5\textwidth]{linear-regression}    
+  \end{center}
+
+  \begin{itemize}
+  \item en bleu, les couples $(x_i,y_i)$ observées,
+  \item en rouge, le graphe de la fonction $f(w_1, \dots, w_m)$
+    qui donne $y$ à partir de $x$.
+  \item $m = 2$ suffit dans ce cas (pente
+    et ordonnées à l'origine).
+  \end{itemize}
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -930,28 +939,71 @@
 \end{frame}
 
 % ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Un modèle universel}
+\newcommand\mat[1]{\mathbf{#1}}
 
-TODO
+\begin{frame}
+  \frametitle{Exemple de modèle}
+  
+  \begin{block}{Définition sous forme matricielle}
+    Soit $k \in \N$.
+    On a $m = k(d+2)$ paramètres stockés dans les matrices :
+    \begin{itemize}
+      \item $\mat{M}_1$ de taille $k \times (d+1)$,
+      \item $\mat{M}_2$ de taille $1 \times k$.
+    \end{itemize}
+    
+    \[ L(\mat{M}_1, \mat{M}_2, \mat{x}) := \mat{M}_2 \cdot \sigma ( \mat{M}_1 \cdot \mat{x} ). \]
+    où $\sigma$ est une fonction d'activation non polynomiale appliquée
+    élément par élément (ex. sigmoïde). 
+  \end{block}
+  
+  \begin{block}{Théorème d'approximation universelle}
+  Il existe $k$ tel qu'on approxime n'importe quelle fonction
+  aussi bien qu'on veut par ce modèle ! 
+  \end{block}
+
+\end{frame}
+
+% ----------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Gradient ?}
+
+  \begin{itemize}
+  \item (immédiat ;-)) $\frac{\partial L}{\partial \mat{M}_2}(\mat{M}_1, \mat{M}_2, \mat{x})
+    = \sigma ( \mat{x}^T \cdot \mat{M}_1^T )$
+  \item (composition) on pose $\mat{z}:=\mat{M}_1\mat{x}$, $\mat{y}:=\sigma(\mat{z})$,
+    \begin{align*}
+    \frac{\partial L}{\partial \mat{M}_1}(\mat{M}_1, \mat{M}_2, \mat{x})
+    &= \mat{M_2} \Bigg( \frac{\partial \mat{y}}{\partial \mat{z}} \frac{\partial \mat{z}}{\partial \mat{M}_1} \Bigg) \\
+    &= \mat{M_2} \sigma'( \mat{M}_1 \cdot \mat{x} ) \mat{x}^T.
+    \end{align*}
+  \end{itemize}
+
+  astuce : formulaire de dérivées matricielles.
+
+  mieux : outils de dérivation automatique comme \verb!PyTorch!.
   
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Gradient}
+  \frametitle{Exemple de gros modèle : AlexNet (2012)}
 
-  règle de la chaine
-TODO
-  
-\end{frame}
+    (CNN → RN → MP)² → (CNN³ → MP) → (FC → DO)² → Linear → softmax
 
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Exemples de gros modèles}
+où
 
-TODO
-  
+\begin{itemize}
+\item     CNN = convolutional layer (with ReLU activation)
+\item     RN = local response normalization
+\item     MP = maxpooling
+\item     FC = fully connected layer (with ReLU activation)
+\item     Linear = fully connected layer (without activation)
+\item     DO = dropoutTODO
+\end{itemize}
+
+60 millions de paramètres 
+
 \end{frame}
 
 % ----------------------------------------------------------------------
@@ -981,10 +1033,10 @@ TODO
   \begin{block}{Le problème peut}
     \begin{itemize}
     \item être \emph{infaisable} :
-      $X = \{ x \in \R^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$,
+      $X := \{ x \in \R^n \ | \ g_i(x) \leq 0, i \in I \}$,
       l'ensemble des solutions candidates est vide.
-    \item être \emph{non borné} : $f(x)$ tend vers $-\infty$ quand $x$ tend vers $\infty$.
-    \item avoir une ou plusieurs solutions. 
+    \item être \emph{non borné} : $\exists t, v, x^0$, tels que $\lim_{t \rightarrow \infty} f(x^0 + tv) = -\infty$.
+    \item avoir une ou \emph{plusieurs solutions}. 
     \end{itemize}
   \end{block}
   
@@ -994,11 +1046,19 @@ TODO
 \begin{frame}
   \frametitle{Problème infaisable}
 
+  \begin{center}
+      \includegraphics[width=0.5\textwidth]{p-infaisable}    
+  \end{center}
+  
 \end{frame}
 
 % ----------------------------------------------------------------------
 \begin{frame}
   \frametitle{Problème non borné}
+
+  \begin{center}
+    \includegraphics[width=0.4\textwidth]{p-non-borne}    
+  \end{center}
 
 \end{frame}
 
@@ -1006,17 +1066,12 @@ TODO
 \begin{frame}
   \frametitle{Plusieurs solutions}
 
-\end{frame}
-
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{}
-
   \begin{center}
-      \includegraphics[width=0.5\textwidth,page=3]{cone-tangent}    
+    \includegraphics[width=0.4\textwidth]{p-plusieurs}    
   \end{center}
-
+  
 \end{frame}
+
 
 %% % ----------------------------------------------------------------------
 %% \begin{frame}
@@ -1084,7 +1139,7 @@ TODO
   \frametitle{Intuition sur les conditions d'optimalité}
 
   \begin{center}
-      \includegraphics[width=0.5\textwidth,page=3]{cone-tangent}    
+      \includegraphics[width=0.5\textwidth]{kkt}    
   \end{center}
 
 \end{frame}
@@ -1105,9 +1160,7 @@ TODO
 
   \begin{itemize}
   \item (H1) $f$ et $(g_i)_{i \in I}$ continues, différentiables
-  \item (H2) $X = \{ x \in \R^n \ | \ g_i(x) \leq 0, i \in I = \{1, \dots, m\} \}$,
-    l'ensemble des solutions candidates de $(\text{P}^\bullet)$, est non vide
-    (mais peut avoir un intérieur vide)
+  \item (H2) $X \neq \emptyset$
   \item (QC) hypothèse de qualification des contraintes
   \end{itemize}
   
@@ -1149,9 +1202,8 @@ TODO
   \begin{tabular}{l}
     trouver $(x_1,x_2)$ qui minimisent \\
     \textcolor{red}{$f(x_1,x_2) := (x_1 - 3)^2 + (x_2 - 4)^2$} tels que : \\
-    pour tout $i = 1, \dots, 4$, \textcolor{blue}{$g_i(x_1,x_2) \leq 0$}, avec \\
-    $g_1(x_1,x_2) := x_1 + x_2 - 5$, $g_2(x_1,x_2) := x_1 - x_2 - 2.5$, \\
-    $g_3(x_1,x_2) := -x_1$, $g_4(x_1,x_2) := -x_2$ 
+    pour tout $i = 1,2,3$, \textcolor{blue}{$g_i(x_1,x_2) \leq 0$}, avec \\
+    $g_1(x_1,x_2) := x_1 + x_2 - 5$, $g_2(x_1,x_2) := -x_1$, $g_3(x_1,x_2) := -x_2$ 
     %% \textcolor{blue}{$\left\{
     %% \begin{array}{l}
     %%   g_1(x_1,x_2) \leq 0, \ g_1(x_1,x_2) := x_1 + x_2 - 5 \\
@@ -1176,7 +1228,7 @@ TODO
   \begin{itemize}
     \item Comme pour tout $x$, $\nabla^2f(x)$ est définie-positive, $f$ est convexe
     \item Les contraintes $\{g_i\}_{i \in I}$ sont linéaires donc convexes
-    \item $x^\star$ et $\lambda_1,\lambda_2,\lambda_3,\lambda_4$ qui vérifient (KKT)
+    \item $x^\star$ et $\lambda_1,\lambda_2,\lambda_3$ qui vérifient (KKT)
       sont tels que $x^\star$ est le minimum global
     \end{itemize}
   }
@@ -1184,7 +1236,7 @@ TODO
     On joue aux devinette et suppose que seule $g_1$ est saturée 
   \begin{itemize}
   \item c-à-d. telle que $g_1(x^\star) = x_1^\star + x_2^\star - 5 = 0$,
-  \item complémentarité : $\lambda_2 = \lambda_3 = \lambda_4 = 0$, 
+  \item complémentarité : $\lambda_2 = \lambda_3 = 0$, 
   \item stationnarité : $-{\nabla f}(x^\star) = \lambda_1 {\nabla g_1}(x^\star)$.
   \end{itemize}
 
@@ -1293,9 +1345,17 @@ TODO
 
 % ----------------------------------------------------------------------
 \begin{frame}
-  \frametitle{Intuition dans $\R^2$}
+  \frametitle{Intuition dans $\R^2$ avec un modèle linéaire}
+  
+  \centering
+  \includegraphics[width=3cm]{linear-separation.png}
 
-  TODO
+  ~
+  
+  \begin{itemize}
+  \item points rouges sont les $\vec{x}_i$ tels que $y_i = 1$, 
+  \item points bleus sont les $\vec{x}_i$ tels que $y_i = -1$, 
+  \end{itemize}
   
 \end{frame}
 
@@ -1305,29 +1365,22 @@ TODO
 
   \begin{block}{Apprentissage $=$ optimisation sous contrainte}
 
-    TODO
-    
-    %% \begin{itemize}
-    %% \item on considère une fonction \emph{de perte} qui
-    %%   est typiquement la somme des carrés des écarts entre ce que
-    %%   donne le modèle et les observations :
-    %%   \[ L(w_1, \dots, w_m) :=
-    %%   \sum_{i=1}^n (f(w_1, \dots, w_m)(\vec{x}_i) - y_i)^2 \]
-    %% \item on la minimise par descente de gradient
-    %%   \begin{itemize}
-    %%   \item $f$ doit être différentiable (et on doit calculer son gradient)
-    %%   \item il y a des \emph{hyper-paramètres} ($\lambda$, nombre d'itérations, etc.)
-    %%   \end{itemize}
-    %% \end{itemize}
-
+    \begin{itemize}
+    \item le classifieur ne fait pas d'erreur si, pour tout $i$,
+      $y_i f(w_1, \dots, w_m)(\vec{x}_i) > 0$ : c'est un ensemble
+      de contraintes.
+    \item la fonction objectif est typiquement 
+      \[ L(w_1, \dots, w_m) := w_1^2 + \dots + w_m^2, \]
+      ce qui revient à maximiser la marge de séparation
+    \end{itemize}
   \end{block}
-  
-\end{frame}
 
-% ----------------------------------------------------------------------
-\begin{frame}
-  \frametitle{Classification et optimisation}
-  
+  \begin{block}{SVM}
+    C'est le principe des séparateurs à vaste marge (SVM),
+    un temps à la mode du fait d'une plus grande capacité de
+    généralisation que les réseaux de neurones. 
+  \end{block}
+      
 \end{frame}
 
 %% % ----------------------------------------------------------------------
